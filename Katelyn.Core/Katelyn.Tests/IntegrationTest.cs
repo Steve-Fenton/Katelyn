@@ -39,7 +39,7 @@ namespace Katelyn.Tests
             // TODO: Test Page?
             var config = new CrawlerConfig
             {
-                RootAddress = new Uri("http://env-dev-01/"),
+                RootAddress = new Uri("http://localhost/"),
                 Listener = this,
                 MaxDepth = 1
             };
