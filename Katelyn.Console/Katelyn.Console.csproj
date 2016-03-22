@@ -7,8 +7,8 @@
     <ProjectGuid>{2DCEA476-C09C-4DF4-BCF8-0AA9E1C4ED75}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Katelyn.Console</RootNamespace>
-    <AssemblyName>Katelyn.Console</AssemblyName>
+    <RootNamespace>Katelyn.ConsoleRunner</RootNamespace>
+    <AssemblyName>Katelyn</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -47,6 +47,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="KatelynRunner.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
