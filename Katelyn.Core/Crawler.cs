@@ -16,8 +16,6 @@ namespace Katelyn.Core
         private CrawlerConfig _config;
         private IDictionary<string, int> _crawled = new Dictionary<string, int>();
 
-        private int maxDepth = 5;
-
         private Crawler(CrawlerConfig config)
         {
             _config = config;
@@ -110,7 +108,7 @@ namespace Katelyn.Core
 
             var nextDepth = currentDepth + 1;
 
-            if (nextDepth > maxDepth)
+            if (nextDepth >= _config.MaxDepth)
             {
                 return;
             }
