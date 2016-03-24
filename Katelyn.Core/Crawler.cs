@@ -7,18 +7,25 @@ namespace Katelyn.Core
 {
     public class Crawler
     {
+        private CrawlerConfig _config;
+        private IDictionary<string, int> _crawled = new Dictionary<string, int>();
+
         public static void Crawl(CrawlerConfig config)
         {
             var crawler = new Crawler(config);
             crawler.Start();
         }
 
-        private CrawlerConfig _config;
-        private IDictionary<string, int> _crawled = new Dictionary<string, int>();
-
         private Crawler(CrawlerConfig config)
         {
             _config = config;
+        }
+
+        private void Start()
+        {
+            CrawlAddress(_config.RootAddress, 0);
+
+            _config.Listener.OnEnd();
         }
 
         private static bool IsOffSiteResource(string linkText)
@@ -134,19 +141,5 @@ namespace Katelyn.Core
                 queue.Add(uri.AbsoluteUri, uri);
             }
         }
-
-        private void Start()
-        {
-            CrawlAddress(_config.RootAddress, 0);
-
-            _config.Listener.OnEnd();
-        }
-    }
-
-    public class CrawlerConfig
-    {
-        public IListener Listener { get; set; }
-        public int MaxDepth { get; set; } = 5;
-        public Uri RootAddress { get; set; }
     }
 }

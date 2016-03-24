@@ -5,6 +5,11 @@ namespace Katelyn.Core.Listeners
     public class ConsoleListener
         : IListener
     {
+        private ConsoleColor _good = ConsoleColor.Green;
+        private ConsoleColor _bad = ConsoleColor.Red;
+        private int _errorCount = 0;
+        private int _successCount = 0;
+
         public void OnEnd()
         {
             Console.ForegroundColor = ConsoleColor.White;
@@ -31,10 +36,5 @@ namespace Katelyn.Core.Listeners
             Console.ForegroundColor = _good;
             Console.WriteLine($"OK {address}");
         }
-
-        private ConsoleColor _bad = ConsoleColor.Red;
-        private int _errorCount = 0;
-        private ConsoleColor _good = ConsoleColor.Green;
-        private int _successCount = 0;
     }
 }
