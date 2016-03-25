@@ -28,69 +28,6 @@ namespace Katelyn.Core
             _config.Listener.OnEnd();
         }
 
-        private static bool IsOffSiteResource(string linkText)
-        {
-            return linkText.StartsWith("tel:")
-                || linkText.StartsWith("fax:")
-                || linkText.StartsWith("mailto:")
-                || linkText.StartsWith("http://")
-                || linkText.StartsWith("https://");
-        }
-
-        private IDictionary<string, Uri> AddLinksToQueueFor(string key)
-        {
-            var queue = new Dictionary<string, Uri>();
-
-            using (var client = new HttpClient())
-            {
-                var response = client.GetAsync(key).Result;
-
-                if (!response.IsSuccessStatusCode)
-                {
-                    _config.Listener.OnError(key, new Exception($"{response.StatusCode} ${response.ReasonPhrase}"));
-                    return queue;
-                }
-
-                if (response.Content.Headers.ContentType.MediaType != "text/html")
-                {
-                    // Not an HTML page
-                    _config.Listener.OnSuccess(key);
-                    return queue;
-                }
-
-                var htmlDocument = new HtmlDocument();
-                htmlDocument.LoadHtml(response.Content.ReadAsStringAsync().Result);
-
-                var linkNodes = htmlDocument.DocumentNode.SelectNodes("//a[@href]");
-
-                if (linkNodes == null || linkNodes.Count == 0)
-                {
-                    // No links on this page
-                    _config.Listener.OnSuccess(key);
-                    return queue;
-                }
-
-                foreach (HtmlNode link in linkNodes)
-                {
-                    var linkText = link.Attributes["href"].Value;
-
-                    if (IsOffSiteResource(linkText))
-                    {
-                        continue;
-                    }
-
-                    var uri = (IsAbsoluteUri(linkText))
-                        ? new Uri(linkText)
-                        : new Uri(_config.RootAddress, linkText);
-
-                    QueueIfNew(queue, uri);
-                }
-            }
-
-            _config.Listener.OnSuccess(key);
-            return queue;
-        }
-
         private void CrawlAddress(Uri address, int currentDepth)
         {
             var addressString = address.AbsoluteUri;
@@ -124,6 +61,177 @@ namespace Katelyn.Core
             {
                 CrawlAddress(queue[key], nextDepth);
             }
+        }
+
+        private static bool IsOffSiteResource(string linkText)
+        {
+            return linkText.StartsWith("tel:")
+                || linkText.StartsWith("fax:")
+                || linkText.StartsWith("mailto:")
+                || linkText.StartsWith("http://")
+                || linkText.StartsWith("https://");
+        }
+
+        private IDictionary<string, Uri> AddLinksToQueueFor(string key)
+        {
+            IDictionary<string, Uri> queue = new Dictionary<string, Uri>();
+
+            using (var client = new HttpClient())
+            {
+                var response = client.GetAsync(key).Result;
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    _config.Listener.OnError(key, new Exception($"{response.StatusCode} ${response.ReasonPhrase}"));
+                    return queue;
+                }
+
+                if (response.Content.Headers.ContentType.MediaType != "text/html")
+                {
+                    // Not an HTML page
+                    _config.Listener.OnSuccess(key);
+                    return queue;
+                }
+
+                var htmlDocument = new HtmlDocument();
+                htmlDocument.LoadHtml(response.Content.ReadAsStringAsync().Result);
+
+                queue = QueueHyperlinks(key, queue, htmlDocument);
+
+                if (_config.CrawlerFlags.HasFlag(CrawlerFlags.IncludeScripts))
+                {
+                    queue = QueueScripts(key, queue, htmlDocument);
+                }
+
+                if (_config.CrawlerFlags.HasFlag(CrawlerFlags.IncludeStyles))
+                {
+                    queue = QueueStyles(key, queue, htmlDocument);
+                }
+
+                if (_config.CrawlerFlags.HasFlag(CrawlerFlags.IncludeImages))
+                {
+                    queue = QueueImages(key, queue, htmlDocument);
+                }
+            }
+
+            _config.Listener.OnSuccess(key);
+            return queue;
+        }
+
+        private IDictionary<string, Uri> QueueHyperlinks(string key, IDictionary<string, Uri> queue, HtmlDocument htmlDocument)
+        {
+            var linkNodes = htmlDocument.DocumentNode.SelectNodes("//a[@href]");
+
+            if (linkNodes == null || linkNodes.Count == 0)
+            {
+                // No links on this page
+                return queue;
+            }
+
+            foreach (HtmlNode link in linkNodes)
+            {
+                var linkText = link.Attributes["href"].Value;
+
+                if (IsOffSiteResource(linkText))
+                {
+                    continue;
+                }
+
+                var uri = (IsAbsoluteUri(linkText))
+                    ? new Uri(linkText)
+                    : new Uri(_config.RootAddress, linkText);
+
+                QueueIfNew(queue, uri);
+            }
+
+            return queue;
+        }
+
+        private IDictionary<string, Uri> QueueScripts(string key, IDictionary<string, Uri> queue, HtmlDocument htmlDocument)
+        {
+            var scriptNodes = htmlDocument.DocumentNode.SelectNodes("//script[@src]");
+
+            if (scriptNodes == null || scriptNodes.Count == 0)
+            {
+                // No external scripts on this page
+                return queue;
+            }
+
+            foreach (HtmlNode link in scriptNodes)
+            {
+                var linkText = link.Attributes["src"].Value;
+
+                if (IsOffSiteResource(linkText))
+                {
+                    continue;
+                }
+
+                var uri = (IsAbsoluteUri(linkText))
+                    ? new Uri(linkText)
+                    : new Uri(_config.RootAddress, linkText);
+
+                QueueIfNew(queue, uri);
+            }
+
+            return queue;
+        }
+
+        private IDictionary<string, Uri> QueueStyles(string key, IDictionary<string, Uri> queue, HtmlDocument htmlDocument)
+        {
+            var styleNodes = htmlDocument.DocumentNode.SelectNodes("//link[@href]");
+
+            if (styleNodes == null || styleNodes.Count == 0)
+            {
+                // No external scripts on this page
+                return queue;
+            }
+
+            foreach (HtmlNode link in styleNodes)
+            {
+                var linkText = link.Attributes["href"].Value;
+
+                if (IsOffSiteResource(linkText))
+                {
+                    continue;
+                }
+
+                var uri = (IsAbsoluteUri(linkText))
+                    ? new Uri(linkText)
+                    : new Uri(_config.RootAddress, linkText);
+
+                QueueIfNew(queue, uri);
+            }
+
+            return queue;
+        }
+
+        private IDictionary<string, Uri> QueueImages(string key, IDictionary<string, Uri> queue, HtmlDocument htmlDocument)
+        {
+            var imageNodes = htmlDocument.DocumentNode.SelectNodes("//img[@src]");
+
+            if (imageNodes == null || imageNodes.Count == 0)
+            {
+                // No external scripts on this page
+                return queue;
+            }
+
+            foreach (HtmlNode link in imageNodes)
+            {
+                var linkText = link.Attributes["src"].Value;
+
+                if (IsOffSiteResource(linkText))
+                {
+                    continue;
+                }
+
+                var uri = (IsAbsoluteUri(linkText))
+                    ? new Uri(linkText)
+                    : new Uri(_config.RootAddress, linkText);
+
+                QueueIfNew(queue, uri);
+            }
+
+            return queue;
         }
 
         private bool IsAbsoluteUri(string linkText)

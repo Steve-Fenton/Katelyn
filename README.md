@@ -8,6 +8,27 @@ You can run Katelyn from the command line:
 
     Katelyn Crawl -address=http://localhost/ -maxDepth=10
 
+Options
+
+ - -address The URI of the root of the website
+
+ - -maxDepth The maximum depth to crawl to the site
+
+ - -includeScripts Whether to include the "src" attribute from _script_ tags
+
+ - -includeStyles Whether to include the "href" attribute from _link_ tags
+
+ - -includeImages Whether to include the "src" attribute from _img_ tags
+
+For example:
+
+    C:\Code\GitHub\Repos\Katelyn\Katelyn\Katelyn.Console\bin\Debug>Katelyn Crawl 
+        -address=http://localhost/ 
+        -maxDepth=5 
+        -includeScripts=true 
+        -includeStyles=true 
+        -includeImages=true
+
 Or use the Katelyn Core library in your own applications.
 
 ## Done
@@ -18,10 +39,10 @@ Or use the Katelyn Core library in your own applications.
  - Media type detection
  - Ensure memory profile remains below 50MB during operation
  - Expose max depth to caller
+ - Find other resources (css, scripts, images) and check them
 
 ## TODO
 
- - Find other resources (css, scripts, images) and check them
  - Expose a crawl delay to caller
  - Sample listeners (i.e. dogstatsd, eventlog)
  - Multi-domain service to slow-crawl a list of domains
