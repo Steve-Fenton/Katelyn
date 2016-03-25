@@ -8,7 +8,7 @@ namespace Katelyn.ConsoleRunner
     public class KatelynRunner
     {
         [Verb]
-        public static void Crawl(string address, int maxDepth = 5, bool includeImages = false, bool includeScripts = false, bool includeStyles = false)
+        public static void Crawl(string address, int maxDepth = 5, bool includeImages = false, bool includeLinks = true, bool includeScripts = false, bool includeStyles = false)
         {
             var config = new CrawlerConfig
             {
@@ -16,6 +16,11 @@ namespace Katelyn.ConsoleRunner
                 Listener = new ConsoleListener(),
                 MaxDepth = maxDepth
             };
+
+            if (includeLinks)
+            {
+                config.CrawlerFlags |= CrawlerFlags.IncludeLinks;
+            }
 
             if (includeImages)
             {

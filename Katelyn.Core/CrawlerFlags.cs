@@ -6,8 +6,9 @@ namespace Katelyn.Core
     public enum CrawlerFlags
     {
         None = 0,
-        IncludeScripts = 1,
-        IncludeImages = 2,
-        IncludeStyles = 4,
+        IncludeImages = 1 << 0,
+        IncludeLinks = 1 << 1,
+        IncludeScripts = 1 << 2,
+        IncludeStyles = 1 << 3,
     }
 }

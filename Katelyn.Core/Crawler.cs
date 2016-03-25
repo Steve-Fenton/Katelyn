@@ -96,7 +96,10 @@ namespace Katelyn.Core
                 var htmlDocument = new HtmlDocument();
                 htmlDocument.LoadHtml(response.Content.ReadAsStringAsync().Result);
 
-                queue = QueueHyperlinks(key, queue, htmlDocument);
+                if (_config.CrawlerFlags.HasFlag(CrawlerFlags.IncludeLinks))
+                {
+                    queue = QueueHyperlinks(key, queue, htmlDocument);
+                }
 
                 if (_config.CrawlerFlags.HasFlag(CrawlerFlags.IncludeScripts))
                 {

@@ -22,7 +22,8 @@ namespace Katelyn.Tests
             {
                 RootAddress = new Uri("http://localhost/"),
                 Listener = this,
-                MaxDepth = 2
+                MaxDepth = 2,
+                CrawlerFlags = CrawlerFlags.IncludeLinks
             };
 
             Crawler.Crawl(config);

@@ -14,11 +14,13 @@ Options
 
  - -maxDepth The maximum depth to crawl to the site
 
- - -includeScripts Whether to include the "src" attribute from _script_ tags
+ - -includeLinks Whether to include the "href" attribute from _a_ tags (true by default)
 
- - -includeStyles Whether to include the "href" attribute from _link_ tags
+ - -includeScripts Whether to include the "src" attribute from _script_ tags (false by default)
 
- - -includeImages Whether to include the "src" attribute from _img_ tags
+ - -includeStyles Whether to include the "href" attribute from _link_ tags (false by default)
+
+ - -includeImages Whether to include the "src" attribute from _img_ tags (false by default)
 
 For example:
 
