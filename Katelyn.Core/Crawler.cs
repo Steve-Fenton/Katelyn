@@ -71,13 +71,13 @@ namespace Katelyn.Core
             }
         }
 
-        private static bool IsOffSiteResource(string linkText)
+        private bool IsOffSiteResource(string linkText)
         {
             return linkText.StartsWith("tel:")
                 || linkText.StartsWith("fax:")
                 || linkText.StartsWith("mailto:")
-                || linkText.StartsWith("http://")
-                || linkText.StartsWith("https://");
+                || (linkText.StartsWith("http://") && !linkText.StartsWith(_config.RootAddress.AbsoluteUri))
+                || (linkText.StartsWith("https://") && !linkText.StartsWith(_config.RootAddress.AbsoluteUri));
         }
 
         private IDictionary<string, Uri> AddLinksToQueueFor(string address, Uri parent)

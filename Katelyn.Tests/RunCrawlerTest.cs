@@ -1,4 +1,5 @@
-﻿using Katelyn.Core;
+﻿using Katelyn.ConsoleRunner;
+using Katelyn.Core;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
 using System;

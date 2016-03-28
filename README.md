@@ -25,9 +25,15 @@ By default, Katelyn crawls all links, scripts, styles, and images that belong to
 address and ignored any external resources. The crawl is performed one request at a time, with
 no additional delay.
 
-If you wish to specify these options manually, you can use the advanced options:
+If you wish to specify these options manually, you can use the advanced options along with the `CrawlWith` method:
+
+    Katelyn CrawlWith ...
 
 Advanced Options
+
+ - `-address` is mandatory. Specify the full URI to be used as the root for the crawling session
+
+ - `-verbose` optional, if `true` shows information for every URI crawled
 
  - `-includeLinks` Whether to include the "href" attribute from _a_ tags
 
@@ -43,7 +49,7 @@ Advanced Options
 
 For example, with everything specified:
 
-    Katelyn Crawl 
+    Katelyn CrawlWith
         -address=http://localhost/ 
         -verbose=true
         -maxDepth=100

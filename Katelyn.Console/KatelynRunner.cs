@@ -1,6 +1,7 @@
 ﻿using CLAP;
 using Katelyn.Core;
 using Katelyn.Core.Listeners;
+using Newtonsoft.Json;
 using System;
 
 namespace Katelyn.ConsoleRunner
@@ -8,17 +9,11 @@ namespace Katelyn.ConsoleRunner
     public class KatelynRunner
     {
         [Verb]
-        public static void Crawl(string address)
-        {
-            bool verbose = true;
-
-            Crawl(address, verbose);
-        }
-
-        [Verb]
-        public static void Crawl(string address, bool verbose)
+        public static void Crawl([Required]string address, [DefaultValue(true)] bool verbose)
         {
             var config = GetQuickConfig(address, verbose);
+
+            Console.WriteLine(JsonConvert.SerializeObject(config));
 
             Crawler.Crawl(config);
 
@@ -29,11 +24,19 @@ namespace Katelyn.ConsoleRunner
         }
 
         [Verb]
-        public static void Crawl(string address, bool quick, bool verbose, int maxDepth, bool includeImages, bool includeLinks, bool includeScripts, bool includeStyles, int delay)
+        public static void CrawlWith(
+            [Required]string address,
+            [DefaultValue(true)]bool verbose,
+            [DefaultValue(true)]bool includeImages,
+            [DefaultValue(true)]bool includeLinks,
+            [DefaultValue(true)]bool includeScripts,
+            [DefaultValue(true)]bool includeStyles,
+            [DefaultValue(100)]int maxDepth,
+            [DefaultValue(0)]int delay)
         {
-            CrawlerConfig config = (quick)
-                ? GetQuickConfig(address, verbose)
-                : GetComplexConfig(address, maxDepth, includeImages, includeLinks, includeScripts, includeStyles, verbose, delay);
+            CrawlerConfig config = GetComplexConfig(address, verbose, includeImages, includeLinks, includeScripts, includeStyles, maxDepth, delay);
+
+            Console.WriteLine(JsonConvert.SerializeObject(config));
 
             Crawler.Crawl(config);
 
@@ -55,7 +58,7 @@ namespace Katelyn.ConsoleRunner
             };
         }
 
-        private static CrawlerConfig GetComplexConfig(string address, int maxDepth, bool includeImages, bool includeLinks, bool includeScripts, bool includeStyles, bool verbose, int delay)
+        private static CrawlerConfig GetComplexConfig(string address, bool verbose, bool includeImages, bool includeLinks, bool includeScripts, bool includeStyles, int maxDepth, int delay)
         {
             var config = new CrawlerConfig
             {
