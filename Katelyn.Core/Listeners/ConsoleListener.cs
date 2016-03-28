@@ -1,48 +1,50 @@
 ﻿using System;
+using System.IO;
 
 namespace Katelyn.Core.Listeners
 {
     public class ConsoleListener
         : IListener
     {
-        private ConsoleColor _good = ConsoleColor.Green;
-        private ConsoleColor _bad = ConsoleColor.Red;
-        private int _errorCount = 0;
-        private int _successCount = 0;
+        protected readonly ConsoleColor GoodForeground = ConsoleColor.Green;
+        protected readonly ConsoleColor BadForeground = ConsoleColor.Red;
+        protected int ErrorCount = 0;
+        protected int SuccessCount = 0;
 
-        public void OnSuccess(string address)
+        public virtual void OnSuccess(string address)
         {
-            _successCount++;
+            SuccessCount++;
 
-            Console.ForegroundColor = _good;
+            Console.ForegroundColor = GoodForeground;
             Console.WriteLine($"OK {address}");
         }
 
-        public void OnError(string address, Exception exception)
+        public virtual void OnError(string address, Exception exception)
         {
-            _errorCount++;
+            ErrorCount++;
 
             while (exception.InnerException != null)
             {
                 exception = exception.InnerException;
             }
 
-            Console.ForegroundColor = _bad;
-            Console.WriteLine($"Exception from {address} {exception.Message}");
+            Console.ForegroundColor = BadForeground;
+            TextWriter errorWriter = Console.Error;
+            errorWriter.WriteLine($"Exception from {address} {exception.Message}");
         }
 
-        public void OnEnd()
+        public virtual void OnEnd()
         {
             Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine($"Finished. {_successCount}/{_successCount + _errorCount} succeeded.");
+            Console.WriteLine($"Finished. {SuccessCount}/{SuccessCount + ErrorCount} succeeded.");
         }
 
-        public CrawlResult GetCrawlResult()
+        public virtual CrawlResult GetCrawlResult()
         {
             return new CrawlResult
             {
-                ErrorCount = _errorCount,
-                SuccessCount = _successCount,
+                ErrorCount = ErrorCount,
+                SuccessCount = SuccessCount,
             };
         }
     }

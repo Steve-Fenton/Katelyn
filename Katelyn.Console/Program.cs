@@ -8,8 +8,6 @@ namespace Katelyn.ConsoleRunner
         public static void Main(string[] args)
         {
             var exitCode = Parser.Run<KatelynRunner>(args);
-
-            Environment.Exit(exitCode);
         }
     }
 }

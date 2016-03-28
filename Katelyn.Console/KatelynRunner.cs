@@ -8,12 +8,12 @@ namespace Katelyn.ConsoleRunner
     public class KatelynRunner
     {
         [Verb]
-        public static int Crawl(string address, int maxDepth = 5, bool includeImages = false, bool includeLinks = true, bool includeScripts = false, bool includeStyles = false)
+        public static void Crawl(string address, int maxDepth = 5, bool includeImages = false, bool includeLinks = false, bool includeScripts = false, bool includeStyles = false, bool verbose = false)
         {
             var config = new CrawlerConfig
             {
                 RootAddress = new Uri(address),
-                Listener = new ConsoleListener(),
+                Listener = (verbose) ? new ConsoleListener() : new SparseConsoleListener(),
                 MaxDepth = maxDepth
             };
 
@@ -39,9 +39,10 @@ namespace Katelyn.ConsoleRunner
 
             Crawler.Crawl(config);
 
-            return (config.Listener.GetCrawlResult().ErrorCount == 0)
-                ? (int)ExitCode.Success
-                : (int)ExitCode.CrawlError;
+            if (config.Listener.GetCrawlResult().ErrorCount == 0)
+            {
+                Environment.Exit((int)ExitCode.CrawlError);
+            }
         }
     }
 }

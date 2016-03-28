@@ -6,7 +6,7 @@ Katelyn is a simple slow-crawler for checking a single website for crawl errors 
 
 You can run Katelyn from the command line:
 
-    Katelyn Crawl -address=http://localhost/ -maxDepth=10
+    Katelyn Crawl -address=http://localhost/ -maxDepth=10 -includeLinks=true
 
 Options
 
@@ -14,13 +14,13 @@ Options
 
  - -maxDepth The maximum depth to crawl to the site
 
- - -includeLinks Whether to include the "href" attribute from _a_ tags (true by default)
+ - -includeLinks Whether to include the "href" attribute from _a_ tags
 
- - -includeScripts Whether to include the "src" attribute from _script_ tags (false by default)
+ - -includeScripts Whether to include the "src" attribute from _script_ tags
 
- - -includeStyles Whether to include the "href" attribute from _link_ tags (false by default)
+ - -includeStyles Whether to include the "href" attribute from _link_ tags
 
- - -includeImages Whether to include the "src" attribute from _img_ tags (false by default)
+ - -includeImages Whether to include the "src" attribute from _img_ tags
 
 For example:
 

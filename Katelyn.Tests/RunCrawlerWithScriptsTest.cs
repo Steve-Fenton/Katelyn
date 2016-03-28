@@ -6,7 +6,7 @@ using System;
 namespace Katelyn.Tests
 {
     [TestClass]
-    public class WithScripts
+    public class RunCrawlerWithScriptsTest
         : TestBase
     {
         [TestMethod]

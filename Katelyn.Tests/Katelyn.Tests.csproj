@@ -45,10 +45,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PageNotFoundTest.cs" />
     <Compile Include="TestBase.cs" />
-    <Compile Include="WithScriptStylesImages.cs" />
-    <Compile Include="WithScripts.cs" />
-    <Compile Include="RunCrawler.cs" />
+    <Compile Include="RunCrawlerWithScriptsStylesImagesTest.cs" />
+    <Compile Include="RunCrawlerWithScriptsTest.cs" />
+    <Compile Include="RunCrawlerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

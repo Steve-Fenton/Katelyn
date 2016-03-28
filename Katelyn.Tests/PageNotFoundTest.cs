@@ -6,16 +6,16 @@ using System;
 namespace Katelyn.Tests
 {
     [TestClass]
-    public partial class IntegrationTest
+    public partial class PageNotFoundTest
         : TestBase
     {
         [TestMethod]
-        public void RunCrawler()
+        public void PageNotFound()
         {
             // TODO: Test Page?
             var config = new CrawlerConfig
             {
-                RootAddress = new Uri("http://localhost/"),
+                RootAddress = new Uri("http://PageNotFound/"),
                 Listener = this,
                 MaxDepth = 2,
                 CrawlerFlags = CrawlerFlags.IncludeLinks
@@ -26,8 +26,8 @@ namespace Katelyn.Tests
 
         public override void OnEnd()
         {
-            _errorCount.ShouldBe(0);
-            _successCount.ShouldBe(2);
+            _errorCount.ShouldBe(1);
+            _successCount.ShouldBe(0);
         }
     }
 }
