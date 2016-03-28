@@ -11,12 +11,12 @@ namespace Katelyn.Tests
         protected int _successCount = 0;
         private IList<string> _errors = new List<string>();
 
-        public void OnSuccess(string address)
+        public void OnSuccess(string address, string parent)
         {
             _successCount++;
         }
 
-        public void OnError(string address, Exception exception)
+        public void OnError(string address, string parent, Exception exception)
         {
             _errorCount++;
 
@@ -25,7 +25,11 @@ namespace Katelyn.Tests
                 exception = exception.InnerException;
             }
 
-            _errors.Add($"{address} {exception.Message}");
+            _errors.Add($"{address} found on {parent} - {exception.Message}");
+        }
+
+        public void OnStart()
+        {
         }
 
         public abstract void OnEnd();

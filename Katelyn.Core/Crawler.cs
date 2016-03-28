@@ -23,12 +23,14 @@ namespace Katelyn.Core
 
         private void Start()
         {
+            _config.Listener.OnStart();
+
             CrawlAddress(_config.RootAddress, 0);
 
             _config.Listener.OnEnd();
         }
 
-        private void CrawlAddress(Uri address, int currentDepth)
+        private void CrawlAddress(Uri address, int currentDepth, Uri parent = null)
         {
             var addressString = address.AbsoluteUri;
             IDictionary<string, Uri> queue = new Dictionary<string, Uri>();
@@ -41,12 +43,12 @@ namespace Katelyn.Core
             {
                 try
                 {
-                    queue = AddLinksToQueueFor(addressString);
+                    queue = AddLinksToQueueFor(addressString, parent);
                     _crawled.Add(addressString, 1);
                 }
                 catch (Exception ex)
                 {
-                    _config.Listener.OnError(addressString, ex);
+                    _config.Listener.OnError(addressString, parent?.AbsoluteUri, ex);
                 }
             }
 
@@ -59,7 +61,7 @@ namespace Katelyn.Core
 
             foreach (var key in queue.Keys)
             {
-                CrawlAddress(queue[key], nextDepth);
+                CrawlAddress(queue[key], nextDepth, address);
             }
         }
 
@@ -72,24 +74,24 @@ namespace Katelyn.Core
                 || linkText.StartsWith("https://");
         }
 
-        private IDictionary<string, Uri> AddLinksToQueueFor(string key)
+        private IDictionary<string, Uri> AddLinksToQueueFor(string address, Uri parent)
         {
             IDictionary<string, Uri> queue = new Dictionary<string, Uri>();
 
             using (var client = new HttpClient())
             {
-                var response = client.GetAsync(key).Result;
+                var response = client.GetAsync(address).Result;
 
                 if (!response.IsSuccessStatusCode)
                 {
-                    _config.Listener.OnError(key, new Exception($"{response.StatusCode} ${response.ReasonPhrase}"));
+                    _config.Listener.OnError(address, parent?.AbsoluteUri, new Exception($"{response.StatusCode} ${response.ReasonPhrase}"));
                     return queue;
                 }
 
                 if (response.Content.Headers.ContentType.MediaType != "text/html")
                 {
                     // Not an HTML page
-                    _config.Listener.OnSuccess(key);
+                    _config.Listener.OnSuccess(address, parent?.AbsoluteUri);
                     return queue;
                 }
 
@@ -98,26 +100,27 @@ namespace Katelyn.Core
 
                 if (_config.CrawlerFlags.HasFlag(CrawlerFlags.IncludeLinks))
                 {
-                    queue = QueueHyperlinks(key, queue, htmlDocument);
+                    queue = QueueHyperlinks(address, queue, htmlDocument);
                 }
 
                 if (_config.CrawlerFlags.HasFlag(CrawlerFlags.IncludeScripts))
                 {
-                    queue = QueueScripts(key, queue, htmlDocument);
+                    queue = QueueScripts(address, queue, htmlDocument);
                 }
 
                 if (_config.CrawlerFlags.HasFlag(CrawlerFlags.IncludeStyles))
                 {
-                    queue = QueueStyles(key, queue, htmlDocument);
+                    queue = QueueStyles(address, queue, htmlDocument);
                 }
 
                 if (_config.CrawlerFlags.HasFlag(CrawlerFlags.IncludeImages))
                 {
-                    queue = QueueImages(key, queue, htmlDocument);
+                    queue = QueueImages(address, queue, htmlDocument);
                 }
             }
 
-            _config.Listener.OnSuccess(key);
+            _config.Listener.OnSuccess(address, parent?.AbsoluteUri);
+
             return queue;
         }
 
