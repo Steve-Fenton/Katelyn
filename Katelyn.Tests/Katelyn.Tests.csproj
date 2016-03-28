@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TestBase.cs" />
     <Compile Include="WithScriptStylesImages.cs" />
     <Compile Include="WithScripts.cs" />
     <Compile Include="RunCrawler.cs" />

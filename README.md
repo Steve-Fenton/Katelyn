@@ -42,6 +42,7 @@ Or use the Katelyn Core library in your own applications.
  - Ensure memory profile remains below 50MB during operation
  - Expose max depth to caller
  - Find other resources (css, scripts, images) and check them
+ - Ignore document hashes (i.e. crawl the page, ignoring the location hash)
 
 ## TODO
 

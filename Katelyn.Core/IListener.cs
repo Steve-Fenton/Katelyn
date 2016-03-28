@@ -9,5 +9,7 @@ namespace Katelyn.Core
         void OnError(string address, Exception exception);
 
         void OnSuccess(string address);
+
+        CrawlResult GetCrawlResult();
     }
 }

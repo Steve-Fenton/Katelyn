@@ -1,4 +1,5 @@
 ﻿using CLAP;
+using System;
 
 namespace Katelyn.ConsoleRunner
 {
@@ -6,7 +7,9 @@ namespace Katelyn.ConsoleRunner
     {
         public static void Main(string[] args)
         {
-            Parser.Run<KatelynRunner>(args);
+            var exitCode = Parser.Run<KatelynRunner>(args);
+
+            Environment.Exit(exitCode);
         }
     }
 }

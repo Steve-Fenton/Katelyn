@@ -49,6 +49,7 @@
     <Compile Include="CrawlerFlags.cs" />
     <Compile Include="IListener.cs" />
     <Compile Include="Listeners\ConsoleListener.cs" />
+    <Compile Include="Listeners\CrawlResult.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

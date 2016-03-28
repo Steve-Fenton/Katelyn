@@ -10,10 +10,12 @@ namespace Katelyn.Core.Listeners
         private int _errorCount = 0;
         private int _successCount = 0;
 
-        public void OnEnd()
+        public void OnSuccess(string address)
         {
-            Console.ForegroundColor = ConsoleColor.White;
-            Console.WriteLine($"Finished. {_successCount}/{_successCount + _errorCount} succeeded.");
+            _successCount++;
+
+            Console.ForegroundColor = _good;
+            Console.WriteLine($"OK {address}");
         }
 
         public void OnError(string address, Exception exception)
@@ -29,12 +31,19 @@ namespace Katelyn.Core.Listeners
             Console.WriteLine($"Exception from {address} {exception.Message}");
         }
 
-        public void OnSuccess(string address)
+        public void OnEnd()
         {
-            _successCount++;
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.WriteLine($"Finished. {_successCount}/{_successCount + _errorCount} succeeded.");
+        }
 
-            Console.ForegroundColor = _good;
-            Console.WriteLine($"OK {address}");
+        public CrawlResult GetCrawlResult()
+        {
+            return new CrawlResult
+            {
+                ErrorCount = _errorCount,
+                SuccessCount = _successCount,
+            };
         }
     }
 }

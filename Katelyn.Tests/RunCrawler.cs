@@ -2,18 +2,13 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
 using System;
-using System.Collections.Generic;
 
 namespace Katelyn.Tests
 {
     [TestClass]
     public partial class IntegrationTest
-        : IListener
+        : TestBase
     {
-        private int _errorCount = 0;
-        private int _successCount = 0;
-        private IList<string> _errors = new List<string>();
-
         [TestMethod]
         public void RunCrawler()
         {
@@ -29,27 +24,10 @@ namespace Katelyn.Tests
             Crawler.Crawl(config);
         }
 
-        public void OnSuccess(string address)
-        {
-            _successCount++;
-        }
-
-        public void OnError(string address, Exception exception)
-        {
-            _errorCount++;
-
-            while (exception.InnerException != null)
-            {
-                exception = exception.InnerException;
-            }
-
-            _errors.Add($"{address} {exception.Message}");
-        }
-
-        public void OnEnd()
+        public override void OnEnd()
         {
             _errorCount.ShouldBe(0);
-            _successCount.ShouldBe(1);
+            _successCount.ShouldBe(2);
         }
     }
 }

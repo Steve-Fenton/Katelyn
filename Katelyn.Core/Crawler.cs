@@ -135,6 +135,11 @@ namespace Katelyn.Core
             {
                 var linkText = link.Attributes["href"].Value;
 
+                if (linkText.Contains("#"))
+                {
+                    linkText = linkText.Substring(0, linkText.IndexOf('#'));
+                }
+
                 if (IsOffSiteResource(linkText))
                 {
                     continue;
