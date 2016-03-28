@@ -8,14 +8,65 @@ namespace Katelyn.ConsoleRunner
     public class KatelynRunner
     {
         [Verb]
-        public static void Crawl(string address, int maxDepth = 5, bool includeImages = false, bool includeLinks = false, bool includeScripts = false, bool includeStyles = false, bool verbose = false, int delay = 0)
+        public static void Crawl(string address)
+        {
+            bool verbose = true;
+
+            Crawl(address, verbose);
+        }
+
+        [Verb]
+        public static void Crawl(string address, bool verbose)
+        {
+            var config = GetQuickConfig(address, verbose);
+
+            Crawler.Crawl(config);
+
+            if (config.Listener.GetCrawlResult().ErrorCount == 0)
+            {
+                Environment.Exit((int)ExitCode.CrawlError);
+            }
+        }
+
+        [Verb]
+        public static void Crawl(string address, bool quick, bool verbose, int maxDepth, bool includeImages, bool includeLinks, bool includeScripts, bool includeStyles, int delay)
+        {
+            CrawlerConfig config = (quick)
+                ? GetQuickConfig(address, verbose)
+                : GetComplexConfig(address, maxDepth, includeImages, includeLinks, includeScripts, includeStyles, verbose, delay);
+
+            Crawler.Crawl(config);
+
+            if (config.Listener.GetCrawlResult().ErrorCount == 0)
+            {
+                Environment.Exit((int)ExitCode.CrawlError);
+            }
+        }
+
+        private static CrawlerConfig GetQuickConfig(string address, bool verbose)
+        {
+            return new CrawlerConfig
+            {
+                RootAddress = new Uri(address),
+                Listener = (verbose) ? new ConsoleListener() : new SparseConsoleListener(),
+                MaxDepth = 100,
+                CrawlDelay = TimeSpan.Zero,
+                CrawlerFlags = CrawlerFlags.IncludeImages | CrawlerFlags.IncludeLinks | CrawlerFlags.IncludeScripts | CrawlerFlags.IncludeStyles,
+            };
+        }
+
+        private static CrawlerConfig GetComplexConfig(string address, int maxDepth, bool includeImages, bool includeLinks, bool includeScripts, bool includeStyles, bool verbose, int delay)
         {
             var config = new CrawlerConfig
             {
                 RootAddress = new Uri(address),
-                Listener = (verbose) ? new ConsoleListener() : new SparseConsoleListener(),
-                MaxDepth = maxDepth
+                Listener = (verbose) ? new ConsoleListener() : new SparseConsoleListener()
             };
+
+            if (maxDepth > 0)
+            {
+                config.MaxDepth = maxDepth;
+            }
 
             if (includeLinks)
             {
@@ -42,12 +93,7 @@ namespace Katelyn.ConsoleRunner
                 config.CrawlDelay = TimeSpan.FromMilliseconds(delay);
             }
 
-            Crawler.Crawl(config);
-
-            if (config.Listener.GetCrawlResult().ErrorCount == 0)
-            {
-                Environment.Exit((int)ExitCode.CrawlError);
-            }
+            return config;
         }
     }
 }

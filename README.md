@@ -2,41 +2,59 @@
 
 Well known for Crawling.
 
-Katelyn is a simple slow-crawler for checking a single website for crawl errors by following links out from the home page.
+Katelyn is a simple slow-crawler for checking a single root website for crawl errors by following links discovered during the crawl.
+The "slow cralwer" is designed to make light demands on your web server, making no concurrent requests. Additional delay can be added 
+to make the crawl even slower if necessary.
 
 You can run Katelyn from the command line:
 
-    Katelyn Crawl -address=http://localhost/ -includeLinks=true -maxDepth=10
+    Katelyn Crawl -address=http://localhost/
 
-Options
+Or
 
- - -address The URI of the root of the website
+    Katelyn Crawl -address=http://localhost/ -verbose=false
 
- - -includeLinks Whether to include the "href" attribute from _a_ tags
+Basic Options
 
- - -includeScripts Whether to include the "src" attribute from _script_ tags
+ - `-address` is mandatory. Specify the full URI to be used as the root for the crawling session
 
- - -includeStyles Whether to include the "href" attribute from _link_ tags
+ - `-verbose` optional, if `true` shows information for every URI crawled
 
- - -includeImages Whether to include the "src" attribute from _img_ tags
+When using only the basic options, the recommended defaults are used for all other settings.
+By default, Katelyn crawls all links, scripts, styles, and images that belong to the root
+address and ignored any external resources. The crawl is performed one request at a time, with
+no additional delay.
 
- - -maxDepth The maximum depth to crawl to the site
+If you wish to specify these options manually, you can use the advanced options:
 
- - -verbose Whether to log success messages as well as errors
+Advanced Options
 
- - -delay If specified, the number of milliseconds to pause before each request
+ - `-includeLinks` Whether to include the "href" attribute from _a_ tags
 
-For example, fully specified (and with recommended settings):
+ - `-includeScripts` Whether to include the "src" attribute from _script_ tags
+
+ - `-includeStyles` Whether to include the "href" attribute from _link_ tags
+
+ - `-includeImages` Whether to include the "src" attribute from _img_ tags
+
+ - `-maxDepth` The maximum depth to crawl to the site
+
+ - `-delay` If specified, the number of milliseconds to pause before each request
+
+For example, with everything specified:
 
     Katelyn Crawl 
         -address=http://localhost/ 
+        -verbose=true
         -maxDepth=100
         -includeLinks=true
         -includeScripts=true 
         -includeStyles=true 
         -includeImages=true
-        -verbose=true
-        -delay=0
+        -delay=500
+
+This example will crawl the website to 100 levels deep, including all resources, 
+with a 500 millisecond delay between receiving a response and making the next request.
 
 Or use the Katelyn Core library in your own applications.
 
@@ -50,9 +68,9 @@ Or use the Katelyn Core library in your own applications.
  - Expose max depth to caller
  - Find other resources (css, scripts, images) and check them
  - Ignore document hashes (i.e. crawl the page, ignoring the location hash)
+ - Expose a crawl delay to caller
 
 ## TODO
 
- - Expose a crawl delay to caller
  - Sample listeners (i.e. dogstatsd, eventlog)
  - Multi-domain service to slow-crawl a list of domains
