@@ -26,7 +26,7 @@ Options
 
 For example:
 
-    C:\Code\GitHub\Repos\Katelyn\Katelyn\Katelyn.Console\bin\Debug>Katelyn Crawl 
+    Katelyn Crawl 
         -address=http://localhost/ 
         -maxDepth=5 
         -includeScripts=true 
