@@ -12,7 +12,6 @@ Options
 
  - -address The URI of the root of the website
 
-
  - -includeLinks Whether to include the "href" attribute from _a_ tags
 
  - -includeScripts Whether to include the "src" attribute from _script_ tags
@@ -27,17 +26,17 @@ Options
 
  - -delay If specified, the number of milliseconds to pause before each request
 
-For example:
+For example, fully specified (and with recommended settings):
 
     Katelyn Crawl 
         -address=http://localhost/ 
-        -maxDepth=5 
+        -maxDepth=100
         -includeLinks=true
         -includeScripts=true 
         -includeStyles=true 
         -includeImages=true
         -verbose=true
-        -delay=500
+        -delay=0
 
 Or use the Katelyn Core library in your own applications.
 
