@@ -22,6 +22,8 @@ Options
 
  - -includeImages Whether to include the "src" attribute from _img_ tags
 
+- -verbose Whether to log success messages as well as errors
+
 For example:
 
     C:\Code\GitHub\Repos\Katelyn\Katelyn\Katelyn.Console\bin\Debug>Katelyn Crawl 
@@ -30,6 +32,7 @@ For example:
         -includeScripts=true 
         -includeStyles=true 
         -includeImages=true
+        -verbose=true
 
 Or use the Katelyn Core library in your own applications.
 
