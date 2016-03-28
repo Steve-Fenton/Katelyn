@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Threading;
 
 namespace Katelyn.Core
 {
@@ -32,6 +33,11 @@ namespace Katelyn.Core
 
         private void CrawlAddress(Uri address, int currentDepth, Uri parent = null)
         {
+            if (_config.CrawlDelay.TotalMilliseconds > 0)
+            {
+                Thread.Sleep((int)_config.CrawlDelay.TotalMilliseconds);
+            }
+
             var addressString = address.AbsoluteUri;
             IDictionary<string, Uri> queue = new Dictionary<string, Uri>();
 

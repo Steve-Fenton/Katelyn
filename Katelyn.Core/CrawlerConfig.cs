@@ -11,5 +11,7 @@ namespace Katelyn.Core
         public int MaxDepth { get; set; } = 5;
 
         public CrawlerFlags CrawlerFlags { get; set; } = CrawlerFlags.None;
+
+        public TimeSpan CrawlDelay { get; set; } = TimeSpan.Zero;
     }
 }

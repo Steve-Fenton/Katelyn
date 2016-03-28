@@ -8,7 +8,7 @@ namespace Katelyn.ConsoleRunner
     public class KatelynRunner
     {
         [Verb]
-        public static void Crawl(string address, int maxDepth = 5, bool includeImages = false, bool includeLinks = false, bool includeScripts = false, bool includeStyles = false, bool verbose = false)
+        public static void Crawl(string address, int maxDepth = 5, bool includeImages = false, bool includeLinks = false, bool includeScripts = false, bool includeStyles = false, bool verbose = false, int delay = 0)
         {
             var config = new CrawlerConfig
             {
@@ -35,6 +35,11 @@ namespace Katelyn.ConsoleRunner
             if (includeStyles)
             {
                 config.CrawlerFlags |= CrawlerFlags.IncludeStyles;
+            }
+
+            if (delay > 0)
+            {
+                config.CrawlDelay = TimeSpan.FromMilliseconds(delay);
             }
 
             Crawler.Crawl(config);
