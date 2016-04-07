@@ -6,7 +6,7 @@ using System;
 namespace Katelyn.Tests
 {
     [TestClass]
-    public partial class PageNotFoundTest
+    public class PageNotFoundTest
         : TestBase
     {
         [TestMethod]

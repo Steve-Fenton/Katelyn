@@ -9,7 +9,7 @@ namespace Katelyn.Core
     public class Crawler
     {
         private CrawlerConfig _config;
-        private IDictionary<string, int> _crawled = new Dictionary<string, int>();
+        private readonly IDictionary<string, int> _crawled = new Dictionary<string, int>();
 
         public static void Crawl(CrawlerConfig config)
         {
@@ -73,18 +73,24 @@ namespace Katelyn.Core
 
         private bool IsOffSiteResource(string linkText)
         {
-            return linkText.StartsWith("tel:")
-                || linkText.StartsWith("fax:")
-                || linkText.StartsWith("mailto:")
-                || (linkText.StartsWith("http://") && !linkText.StartsWith(_config.RootAddress.AbsoluteUri))
-                || (linkText.StartsWith("https://") && !linkText.StartsWith(_config.RootAddress.AbsoluteUri));
+            return linkText.StartsWith("tel:", StringComparison.InvariantCultureIgnoreCase)
+                || linkText.StartsWith("fax:", StringComparison.InvariantCultureIgnoreCase)
+                || linkText.StartsWith("mailto:", StringComparison.InvariantCultureIgnoreCase)
+                || linkText.StartsWith("//", StringComparison.InvariantCultureIgnoreCase)
+                || (linkText.StartsWith("http://", StringComparison.InvariantCultureIgnoreCase) && !linkText.StartsWith(_config.RootAddress.AbsoluteUri, StringComparison.InvariantCultureIgnoreCase))
+                || (linkText.StartsWith("https://", StringComparison.InvariantCultureIgnoreCase) && !linkText.StartsWith(_config.RootAddress.AbsoluteUri, StringComparison.InvariantCultureIgnoreCase));
         }
 
         private IDictionary<string, Uri> AddLinksToQueueFor(string address, Uri parent)
         {
             IDictionary<string, Uri> queue = new Dictionary<string, Uri>();
 
-            using (var client = new HttpClient())
+            var handler = new HttpClientHandler
+            {
+                AllowAutoRedirect = false
+            };
+
+            using (var client = new HttpClient(handler))
             {
                 var response = client.GetAsync(address).Result;
 
@@ -106,22 +112,22 @@ namespace Katelyn.Core
 
                 if (_config.CrawlerFlags.HasFlag(CrawlerFlags.IncludeLinks))
                 {
-                    queue = QueueHyperlinks(address, queue, htmlDocument);
+                    queue = QueueHyperlinks(queue, htmlDocument);
                 }
 
                 if (_config.CrawlerFlags.HasFlag(CrawlerFlags.IncludeScripts))
                 {
-                    queue = QueueScripts(address, queue, htmlDocument);
+                    queue = QueueScripts(queue, htmlDocument);
                 }
 
                 if (_config.CrawlerFlags.HasFlag(CrawlerFlags.IncludeStyles))
                 {
-                    queue = QueueStyles(address, queue, htmlDocument);
+                    queue = QueueStyles(queue, htmlDocument);
                 }
 
                 if (_config.CrawlerFlags.HasFlag(CrawlerFlags.IncludeImages))
                 {
-                    queue = QueueImages(address, queue, htmlDocument);
+                    queue = QueueImages(queue, htmlDocument);
                 }
             }
 
@@ -130,7 +136,7 @@ namespace Katelyn.Core
             return queue;
         }
 
-        private IDictionary<string, Uri> QueueHyperlinks(string key, IDictionary<string, Uri> queue, HtmlDocument htmlDocument)
+        private IDictionary<string, Uri> QueueHyperlinks(IDictionary<string, Uri> queue, HtmlDocument htmlDocument)
         {
             var linkNodes = htmlDocument.DocumentNode.SelectNodes("//a[@href]");
 
@@ -164,7 +170,7 @@ namespace Katelyn.Core
             return queue;
         }
 
-        private IDictionary<string, Uri> QueueScripts(string key, IDictionary<string, Uri> queue, HtmlDocument htmlDocument)
+        private IDictionary<string, Uri> QueueScripts(IDictionary<string, Uri> queue, HtmlDocument htmlDocument)
         {
             var scriptNodes = htmlDocument.DocumentNode.SelectNodes("//script[@src]");
 
@@ -193,7 +199,7 @@ namespace Katelyn.Core
             return queue;
         }
 
-        private IDictionary<string, Uri> QueueStyles(string key, IDictionary<string, Uri> queue, HtmlDocument htmlDocument)
+        private IDictionary<string, Uri> QueueStyles(IDictionary<string, Uri> queue, HtmlDocument htmlDocument)
         {
             var styleNodes = htmlDocument.DocumentNode.SelectNodes("//link[@href]");
 
@@ -222,7 +228,7 @@ namespace Katelyn.Core
             return queue;
         }
 
-        private IDictionary<string, Uri> QueueImages(string key, IDictionary<string, Uri> queue, HtmlDocument htmlDocument)
+        private IDictionary<string, Uri> QueueImages(IDictionary<string, Uri> queue, HtmlDocument htmlDocument)
         {
             var imageNodes = htmlDocument.DocumentNode.SelectNodes("//img[@src]");
 
@@ -253,7 +259,7 @@ namespace Katelyn.Core
 
         private bool IsAbsoluteUri(string linkText)
         {
-            return linkText.StartsWith(_config.RootAddress.AbsoluteUri);
+            return linkText.StartsWith(_config.RootAddress.AbsoluteUri, StringComparison.InvariantCultureIgnoreCase);
         }
 
         private void QueueIfNew(IDictionary<string, Uri> queue, Uri uri)

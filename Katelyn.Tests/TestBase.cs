@@ -7,8 +7,8 @@ namespace Katelyn.Tests
     public abstract class TestBase
         : IListener
     {
-        protected int _errorCount = 0;
-        protected int _successCount = 0;
+        protected int _errorCount;
+        protected int _successCount;
         private IList<string> _errors = new List<string>();
 
         public void OnSuccess(string address, string parent)

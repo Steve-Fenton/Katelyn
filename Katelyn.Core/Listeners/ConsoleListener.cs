@@ -8,8 +8,8 @@ namespace Katelyn.Core.Listeners
     {
         protected readonly ConsoleColor GoodForeground = ConsoleColor.Green;
         protected readonly ConsoleColor BadForeground = ConsoleColor.Red;
-        protected int ErrorCount = 0;
-        protected int SuccessCount = 0;
+        protected int ErrorCount;
+        protected int SuccessCount;
 
         public virtual void OnSuccess(string address, string parent)
         {

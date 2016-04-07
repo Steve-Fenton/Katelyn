@@ -7,7 +7,7 @@ using System;
 namespace Katelyn.Tests
 {
     [TestClass]
-    public partial class RunCrawlerTest
+    public class RunCrawlerTest
         : TestBase
     {
         [TestMethod]
