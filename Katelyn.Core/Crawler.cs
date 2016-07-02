@@ -94,7 +94,9 @@ namespace Katelyn.Core
             {
                 var response = client.GetAsync(address).Result;
 
-                if (!response.IsSuccessStatusCode)
+                int statusCode = (int)response.StatusCode;
+
+                if (statusCode >= 400)
                 {
                     _config.Listener.OnError(address, parent?.AbsoluteUri, new Exception($"{response.StatusCode} ${response.ReasonPhrase}"));
                     return queue;
@@ -264,8 +266,7 @@ namespace Katelyn.Core
 
         private void QueueIfNew(IDictionary<string, Uri> queue, Uri uri)
         {
-            // Only queue it up if it hasn't been crawled,
-            // and isn't already queued
+            // Only queue it up if it hasn't been queued or crawled
             if (!_crawled.ContainsKey(uri.AbsoluteUri)
                 && !queue.ContainsKey(uri.AbsoluteUri))
             {
