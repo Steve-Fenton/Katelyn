@@ -40,7 +40,7 @@ namespace Katelyn.ConsoleRunner
 
             Crawler.Crawl(config);
 
-            if (config.Listener.GetCrawlResult().ErrorCount == 0)
+            if (config.Listener.GetCrawlResult().ErrorCount > 0)
             {
                 Environment.Exit((int)ExitCode.CrawlError);
             }
