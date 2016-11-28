@@ -1,7 +1,10 @@
 ﻿using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 
 namespace Katelyn.Core
@@ -94,7 +97,7 @@ namespace Katelyn.Core
             {
                 var response = client.GetAsync(address).Result;
 
-                int statusCode = (int)response.StatusCode;
+                var statusCode = (int)response.StatusCode;
 
                 if (statusCode >= 400)
                 {
@@ -111,6 +114,17 @@ namespace Katelyn.Core
 
                 var htmlDocument = new HtmlDocument();
                 htmlDocument.LoadHtml(response.Content.ReadAsStringAsync().Result);
+
+                if (_config.CrawlerFlags.HasFlag(CrawlerFlags.IncludeFailureCheck))
+                {
+                    var regex = new Regex(@"KATELYN:ERRORS\([0-9]+\)", RegexOptions.IgnoreCase);
+
+                    foreach (Match match in regex.Matches(htmlDocument.DocumentNode.OuterHtml))
+                    {
+                        _config.Listener.OnError(address, parent?.AbsoluteUri, new Exception($"At {match.Index} - {match.Value}"));
+                        return queue;
+                    }
+                }
 
                 if (_config.CrawlerFlags.HasFlag(CrawlerFlags.IncludeLinks))
                 {

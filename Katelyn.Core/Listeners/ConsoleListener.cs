@@ -58,7 +58,7 @@ namespace Katelyn.Core.Listeners
             return new CrawlResult
             {
                 ErrorCount = ErrorCount,
-                SuccessCount = SuccessCount,
+                SuccessCount = SuccessCount
             };
         }
     }

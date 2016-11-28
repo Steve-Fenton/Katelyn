@@ -39,7 +39,7 @@ namespace Katelyn.Tests
             return new CrawlResult
             {
                 ErrorCount = _errorCount,
-                SuccessCount = _successCount,
+                SuccessCount = _successCount
             };
         }
     }

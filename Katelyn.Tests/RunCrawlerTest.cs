@@ -19,7 +19,7 @@ namespace Katelyn.Tests
                 RootAddress = new Uri("http://localhost/"),
                 Listener = this,
                 MaxDepth = 2,
-                CrawlerFlags = CrawlerFlags.IncludeLinks
+                CrawlerFlags = CrawlerFlags.IncludeLinks | CrawlerFlags.IncludeFailureCheck
             };
 
             Crawler.Crawl(config);

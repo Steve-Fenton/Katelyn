@@ -6,7 +6,9 @@ using System;
 
 namespace Katelyn.ConsoleRunner
 {
+#pragma warning disable RECS0014 // If all fields, properties and methods members are static, the class can be made static.
     public class KatelynRunner
+#pragma warning restore RECS0014 // If all fields, properties and methods members are static, the class can be made static.
     {
         [Verb]
         public static void Crawl([Required]string address, [DefaultValue(true)] bool verbose)
@@ -31,10 +33,11 @@ namespace Katelyn.ConsoleRunner
             [DefaultValue(true)]bool includeLinks,
             [DefaultValue(true)]bool includeScripts,
             [DefaultValue(true)]bool includeStyles,
+            [DefaultValue(true)]bool includeFailureCheck,
             [DefaultValue(100)]int maxDepth,
             [DefaultValue(0)]int delay)
         {
-            CrawlerConfig config = GetComplexConfig(address, verbose, includeImages, includeLinks, includeScripts, includeStyles, maxDepth, delay);
+            var config = GetComplexConfig(address, verbose, includeImages, includeLinks, includeScripts, includeStyles, includeFailureCheck, maxDepth, delay);
 
             Console.WriteLine(JsonConvert.SerializeObject(config));
 
@@ -54,11 +57,11 @@ namespace Katelyn.ConsoleRunner
                 Listener = (verbose) ? new ConsoleListener() : new SparseConsoleListener(),
                 MaxDepth = 100,
                 CrawlDelay = TimeSpan.Zero,
-                CrawlerFlags = CrawlerFlags.IncludeImages | CrawlerFlags.IncludeLinks | CrawlerFlags.IncludeScripts | CrawlerFlags.IncludeStyles,
+                CrawlerFlags = CrawlerFlags.IncludeImages | CrawlerFlags.IncludeLinks | CrawlerFlags.IncludeScripts | CrawlerFlags.IncludeStyles | CrawlerFlags.IncludeFailureCheck
             };
         }
 
-        private static CrawlerConfig GetComplexConfig(string address, bool verbose, bool includeImages, bool includeLinks, bool includeScripts, bool includeStyles, int maxDepth, int delay)
+        private static CrawlerConfig GetComplexConfig(string address, bool verbose, bool includeImages, bool includeLinks, bool includeScripts, bool includeStyles, bool includeFailureCheck, int maxDepth, int delay)
         {
             var config = new CrawlerConfig
             {
@@ -89,6 +92,11 @@ namespace Katelyn.ConsoleRunner
             if (includeStyles)
             {
                 config.CrawlerFlags |= CrawlerFlags.IncludeStyles;
+            }
+
+            if (includeFailureCheck)
+            {
+                config.CrawlerFlags |= CrawlerFlags.IncludeFailureCheck;
             }
 
             if (delay > 0)
