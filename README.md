@@ -43,7 +43,7 @@ Advanced Options
 
  - `-includeImages` Whether to include the "src" attribute from _img_ tags
  
-  - `-includeFailureCheck` Whether to check for the Katelyn Error Comment `<!-- KATELYN:ERRORS(1) -->`
+ - `-includeFailureCheck` Whether to check for the Katelyn Error Comment `<!-- KATELYN:ERRORS(1) -->`
 
  - `-maxDepth` The maximum depth to crawl to the site
 
