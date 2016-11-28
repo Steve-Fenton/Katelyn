@@ -42,6 +42,8 @@ Advanced Options
  - `-includeStyles` Whether to include the "href" attribute from _link_ tags
 
  - `-includeImages` Whether to include the "src" attribute from _img_ tags
+ 
+  - `-includeFailureCheck` Whether to check for the Katelyn Error Comment `<!-- KATELYN:ERRORS(1) -->`
 
  - `-maxDepth` The maximum depth to crawl to the site
 
@@ -57,6 +59,7 @@ For example, with everything specified:
         -includeScripts=true 
         -includeStyles=true 
         -includeImages=true
+        -includeFailureCheck=true
         -delay=500
 
 This example will crawl the website to 100 levels deep, including all resources, 
@@ -75,6 +78,7 @@ Or use the Katelyn Core library in your own applications.
  - Find other resources (css, scripts, images) and check them
  - Ignore document hashes (i.e. crawl the page, ignoring the location hash)
  - Expose a crawl delay to caller
+ - Method of indicating a partial failure (i.e. one module failed, but a page is still being served)
 
 ## TODO
 
