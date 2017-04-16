@@ -7,6 +7,7 @@ using System;
 namespace Katelyn.ConsoleRunner
 {
 #pragma warning disable RECS0014 // If all fields, properties and methods members are static, the class can be made static.
+
     public class KatelynRunner
 #pragma warning restore RECS0014 // If all fields, properties and methods members are static, the class can be made static.
     {

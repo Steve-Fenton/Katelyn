@@ -12,10 +12,9 @@ namespace Katelyn.Tests
         [TestMethod]
         public void RunCrawlerWithScriptsStylesImages()
         {
-            // TODO: Test Page?
             var config = new CrawlerConfig
             {
-                RootAddress = new Uri("http://localhost/"),
+                RootAddress = new Uri("http://localhost:51746/"),
                 Listener = this,
                 MaxDepth = 2,
             };
@@ -31,7 +30,7 @@ namespace Katelyn.Tests
         public override void OnEnd()
         {
             _errorCount.ShouldBe(0);
-            _successCount.ShouldBe(5);
+            _successCount.ShouldBe(3);
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using CLAP;
-using System;
 
 namespace Katelyn.ConsoleRunner
 {
