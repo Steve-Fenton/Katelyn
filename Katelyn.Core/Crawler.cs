@@ -10,12 +10,16 @@ namespace Katelyn.Core
     public class Crawler
     {
         private CrawlerConfig _config;
+        private bool _continue = true;
         private readonly IDictionary<string, int> _crawled = new Dictionary<string, int>();
 
-        public static void Crawl(CrawlerConfig config)
+        public bool IsRunning { get; set; }
+
+        public static Crawler Crawl(CrawlerConfig config)
         {
             var crawler = new Crawler(config);
             crawler.Start();
+            return crawler;
         }
 
         private Crawler(CrawlerConfig config)
@@ -23,17 +27,31 @@ namespace Katelyn.Core
             _config = config;
         }
 
-        private void Start()
+        public void Start()
         {
+            IsRunning = true;
             _config.Listener.OnStart();
 
             CrawlAddress(_config.RootAddress, 0);
+
+            _config.Listener.OnEnd();
+            IsRunning = false;
+        }
+
+        public void Stop()
+        {
+            _continue = false;
 
             _config.Listener.OnEnd();
         }
 
         private void CrawlAddress(Uri address, int currentDepth, Uri parent = null)
         {
+            if (!_continue)
+            {
+                return;
+            }
+
             if (_config.CrawlDelay.TotalMilliseconds > 0)
             {
                 Thread.Sleep((int)_config.CrawlDelay.TotalMilliseconds);
