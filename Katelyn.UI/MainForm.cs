@@ -65,8 +65,7 @@ namespace Katelyn.UI
                     break;
                 case (int)ProgressType.Complete:
                     OutputListBox.Items.Add(userState);
-                    CrawlStart.Enabled = true;
-                    CrawlProgress.Style = ProgressBarStyle.Blocks;
+                    ResetUI();
 
                     if (_errorCount > 0)
                     {
@@ -100,6 +99,7 @@ namespace Katelyn.UI
             }
             catch (Exception ex)
             {
+                ResetUI();
                 MessageBox.Show(ex.Message);
             }
         }
@@ -114,6 +114,13 @@ namespace Katelyn.UI
 
             OutputTab.Text = "Output";
             ErrorTab.Text = "Errors";
+        }
+
+
+        private void ResetUI()
+        {
+            CrawlStart.Enabled = true;
+            CrawlProgress.Style = ProgressBarStyle.Blocks;
         }
     }
 }
