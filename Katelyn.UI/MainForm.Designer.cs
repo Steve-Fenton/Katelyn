@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             this.CrawlProgress = new System.Windows.Forms.ProgressBar();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.AddressGroupBox = new System.Windows.Forms.GroupBox();
@@ -37,19 +38,19 @@
             this.ClearButton = new System.Windows.Forms.Button();
             this.CrawlStart = new System.Windows.Forms.Button();
             this.CrawlAddress = new System.Windows.Forms.TextBox();
-            this.ErrorTab = new System.Windows.Forms.TabPage();
-            this.ErrorListBox = new System.Windows.Forms.ListBox();
+            this.MainTabControl = new System.Windows.Forms.TabControl();
             this.OutputTab = new System.Windows.Forms.TabPage();
             this.OutputListBox = new System.Windows.Forms.ListBox();
-            this.MainTabControl = new System.Windows.Forms.TabControl();
+            this.ErrorTab = new System.Windows.Forms.TabPage();
+            this.ErrorListBox = new System.Windows.Forms.ListBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.AddressGroupBox.SuspendLayout();
-            this.ErrorTab.SuspendLayout();
-            this.OutputTab.SuspendLayout();
             this.MainTabControl.SuspendLayout();
+            this.OutputTab.SuspendLayout();
+            this.ErrorTab.SuspendLayout();
             this.SuspendLayout();
             // 
             // CrawlProgress
@@ -148,26 +149,16 @@
             this.CrawlAddress.Size = new System.Drawing.Size(372, 31);
             this.CrawlAddress.TabIndex = 0;
             // 
-            // ErrorTab
+            // MainTabControl
             // 
-            this.ErrorTab.Controls.Add(this.ErrorListBox);
-            this.ErrorTab.Location = new System.Drawing.Point(8, 39);
-            this.ErrorTab.Name = "ErrorTab";
-            this.ErrorTab.Padding = new System.Windows.Forms.Padding(3);
-            this.ErrorTab.Size = new System.Drawing.Size(1702, 683);
-            this.ErrorTab.TabIndex = 1;
-            this.ErrorTab.Text = "Errors";
-            this.ErrorTab.UseVisualStyleBackColor = true;
-            // 
-            // ErrorListBox
-            // 
-            this.ErrorListBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ErrorListBox.FormattingEnabled = true;
-            this.ErrorListBox.ItemHeight = 25;
-            this.ErrorListBox.Location = new System.Drawing.Point(3, 3);
-            this.ErrorListBox.Name = "ErrorListBox";
-            this.ErrorListBox.Size = new System.Drawing.Size(1696, 677);
-            this.ErrorListBox.TabIndex = 0;
+            this.MainTabControl.Controls.Add(this.OutputTab);
+            this.MainTabControl.Controls.Add(this.ErrorTab);
+            this.MainTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.MainTabControl.Location = new System.Drawing.Point(0, 0);
+            this.MainTabControl.Name = "MainTabControl";
+            this.MainTabControl.SelectedIndex = 0;
+            this.MainTabControl.Size = new System.Drawing.Size(1718, 730);
+            this.MainTabControl.TabIndex = 8;
             // 
             // OutputTab
             // 
@@ -190,16 +181,26 @@
             this.OutputListBox.Size = new System.Drawing.Size(1696, 677);
             this.OutputListBox.TabIndex = 0;
             // 
-            // MainTabControl
+            // ErrorTab
             // 
-            this.MainTabControl.Controls.Add(this.OutputTab);
-            this.MainTabControl.Controls.Add(this.ErrorTab);
-            this.MainTabControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.MainTabControl.Location = new System.Drawing.Point(0, 0);
-            this.MainTabControl.Name = "MainTabControl";
-            this.MainTabControl.SelectedIndex = 0;
-            this.MainTabControl.Size = new System.Drawing.Size(1718, 730);
-            this.MainTabControl.TabIndex = 8;
+            this.ErrorTab.Controls.Add(this.ErrorListBox);
+            this.ErrorTab.Location = new System.Drawing.Point(8, 39);
+            this.ErrorTab.Name = "ErrorTab";
+            this.ErrorTab.Padding = new System.Windows.Forms.Padding(3);
+            this.ErrorTab.Size = new System.Drawing.Size(1702, 683);
+            this.ErrorTab.TabIndex = 1;
+            this.ErrorTab.Text = "Errors";
+            this.ErrorTab.UseVisualStyleBackColor = true;
+            // 
+            // ErrorListBox
+            // 
+            this.ErrorListBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ErrorListBox.FormattingEnabled = true;
+            this.ErrorListBox.ItemHeight = 25;
+            this.ErrorListBox.Location = new System.Drawing.Point(3, 3);
+            this.ErrorListBox.Name = "ErrorListBox";
+            this.ErrorListBox.Size = new System.Drawing.Size(1696, 677);
+            this.ErrorListBox.TabIndex = 0;
             // 
             // MainForm
             // 
@@ -208,6 +209,7 @@
             this.ClientSize = new System.Drawing.Size(1718, 857);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.CrawlProgress);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "MainForm";
             this.RightToLeftLayout = true;
             this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Show;
@@ -218,9 +220,9 @@
             this.splitContainer1.ResumeLayout(false);
             this.AddressGroupBox.ResumeLayout(false);
             this.AddressGroupBox.PerformLayout();
-            this.ErrorTab.ResumeLayout(false);
-            this.OutputTab.ResumeLayout(false);
             this.MainTabControl.ResumeLayout(false);
+            this.OutputTab.ResumeLayout(false);
+            this.ErrorTab.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
