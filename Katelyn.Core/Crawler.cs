@@ -1,6 +1,7 @@
 ﻿using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net.Http;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -30,11 +31,36 @@ namespace Katelyn.Core
         public void Start()
         {
             IsRunning = true;
-            _config.Listener.OnStart();
 
-            CrawlAddress(_config.RootAddress, 0);
+            try
+            {
+                _config.Listener.OnStart();
 
-            _config.Listener.OnEnd();
+                if (!string.IsNullOrWhiteSpace(_config.FilePath))
+                {
+                    foreach (var line in File.ReadLines(_config.FilePath))
+                    {
+                        if (string.IsNullOrWhiteSpace(line))
+                        {
+                            continue;
+                        }
+
+                        _config.RootAddress = new Uri(line);
+                        CrawlAddress(_config.RootAddress, 0);
+                    }
+                }
+                else
+                {
+                    CrawlAddress(_config.RootAddress, 0);
+                }
+
+                _config.Listener.OnEnd();
+            }
+            catch (Exception ex)
+            {
+                _config.Listener.OnError("Crawl Error", "Start", ex);
+            }
+
             IsRunning = false;
         }
 

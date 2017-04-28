@@ -6,6 +6,8 @@ namespace Katelyn.Core
     {
         public Uri RootAddress { get; set; }
 
+        public string FilePath { get; set; }
+
         public IListener Listener { get; set; }
 
         public int MaxDepth { get; set; } = 5;

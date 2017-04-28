@@ -46,9 +46,9 @@ namespace Katelyn.UI
         private void WorkerProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             int progress = e.ProgressPercentage; //Progress-Value
-            var userState = (string) e.UserState; //can be used to pass values to the progress-changed-event
+            var userState = (string)e.UserState; //can be used to pass values to the progress-changed-event
 
-            switch(progress)
+            switch (progress)
             {
                 case (int)ProgressType.Information:
                     OutputListBox.Items.Add(userState);
@@ -85,15 +85,23 @@ namespace Katelyn.UI
             {
                 CrawlStart.Enabled = false;
                 CrawlProgress.Style = ProgressBarStyle.Marquee;
-
-                CrawlerConfig config = new CrawlerConfig
+                var config = new CrawlerConfig
                 {
                     MaxDepth = int.Parse(CrawlDepth.Text),
                     CrawlerFlags = CrawlerFlags.IncludeFailureCheck | CrawlerFlags.IncludeImages | CrawlerFlags.IncludeLinks | CrawlerFlags.IncludeScripts | CrawlerFlags.IncludeStyles,
-                    RootAddress = new Uri(CrawlAddress.Text),
                 };
 
-                if (!_worker.IsBusy) {
+                if (IsLocalPath(CrawlAddress.Text))
+                {
+                    config.FilePath = CrawlAddress.Text;
+                }
+                else
+                {
+                    config.RootAddress = new Uri(CrawlAddress.Text);
+                }
+
+                if (!_worker.IsBusy)
+                {
                     _worker.RunWorkerAsync(config);
                 }
             }
@@ -121,6 +129,16 @@ namespace Katelyn.UI
         {
             CrawlStart.Enabled = true;
             CrawlProgress.Style = ProgressBarStyle.Blocks;
+        }
+
+        private static bool IsLocalPath(string path)
+        {
+            if (path.StartsWith("http:\\"))
+            {
+                return false;
+            }
+
+            return new Uri(path).IsFile;
         }
     }
 }
