@@ -40,6 +40,11 @@ namespace Katelyn.Core.Listeners
             errorWriter.WriteLine($"   {exception.Message}");
         }
 
+        public void OnDocumentLoaded(string address, string parent, string document)
+        {
+            return;
+        }
+
         public void OnStart()
         {
             Console.ForegroundColor = ConsoleColor.White;

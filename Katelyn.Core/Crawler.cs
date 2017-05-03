@@ -157,6 +157,8 @@ namespace Katelyn.Core
                 var htmlDocument = new HtmlDocument();
                 htmlDocument.LoadHtml(response.Content.ReadAsStringAsync().Result);
 
+                _config.Listener.OnDocumentLoaded(address, parent?.AbsoluteUri, htmlDocument.DocumentNode.OuterHtml);
+
                 if (_config.CrawlerFlags.HasFlag(CrawlerFlags.IncludeFailureCheck))
                 {
                     var regex = new Regex(@"KATELYN:ERRORS\([0-9]+\)", RegexOptions.IgnoreCase);

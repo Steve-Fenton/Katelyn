@@ -37,6 +37,12 @@ namespace Katelyn.UI
             _worker.ReportProgress((int)ProgressType.RequestError, $"Exception from {address} Found on {parent} {exception.Message}");
         }
 
+        public void OnDocumentLoaded(string address, string parent, string document)
+        {
+            // TODO: Store results... can be used for comparison later...
+            return;
+        }
+
         public void OnStart()
         {
             _worker.ReportProgress((int)ProgressType.Information, "Katelyn - Well known for Crawling");

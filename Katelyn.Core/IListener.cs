@@ -12,6 +12,8 @@ namespace Katelyn.Core
 
         void OnSuccess(string address, string parent);
 
+        void OnDocumentLoaded(string address, string parent, string document);
+
         CrawlResult GetCrawlResult();
     }
 }

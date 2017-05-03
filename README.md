@@ -79,8 +79,8 @@ Or use the Katelyn Core library in your own applications.
  - Ignore document hashes (i.e. crawl the page, ignoring the location hash)
  - Expose a crawl delay to caller
  - Method of indicating a partial failure (i.e. one module failed, but a page is still being served)
+ - Multi-domain service to slow-crawl a list of domains (supply a FilePath to a file with one line per domain)
 
 ## TODO
 
  - Sample listeners (i.e. dogstatsd, eventlog)
- - Multi-domain service to slow-crawl a list of domains

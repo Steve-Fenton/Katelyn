@@ -28,8 +28,14 @@ namespace Katelyn.Tests
             _errors.Add($"{address} found on {parent} - {exception.Message}");
         }
 
+        public void OnDocumentLoaded(string address, string parent, string document)
+        {
+            return;
+        }
+
         public void OnStart()
         {
+            return;
         }
 
         public abstract void OnEnd();
