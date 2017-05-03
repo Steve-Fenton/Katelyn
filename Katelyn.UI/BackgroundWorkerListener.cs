@@ -1,6 +1,7 @@
 ﻿using Katelyn.Core;
 using System;
 using System.ComponentModel;
+using System.IO;
 
 namespace Katelyn.UI
 {
@@ -8,14 +9,21 @@ namespace Katelyn.UI
         : IListener
     {
         private BackgroundWorker _worker;
+        private bool _storeResult;
+        private DirectoryInfo _outputDirectory;
         protected int ErrorCount;
         protected int SuccessCount;
 
-        public bool IsRunning { get; private set; } = true;
-
-        public BackgroundWorkerListener(BackgroundWorker worker)
+        public BackgroundWorkerListener(BackgroundWorker worker, bool storeResult, string outputPath)
         {
             _worker = worker;
+            _storeResult = storeResult;
+
+            if (_storeResult)
+            {
+                _outputDirectory = new DirectoryInfo(Path.Combine(outputPath, "katelyn", DateTime.UtcNow.ToFileTimeUtc().ToString()));
+                _outputDirectory.Create();
+            }
         }
 
         public virtual void OnSuccess(string address, string parent)
@@ -39,8 +47,21 @@ namespace Katelyn.UI
 
         public void OnDocumentLoaded(string address, string parent, string document)
         {
-            // TODO: Store results... can be used for comparison later...
-            return;
+            if (!_storeResult)
+            {
+                return;
+            }
+
+            string invalid = new string(Path.GetInvalidFileNameChars()) + new string(Path.GetInvalidPathChars());
+
+            string fileName = address;
+
+            foreach (char c in invalid)
+            {
+                fileName = fileName.Replace(c.ToString(), "-");
+            }
+
+            File.WriteAllText(Path.Combine(_outputDirectory.FullName, fileName + ".html"), document);
         }
 
         public void OnStart()

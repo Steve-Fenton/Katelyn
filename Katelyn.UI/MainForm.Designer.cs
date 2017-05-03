@@ -43,6 +43,8 @@
             this.OutputListBox = new System.Windows.Forms.ListBox();
             this.ErrorTab = new System.Windows.Forms.TabPage();
             this.ErrorListBox = new System.Windows.Forms.ListBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.StoreResultCheckBox = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -78,11 +80,13 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.MainTabControl);
             this.splitContainer1.Size = new System.Drawing.Size(1718, 834);
-            this.splitContainer1.SplitterDistance = 100;
+            this.splitContainer1.SplitterDistance = 120;
             this.splitContainer1.TabIndex = 9;
             // 
             // AddressGroupBox
             // 
+            this.AddressGroupBox.Controls.Add(this.StoreResultCheckBox);
+            this.AddressGroupBox.Controls.Add(this.label2);
             this.AddressGroupBox.Controls.Add(this.label1);
             this.AddressGroupBox.Controls.Add(this.DepthLabel);
             this.AddressGroupBox.Controls.Add(this.CrawlDepth);
@@ -91,7 +95,7 @@
             this.AddressGroupBox.Controls.Add(this.CrawlAddress);
             this.AddressGroupBox.Location = new System.Drawing.Point(8, 12);
             this.AddressGroupBox.Name = "AddressGroupBox";
-            this.AddressGroupBox.Size = new System.Drawing.Size(844, 180);
+            this.AddressGroupBox.Size = new System.Drawing.Size(844, 211);
             this.AddressGroupBox.TabIndex = 9;
             this.AddressGroupBox.TabStop = false;
             this.AddressGroupBox.Text = "Settings";
@@ -127,7 +131,7 @@
             this.ClearButton.Location = new System.Drawing.Point(683, 49);
             this.ClearButton.Name = "ClearButton";
             this.ClearButton.Size = new System.Drawing.Size(125, 51);
-            this.ClearButton.TabIndex = 5;
+            this.ClearButton.TabIndex = 102;
             this.ClearButton.Text = "Clear";
             this.ClearButton.UseVisualStyleBackColor = true;
             this.ClearButton.Click += new System.EventHandler(this.ClearButton_Click);
@@ -137,7 +141,7 @@
             this.CrawlStart.Location = new System.Drawing.Point(552, 49);
             this.CrawlStart.Name = "CrawlStart";
             this.CrawlStart.Size = new System.Drawing.Size(125, 51);
-            this.CrawlStart.TabIndex = 3;
+            this.CrawlStart.TabIndex = 101;
             this.CrawlStart.Text = "Start";
             this.CrawlStart.UseVisualStyleBackColor = true;
             this.CrawlStart.Click += new System.EventHandler(this.CrawlStart_Click);
@@ -157,8 +161,8 @@
             this.MainTabControl.Location = new System.Drawing.Point(0, 0);
             this.MainTabControl.Name = "MainTabControl";
             this.MainTabControl.SelectedIndex = 0;
-            this.MainTabControl.Size = new System.Drawing.Size(1718, 730);
-            this.MainTabControl.TabIndex = 8;
+            this.MainTabControl.Size = new System.Drawing.Size(1718, 710);
+            this.MainTabControl.TabIndex = 1000;
             // 
             // OutputTab
             // 
@@ -166,7 +170,7 @@
             this.OutputTab.Location = new System.Drawing.Point(8, 39);
             this.OutputTab.Name = "OutputTab";
             this.OutputTab.Padding = new System.Windows.Forms.Padding(3);
-            this.OutputTab.Size = new System.Drawing.Size(1702, 683);
+            this.OutputTab.Size = new System.Drawing.Size(1702, 663);
             this.OutputTab.TabIndex = 0;
             this.OutputTab.Text = "Output";
             this.OutputTab.UseVisualStyleBackColor = true;
@@ -178,7 +182,7 @@
             this.OutputListBox.ItemHeight = 25;
             this.OutputListBox.Location = new System.Drawing.Point(3, 3);
             this.OutputListBox.Name = "OutputListBox";
-            this.OutputListBox.Size = new System.Drawing.Size(1696, 677);
+            this.OutputListBox.Size = new System.Drawing.Size(1696, 657);
             this.OutputListBox.TabIndex = 0;
             // 
             // ErrorTab
@@ -201,6 +205,25 @@
             this.ErrorListBox.Name = "ErrorListBox";
             this.ErrorListBox.Size = new System.Drawing.Size(1696, 677);
             this.ErrorListBox.TabIndex = 0;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(14, 144);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(63, 25);
+            this.label2.TabIndex = 7;
+            this.label2.Text = "Store";
+            // 
+            // StoreResultCheckBox
+            // 
+            this.StoreResultCheckBox.AutoSize = true;
+            this.StoreResultCheckBox.Location = new System.Drawing.Point(138, 143);
+            this.StoreResultCheckBox.Name = "StoreResultCheckBox";
+            this.StoreResultCheckBox.Size = new System.Drawing.Size(335, 29);
+            this.StoreResultCheckBox.TabIndex = 3;
+            this.StoreResultCheckBox.Text = "(stores results for comparison)";
+            this.StoreResultCheckBox.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
@@ -243,6 +266,8 @@
         private System.Windows.Forms.ListBox OutputListBox;
         private System.Windows.Forms.TabPage ErrorTab;
         private System.Windows.Forms.ListBox ErrorListBox;
+        private System.Windows.Forms.CheckBox StoreResultCheckBox;
+        private System.Windows.Forms.Label label2;
     }
 }
 

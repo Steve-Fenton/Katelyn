@@ -32,8 +32,8 @@ namespace Katelyn.UI
         {
             BackgroundWorker worker = sender as BackgroundWorker;
 
-            var config = e.Argument as CrawlerConfig;
-            config.Listener = new BackgroundWorkerListener(worker);
+            var config = e.Argument as UICrawlerConfig;
+            config.Listener = new BackgroundWorkerListener(worker, config.StoreResult, "c:\\temp\\crawl");
 
             Crawler.Crawl(config);
         }
@@ -85,8 +85,9 @@ namespace Katelyn.UI
             {
                 CrawlStart.Enabled = false;
                 CrawlProgress.Style = ProgressBarStyle.Marquee;
-                var config = new CrawlerConfig
+                var config = new UICrawlerConfig
                 {
+                    StoreResult = StoreResultCheckBox.Checked,
                     MaxDepth = int.Parse(CrawlDepth.Text),
                     CrawlerFlags = CrawlerFlags.IncludeFailureCheck | CrawlerFlags.IncludeImages | CrawlerFlags.IncludeLinks | CrawlerFlags.IncludeScripts | CrawlerFlags.IncludeStyles,
                 };
