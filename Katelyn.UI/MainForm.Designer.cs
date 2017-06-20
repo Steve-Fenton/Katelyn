@@ -32,6 +32,8 @@
             this.CrawlProgress = new System.Windows.Forms.ProgressBar();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.AddressGroupBox = new System.Windows.Forms.GroupBox();
+            this.StoreResultCheckBox = new System.Windows.Forms.CheckBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.DepthLabel = new System.Windows.Forms.Label();
             this.CrawlDepth = new System.Windows.Forms.TextBox();
@@ -40,11 +42,9 @@
             this.CrawlAddress = new System.Windows.Forms.TextBox();
             this.MainTabControl = new System.Windows.Forms.TabControl();
             this.OutputTab = new System.Windows.Forms.TabPage();
-            this.OutputListBox = new System.Windows.Forms.ListBox();
             this.ErrorTab = new System.Windows.Forms.TabPage();
             this.ErrorListBox = new System.Windows.Forms.ListBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.StoreResultCheckBox = new System.Windows.Forms.CheckBox();
+            this.CrawlOutput = new System.Windows.Forms.DataGridView();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -53,6 +53,7 @@
             this.MainTabControl.SuspendLayout();
             this.OutputTab.SuspendLayout();
             this.ErrorTab.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.CrawlOutput)).BeginInit();
             this.SuspendLayout();
             // 
             // CrawlProgress
@@ -99,6 +100,25 @@
             this.AddressGroupBox.TabIndex = 9;
             this.AddressGroupBox.TabStop = false;
             this.AddressGroupBox.Text = "Settings";
+            // 
+            // StoreResultCheckBox
+            // 
+            this.StoreResultCheckBox.AutoSize = true;
+            this.StoreResultCheckBox.Location = new System.Drawing.Point(138, 143);
+            this.StoreResultCheckBox.Name = "StoreResultCheckBox";
+            this.StoreResultCheckBox.Size = new System.Drawing.Size(335, 29);
+            this.StoreResultCheckBox.TabIndex = 3;
+            this.StoreResultCheckBox.Text = "(stores results for comparison)";
+            this.StoreResultCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(14, 144);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(63, 25);
+            this.label2.TabIndex = 7;
+            this.label2.Text = "Store";
             // 
             // label1
             // 
@@ -166,7 +186,7 @@
             // 
             // OutputTab
             // 
-            this.OutputTab.Controls.Add(this.OutputListBox);
+            this.OutputTab.Controls.Add(this.CrawlOutput);
             this.OutputTab.Location = new System.Drawing.Point(8, 39);
             this.OutputTab.Name = "OutputTab";
             this.OutputTab.Padding = new System.Windows.Forms.Padding(3);
@@ -175,23 +195,13 @@
             this.OutputTab.Text = "Output";
             this.OutputTab.UseVisualStyleBackColor = true;
             // 
-            // OutputListBox
-            // 
-            this.OutputListBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.OutputListBox.FormattingEnabled = true;
-            this.OutputListBox.ItemHeight = 25;
-            this.OutputListBox.Location = new System.Drawing.Point(3, 3);
-            this.OutputListBox.Name = "OutputListBox";
-            this.OutputListBox.Size = new System.Drawing.Size(1696, 657);
-            this.OutputListBox.TabIndex = 0;
-            // 
             // ErrorTab
             // 
             this.ErrorTab.Controls.Add(this.ErrorListBox);
             this.ErrorTab.Location = new System.Drawing.Point(8, 39);
             this.ErrorTab.Name = "ErrorTab";
             this.ErrorTab.Padding = new System.Windows.Forms.Padding(3);
-            this.ErrorTab.Size = new System.Drawing.Size(1702, 683);
+            this.ErrorTab.Size = new System.Drawing.Size(1702, 663);
             this.ErrorTab.TabIndex = 1;
             this.ErrorTab.Text = "Errors";
             this.ErrorTab.UseVisualStyleBackColor = true;
@@ -203,27 +213,23 @@
             this.ErrorListBox.ItemHeight = 25;
             this.ErrorListBox.Location = new System.Drawing.Point(3, 3);
             this.ErrorListBox.Name = "ErrorListBox";
-            this.ErrorListBox.Size = new System.Drawing.Size(1696, 677);
+            this.ErrorListBox.Size = new System.Drawing.Size(1696, 657);
             this.ErrorListBox.TabIndex = 0;
             // 
-            // label2
+            // CrawlOutput
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(14, 144);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(63, 25);
-            this.label2.TabIndex = 7;
-            this.label2.Text = "Store";
-            // 
-            // StoreResultCheckBox
-            // 
-            this.StoreResultCheckBox.AutoSize = true;
-            this.StoreResultCheckBox.Location = new System.Drawing.Point(138, 143);
-            this.StoreResultCheckBox.Name = "StoreResultCheckBox";
-            this.StoreResultCheckBox.Size = new System.Drawing.Size(335, 29);
-            this.StoreResultCheckBox.TabIndex = 3;
-            this.StoreResultCheckBox.Text = "(stores results for comparison)";
-            this.StoreResultCheckBox.UseVisualStyleBackColor = true;
+            this.CrawlOutput.AllowUserToAddRows = false;
+            this.CrawlOutput.AllowUserToDeleteRows = false;
+            this.CrawlOutput.AllowUserToResizeRows = false;
+            this.CrawlOutput.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.CrawlOutput.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.CrawlOutput.Location = new System.Drawing.Point(3, 3);
+            this.CrawlOutput.Name = "CrawlOutput";
+            this.CrawlOutput.ReadOnly = true;
+            this.CrawlOutput.RowTemplate.Height = 33;
+            this.CrawlOutput.Size = new System.Drawing.Size(1696, 657);
+            this.CrawlOutput.TabIndex = 0;
+            this.CrawlOutput.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.ColumnHeaderClick);
             // 
             // MainForm
             // 
@@ -246,6 +252,7 @@
             this.MainTabControl.ResumeLayout(false);
             this.OutputTab.ResumeLayout(false);
             this.ErrorTab.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.CrawlOutput)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -263,11 +270,11 @@
         private System.Windows.Forms.TextBox CrawlAddress;
         private System.Windows.Forms.TabControl MainTabControl;
         private System.Windows.Forms.TabPage OutputTab;
-        private System.Windows.Forms.ListBox OutputListBox;
         private System.Windows.Forms.TabPage ErrorTab;
         private System.Windows.Forms.ListBox ErrorListBox;
         private System.Windows.Forms.CheckBox StoreResultCheckBox;
         private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.DataGridView CrawlOutput;
     }
 }
 

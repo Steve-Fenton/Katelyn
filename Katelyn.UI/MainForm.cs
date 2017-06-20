@@ -1,6 +1,9 @@
 ﻿using Katelyn.Core;
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Data;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Katelyn.UI
@@ -8,6 +11,7 @@ namespace Katelyn.UI
     public partial class MainForm : Form
     {
         private BackgroundWorker _worker;
+        private IList<CrawlRequest> _requests = new List<CrawlRequest>();
         private int _errorCount;
         private int _successCount;
 
@@ -46,25 +50,32 @@ namespace Katelyn.UI
         private void WorkerProgressChanged(object sender, ProgressChangedEventArgs e)
         {
             int progress = e.ProgressPercentage; //Progress-Value
-            var userState = (string)e.UserState; //can be used to pass values to the progress-changed-event
 
             switch (progress)
             {
                 case (int)ProgressType.Information:
-                    OutputListBox.Items.Add(userState);
+                    // TODO: Tell user it has started
+                    //OutputListBox.Items.Add(userState);
                     break;
                 case (int)ProgressType.RequestSuccess:
                     _successCount++;
-                    OutputListBox.Items.Add(userState);
+
+                    var crawlRequest = (CrawlRequest)e.UserState;
+                    _requests.Add(crawlRequest);
+
+                    BindCrawlGrid();
+
                     OutputTab.Text = $"{_successCount} Output";
                     break;
                 case (int)ProgressType.RequestError:
                     _errorCount++;
+                    var userState = (string)e.UserState;
                     ErrorListBox.Items.Add(userState);
                     ErrorTab.Text = $"{_errorCount} Errors";
                     break;
                 case (int)ProgressType.Complete:
-                    OutputListBox.Items.Add(userState);
+                    // TODO: Tell user it has completed
+                    //OutputListBox.Items.Add(userState);
                     ResetUI();
 
                     if (_errorCount > 0)
@@ -75,8 +86,14 @@ namespace Katelyn.UI
                     break;
 
             }
+        }
 
-            OutputListBox.SelectedIndex = OutputListBox.Items.Count - 1;
+        private void BindCrawlGrid()
+        {
+            var bindingSource = new BindingSource();
+            bindingSource.DataSource = _requests;
+            CrawlOutput.AutoGenerateColumns = true;
+            CrawlOutput.DataSource = bindingSource;
         }
 
         private void CrawlStart_Click(object sender, EventArgs e)
@@ -119,7 +136,8 @@ namespace Katelyn.UI
             _successCount = 0;
 
             ErrorListBox.Items.Clear();
-            OutputListBox.Items.Clear();
+            _requests = new List<CrawlRequest>();
+            BindCrawlGrid();
 
             OutputTab.Text = "Output";
             ErrorTab.Text = "Errors";
@@ -140,6 +158,30 @@ namespace Katelyn.UI
             }
 
             return new Uri(path).IsFile;
+        }
+
+        private void ColumnHeaderClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            switch(CrawlOutput.Columns[e.ColumnIndex].HeaderText)
+            {
+                case "Address":
+                    _requests = _requests.OrderBy(r => r.Address).ToList();
+                    break;
+                case "ParentAddress":
+                    _requests = _requests.OrderBy(r => r.ParentAddress).ToList();
+                    break;
+                case "ContentType":
+                    _requests = _requests.OrderBy(r => r.ContentType).ToList();
+                    break;
+                case "Duration":
+                    _requests = _requests.OrderByDescending(r => r.Duration).ToList();
+                    break;
+                case "StatusCode":
+                    _requests = _requests.OrderBy(r => r.StatusCode).ToList();
+                    break;
+            }
+
+            BindCrawlGrid();
         }
     }
 }
