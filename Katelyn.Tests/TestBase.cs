@@ -11,12 +11,12 @@ namespace Katelyn.Tests
         protected int _successCount;
         private IList<string> _errors = new List<string>();
 
-        public void OnSuccess(string address, string parent)
+        public void OnSuccess(CrawlRequest request)
         {
             _successCount++;
         }
 
-        public void OnError(string address, string parent, Exception exception)
+        public void OnError(CrawlRequest request, Exception exception)
         {
             _errorCount++;
 
@@ -25,10 +25,10 @@ namespace Katelyn.Tests
                 exception = exception.InnerException;
             }
 
-            _errors.Add($"{address} found on {parent} - {exception.Message}");
+            _errors.Add($"{request.Address} found on {request.ParentAddress} - {exception.Message}");
         }
 
-        public void OnDocumentLoaded(string address, string parent, string document)
+        public void OnDocumentLoaded(CrawlRequest request)
         {
             return;
         }

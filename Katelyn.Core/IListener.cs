@@ -8,11 +8,11 @@ namespace Katelyn.Core
 
         void OnEnd();
 
-        void OnError(string address, string parent, Exception exception);
+        void OnError(CrawlRequest request, Exception exception);
 
-        void OnSuccess(string address, string parent);
+        void OnSuccess(CrawlRequest request);
 
-        void OnDocumentLoaded(string address, string parent, string document);
+        void OnDocumentLoaded(CrawlRequest request);
 
         CrawlResult GetCrawlResult();
     }

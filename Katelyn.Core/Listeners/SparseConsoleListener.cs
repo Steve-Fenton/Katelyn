@@ -3,7 +3,7 @@
     public class SparseConsoleListener
         : ConsoleListener
     {
-        public override void OnSuccess(string address, string parent)
+        public override void OnSuccess(CrawlRequest request)
         {
             SuccessCount++;
         }

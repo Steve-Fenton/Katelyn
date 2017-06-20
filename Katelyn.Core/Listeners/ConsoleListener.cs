@@ -11,18 +11,18 @@ namespace Katelyn.Core.Listeners
         protected int ErrorCount;
         protected int SuccessCount;
 
-        public virtual void OnSuccess(string address, string parent)
+        public virtual void OnSuccess(CrawlRequest request)
         {
             SuccessCount++;
 
             var color = Console.ForegroundColor;
             Console.ForegroundColor = GoodForeground;
-            Console.WriteLine($"OK {address}");
+            Console.WriteLine($"OK {request.Address}");
             Console.ForegroundColor = color;
-            Console.WriteLine($"   Found on {parent}");
+            Console.WriteLine($"   Found on {request.ParentAddress}");
         }
 
-        public virtual void OnError(string address, string parent, Exception exception)
+        public virtual void OnError(CrawlRequest request, Exception exception)
         {
             ErrorCount++;
 
@@ -34,13 +34,13 @@ namespace Katelyn.Core.Listeners
             var color = Console.ForegroundColor;
             Console.ForegroundColor = BadForeground;
             TextWriter errorWriter = Console.Error;
-            errorWriter.WriteLine($"Exception from {address}");
+            errorWriter.WriteLine($"Exception from {request.Address}");
             Console.ForegroundColor = color;
-            errorWriter.WriteLine($"   Found on {parent}");
+            errorWriter.WriteLine($"   Found on {request.ParentAddress}");
             errorWriter.WriteLine($"   {exception.Message}");
         }
 
-        public void OnDocumentLoaded(string address, string parent, string document)
+        public void OnDocumentLoaded(CrawlRequest request)
         {
             return;
         }

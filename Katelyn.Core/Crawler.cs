@@ -1,6 +1,7 @@
 ﻿using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
 using System.Text.RegularExpressions;
@@ -58,7 +59,7 @@ namespace Katelyn.Core
             }
             catch (Exception ex)
             {
-                _config.Listener.OnError("Crawl Error", "Start", ex);
+                _config.Listener.OnError(new CrawlRequest { Address = "Crawl Error", ParentAddress = "Start" }, ex);
             }
 
             IsRunning = false;
@@ -73,6 +74,12 @@ namespace Katelyn.Core
 
         private void CrawlAddress(Uri address, int currentDepth, Uri parent = null)
         {
+            var request = new CrawlRequest
+            {
+                Address = address.AbsoluteUri,
+                ParentAddress = parent?.AbsoluteUri
+            };
+
             if (!_continue)
             {
                 return;
@@ -83,23 +90,22 @@ namespace Katelyn.Core
                 Thread.Sleep((int)_config.CrawlDelay.TotalMilliseconds);
             }
 
-            var addressString = address.AbsoluteUri;
             IDictionary<string, Uri> queue = new Dictionary<string, Uri>();
 
-            if (_crawled.ContainsKey(addressString))
+            if (_crawled.ContainsKey(request.Address))
             {
-                _crawled[addressString]++;
+                _crawled[request.Address]++;
             }
             else
             {
                 try
                 {
-                    queue = AddLinksToQueueFor(addressString, parent);
-                    _crawled.Add(addressString, 1);
+                    queue = AddLinksToQueueFor(request.Address, parent);
+                    _crawled.Add(request.Address, 1);
                 }
                 catch (Exception ex)
                 {
-                    _config.Listener.OnError(addressString, parent?.AbsoluteUri, ex);
+                    _config.Listener.OnError(request, ex);
                 }
             }
 
@@ -128,6 +134,12 @@ namespace Katelyn.Core
 
         private IDictionary<string, Uri> AddLinksToQueueFor(string address, Uri parent)
         {
+            var request = new CrawlRequest
+            {
+                Address = address,
+                ParentAddress = parent?.AbsoluteUri
+            };
+
             IDictionary<string, Uri> queue = new Dictionary<string, Uri>();
 
             var handler = new HttpClientHandler
@@ -137,27 +149,36 @@ namespace Katelyn.Core
 
             using (var client = new HttpClient(handler))
             {
-                var response = client.GetAsync(address).Result;
+                var timer = CrawlTimer.Start();
 
-                var statusCode = (int)response.StatusCode;
+                var response = client.GetAsync(request.Address).Result;
 
-                if (statusCode >= 400)
+                request.ContentType = response.Content.Headers.ContentType.MediaType;
+                request.StatusCode = (int)response.StatusCode;
+
+                if (request.StatusCode >= 400)
                 {
-                    _config.Listener.OnError(address, parent?.AbsoluteUri, new Exception($"{response.StatusCode} ${response.ReasonPhrase}"));
+                    request.Duration = timer.Stop();
+                    _config.Listener.OnError(request, new Exception($"{response.StatusCode} ${response.ReasonPhrase}"));
                     return queue;
                 }
 
                 if (response.Content.Headers.ContentType.MediaType != "text/html")
                 {
-                    // Not an HTML page
-                    _config.Listener.OnSuccess(address, parent?.AbsoluteUri);
+                    // Not an HTML page - read the content to get an accurate time
+                    var content = response.Content.ReadAsStringAsync().Result;
+                    request.Duration = timer.Stop();
+                    _config.Listener.OnSuccess(request);
                     return queue;
                 }
 
                 var htmlDocument = new HtmlDocument();
                 htmlDocument.LoadHtml(response.Content.ReadAsStringAsync().Result);
+                request.Duration = timer.Stop();
 
-                _config.Listener.OnDocumentLoaded(address, parent?.AbsoluteUri, htmlDocument.DocumentNode.OuterHtml);
+                request.Document = htmlDocument.DocumentNode.OuterHtml;
+
+                _config.Listener.OnDocumentLoaded(request);
 
                 if (_config.CrawlerFlags.HasFlag(CrawlerFlags.IncludeFailureCheck))
                 {
@@ -165,7 +186,7 @@ namespace Katelyn.Core
 
                     foreach (Match match in regex.Matches(htmlDocument.DocumentNode.OuterHtml))
                     {
-                        _config.Listener.OnError(address, parent?.AbsoluteUri, new Exception($"At {match.Index} - {match.Value}"));
+                        _config.Listener.OnError(request, new Exception($"At {match.Index} - {match.Value}"));
                         return queue;
                     }
                 }
@@ -191,7 +212,7 @@ namespace Katelyn.Core
                 }
             }
 
-            _config.Listener.OnSuccess(address, parent?.AbsoluteUri);
+            _config.Listener.OnSuccess(request);
 
             return queue;
         }

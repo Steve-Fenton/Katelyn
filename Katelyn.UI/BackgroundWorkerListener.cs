@@ -26,14 +26,14 @@ namespace Katelyn.UI
             }
         }
 
-        public virtual void OnSuccess(string address, string parent)
+        public virtual void OnSuccess(CrawlRequest request)
         {
             SuccessCount++;
 
-            _worker.ReportProgress((int)ProgressType.RequestSuccess, $"OK {address} Found on {parent}");
+            _worker.ReportProgress((int)ProgressType.RequestSuccess, $"OK ({request.Duration}ms) {request.Address} Found on {request.ParentAddress}");
         }
 
-        public virtual void OnError(string address, string parent, Exception exception)
+        public virtual void OnError(CrawlRequest request, Exception exception)
         {
             ErrorCount++;
 
@@ -42,10 +42,10 @@ namespace Katelyn.UI
                 exception = exception.InnerException;
             }
 
-            _worker.ReportProgress((int)ProgressType.RequestError, $"Exception from {address} Found on {parent} {exception.Message}");
+            _worker.ReportProgress((int)ProgressType.RequestError, $"Exception from {request.Address} Found on {request.ParentAddress} {exception.Message}");
         }
 
-        public void OnDocumentLoaded(string address, string parent, string document)
+        public void OnDocumentLoaded(CrawlRequest request)
         {
             if (!_storeResult)
             {
@@ -54,14 +54,14 @@ namespace Katelyn.UI
 
             string invalid = new string(Path.GetInvalidFileNameChars()) + new string(Path.GetInvalidPathChars());
 
-            string fileName = address;
+            string fileName = request.Address;
 
             foreach (char c in invalid)
             {
                 fileName = fileName.Replace(c.ToString(), "-");
             }
 
-            File.WriteAllText(Path.Combine(_outputDirectory.FullName, fileName + ".html"), document);
+            File.WriteAllText(Path.Combine(_outputDirectory.FullName, fileName + ".html"), request.Document);
         }
 
         public void OnStart()
@@ -71,7 +71,7 @@ namespace Katelyn.UI
 
         public virtual void OnEnd()
         {
-            _worker.ReportProgress((int)(int)ProgressType.Complete, $"Katelyn - Finished Crawling. {SuccessCount}/{SuccessCount + ErrorCount} succeeded.");
+            _worker.ReportProgress((int)ProgressType.Complete, $"Katelyn - Finished Crawling. {SuccessCount}/{SuccessCount + ErrorCount} succeeded.");
         }
 
         public virtual CrawlResult GetCrawlResult()

@@ -47,6 +47,8 @@
     <Compile Include="Crawler.cs" />
     <Compile Include="CrawlerConfig.cs" />
     <Compile Include="CrawlerFlags.cs" />
+    <Compile Include="CrawlRequest.cs" />
+    <Compile Include="CrawlTimer.cs" />
     <Compile Include="IListener.cs" />
     <Compile Include="Listeners\SparseConsoleListener.cs" />
     <Compile Include="Listeners\ConsoleListener.cs" />
