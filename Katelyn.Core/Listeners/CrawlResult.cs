@@ -1,17 +1,20 @@
-﻿namespace Katelyn.Core
+﻿using System.ComponentModel;
+
+namespace Katelyn.Core
 {
     public class CrawlResult
     {
-        public int Total
-        {
-            get
-            {
-                return ErrorCount + SuccessCount;
-            }
-        }
+        public string Address { get; internal set; }
 
-        public int ErrorCount { get; set; }
+        public string ParentAddress { get; internal set; }
 
-        public int SuccessCount { get; set; }
+        public string ContentType { get; internal set; }
+
+        [Browsable(false)]
+        public string Document { get; internal set; }
+
+        public long Duration { get; internal set; }
+
+        public int StatusCode { get; internal set; }
     }
 }

@@ -59,7 +59,7 @@ namespace Katelyn.Core
             }
             catch (Exception ex)
             {
-                _config.Listener.OnError(new CrawlRequest { Address = "Crawl Error", ParentAddress = "Start" }, ex);
+                _config.Listener.OnError(new CrawlResult { Address = "Crawl Error", ParentAddress = "Start" }, ex);
             }
 
             IsRunning = false;
@@ -74,7 +74,7 @@ namespace Katelyn.Core
 
         private void CrawlAddress(Uri address, int currentDepth, Uri parent = null)
         {
-            var request = new CrawlRequest
+            var request = new CrawlResult
             {
                 Address = address.AbsoluteUri,
                 ParentAddress = parent?.AbsoluteUri
@@ -134,7 +134,7 @@ namespace Katelyn.Core
 
         private IDictionary<string, Uri> AddLinksToQueueFor(string address, Uri parent)
         {
-            var request = new CrawlRequest
+            var request = new CrawlResult
             {
                 Address = address,
                 ParentAddress = parent?.AbsoluteUri

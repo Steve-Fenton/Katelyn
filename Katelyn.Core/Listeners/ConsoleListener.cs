@@ -11,7 +11,7 @@ namespace Katelyn.Core.Listeners
         protected int ErrorCount;
         protected int SuccessCount;
 
-        public virtual void OnSuccess(CrawlRequest request)
+        public virtual void OnSuccess(CrawlResult request)
         {
             SuccessCount++;
 
@@ -22,7 +22,7 @@ namespace Katelyn.Core.Listeners
             Console.WriteLine($"   Found on {request.ParentAddress}");
         }
 
-        public virtual void OnError(CrawlRequest request, Exception exception)
+        public virtual void OnError(CrawlResult request, Exception exception)
         {
             ErrorCount++;
 
@@ -40,7 +40,7 @@ namespace Katelyn.Core.Listeners
             errorWriter.WriteLine($"   {exception.Message}");
         }
 
-        public void OnDocumentLoaded(CrawlRequest request)
+        public void OnDocumentLoaded(CrawlResult request)
         {
             return;
         }
@@ -58,9 +58,9 @@ namespace Katelyn.Core.Listeners
             Console.WriteLine($"Finished. {SuccessCount}/{SuccessCount + ErrorCount} succeeded.");
         }
 
-        public virtual CrawlResult GetCrawlResult()
+        public virtual CrawlSummary GetCrawlResult()
         {
-            return new CrawlResult
+            return new CrawlSummary
             {
                 ErrorCount = ErrorCount,
                 SuccessCount = SuccessCount

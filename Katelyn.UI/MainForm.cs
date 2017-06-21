@@ -11,7 +11,7 @@ namespace Katelyn.UI
     public partial class MainForm : Form
     {
         private BackgroundWorker _worker;
-        private IList<CrawlRequest> _requests = new List<CrawlRequest>();
+        private IList<CrawlResult> _requests = new List<CrawlResult>();
         private int _errorCount;
         private int _successCount;
 
@@ -27,7 +27,7 @@ namespace Katelyn.UI
             _worker.RunWorkerCompleted += WorkerCompleted;
         }
 
-        public CrawlResult GetCrawlResult()
+        public CrawlSummary GetCrawlResult()
         {
             throw new NotImplementedException();
         }
@@ -60,7 +60,7 @@ namespace Katelyn.UI
                 case (int)ProgressType.RequestSuccess:
                     _successCount++;
 
-                    var crawlRequest = (CrawlRequest)e.UserState;
+                    var crawlRequest = (CrawlResult)e.UserState;
                     _requests.Add(crawlRequest);
 
                     BindCrawlGrid();
@@ -136,7 +136,7 @@ namespace Katelyn.UI
             _successCount = 0;
 
             ErrorListBox.Items.Clear();
-            _requests = new List<CrawlRequest>();
+            _requests = new List<CrawlResult>();
             BindCrawlGrid();
 
             OutputTab.Text = "Output";

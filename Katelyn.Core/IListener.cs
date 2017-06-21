@@ -8,12 +8,12 @@ namespace Katelyn.Core
 
         void OnEnd();
 
-        void OnError(CrawlRequest request, Exception exception);
+        void OnError(CrawlResult request, Exception exception);
 
-        void OnSuccess(CrawlRequest request);
+        void OnSuccess(CrawlResult request);
 
-        void OnDocumentLoaded(CrawlRequest request);
+        void OnDocumentLoaded(CrawlResult request);
 
-        CrawlResult GetCrawlResult();
+        CrawlSummary GetCrawlResult();
     }
 }

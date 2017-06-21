@@ -26,7 +26,7 @@ namespace Katelyn.UI
             }
         }
 
-        public virtual void OnSuccess(CrawlRequest request)
+        public virtual void OnSuccess(CrawlResult request)
         {
             SuccessCount++;
 
@@ -34,7 +34,7 @@ namespace Katelyn.UI
             _worker.ReportProgress((int)ProgressType.RequestSuccess, request);
         }
 
-        public virtual void OnError(CrawlRequest request, Exception exception)
+        public virtual void OnError(CrawlResult request, Exception exception)
         {
             ErrorCount++;
 
@@ -46,7 +46,7 @@ namespace Katelyn.UI
             _worker.ReportProgress((int)ProgressType.RequestError, $"Exception from {request.Address} Found on {request.ParentAddress} {exception.Message}");
         }
 
-        public void OnDocumentLoaded(CrawlRequest request)
+        public void OnDocumentLoaded(CrawlResult request)
         {
             if (!_storeResult)
             {
@@ -75,9 +75,9 @@ namespace Katelyn.UI
             _worker.ReportProgress((int)ProgressType.Complete, $"Katelyn - Finished Crawling. {SuccessCount}/{SuccessCount + ErrorCount} succeeded.");
         }
 
-        public virtual CrawlResult GetCrawlResult()
+        public virtual CrawlSummary GetCrawlResult()
         {
-            return new CrawlResult
+            return new CrawlSummary
             {
                 ErrorCount = ErrorCount,
                 SuccessCount = SuccessCount

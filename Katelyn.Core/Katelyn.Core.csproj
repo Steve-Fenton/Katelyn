@@ -47,12 +47,12 @@
     <Compile Include="Crawler.cs" />
     <Compile Include="CrawlerConfig.cs" />
     <Compile Include="CrawlerFlags.cs" />
-    <Compile Include="CrawlRequest.cs" />
+    <Compile Include="Listeners\CrawlResult.cs" />
     <Compile Include="CrawlTimer.cs" />
     <Compile Include="IListener.cs" />
     <Compile Include="Listeners\SparseConsoleListener.cs" />
     <Compile Include="Listeners\ConsoleListener.cs" />
-    <Compile Include="Listeners\CrawlResult.cs" />
+    <Compile Include="Listeners\CrawlSummary.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
