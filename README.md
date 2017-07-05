@@ -49,6 +49,8 @@ Advanced Options
 
  - `-delay` If specified, the number of milliseconds to pause before each request
 
+ - `-searchExpression` If specified, a regular expression that fails a page if matched
+
 For example, with everything specified:
 
     Katelyn CrawlWith
@@ -61,6 +63,7 @@ For example, with everything specified:
         -includeImages=true
         -includeFailureCheck=true
         -delay=500
+        -searchExpression="(?i)example[\w\s]expression"
 
 This example will crawl the website to 100 levels deep, including all resources, 
 with a 500 millisecond delay between receiving a response and making the next request.

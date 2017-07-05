@@ -3,6 +3,7 @@ using Katelyn.Core;
 using Katelyn.Core.Listeners;
 using Newtonsoft.Json;
 using System;
+using System.Text.RegularExpressions;
 
 namespace Katelyn.ConsoleRunner
 {
@@ -36,9 +37,10 @@ namespace Katelyn.ConsoleRunner
             [DefaultValue(true)]bool includeStyles,
             [DefaultValue(true)]bool includeFailureCheck,
             [DefaultValue(100)]int maxDepth,
-            [DefaultValue(0)]int delay)
+            [DefaultValue(0)]int delay,
+            [DefaultValue("")]string searchExpression)
         {
-            var config = GetComplexConfig(address, verbose, includeImages, includeLinks, includeScripts, includeStyles, includeFailureCheck, maxDepth, delay);
+            var config = GetComplexConfig(address, verbose, includeImages, includeLinks, includeScripts, includeStyles, includeFailureCheck, maxDepth, delay, searchExpression);
 
             Console.WriteLine(JsonConvert.SerializeObject(config));
 
@@ -62,13 +64,18 @@ namespace Katelyn.ConsoleRunner
             };
         }
 
-        private static CrawlerConfig GetComplexConfig(string address, bool verbose, bool includeImages, bool includeLinks, bool includeScripts, bool includeStyles, bool includeFailureCheck, int maxDepth, int delay)
+        private static CrawlerConfig GetComplexConfig(string address, bool verbose, bool includeImages, bool includeLinks, bool includeScripts, bool includeStyles, bool includeFailureCheck, int maxDepth, int delay, string searchExpression)
         {
             var config = new CrawlerConfig
             {
                 RootAddress = new Uri(address),
                 Listener = (verbose) ? new ConsoleListener() : new SparseConsoleListener()
             };
+
+            if (!string.IsNullOrWhiteSpace(searchExpression))
+            {
+                config.HtmlContentExpression = new Regex(searchExpression);
+            }
 
             if (maxDepth > 0)
             {
