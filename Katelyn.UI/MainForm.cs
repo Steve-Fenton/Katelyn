@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace Katelyn.UI
@@ -106,6 +107,7 @@ namespace Katelyn.UI
                 {
                     StoreResult = StoreResultCheckBox.Checked,
                     MaxDepth = int.Parse(CrawlDepth.Text),
+                    HtmlContentExpression = (string.IsNullOrWhiteSpace(StringForRegex.Text)) ? null : new Regex(StringForRegex.Text),
                     CrawlerFlags = CrawlerFlags.IncludeFailureCheck | CrawlerFlags.IncludeImages | CrawlerFlags.IncludeLinks | CrawlerFlags.IncludeScripts | CrawlerFlags.IncludeStyles,
                 };
 

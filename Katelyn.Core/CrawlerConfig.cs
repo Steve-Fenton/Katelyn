@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.RegularExpressions;
 
 namespace Katelyn.Core
 {
@@ -15,5 +16,7 @@ namespace Katelyn.Core
         public CrawlerFlags CrawlerFlags { get; set; } = CrawlerFlags.None;
 
         public TimeSpan CrawlDelay { get; set; } = TimeSpan.Zero;
+
+        public Regex HtmlContentExpression { get; set; } = null;
     }
 }

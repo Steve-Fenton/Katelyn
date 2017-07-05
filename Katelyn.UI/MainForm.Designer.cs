@@ -42,9 +42,11 @@
             this.CrawlAddress = new System.Windows.Forms.TextBox();
             this.MainTabControl = new System.Windows.Forms.TabControl();
             this.OutputTab = new System.Windows.Forms.TabPage();
+            this.CrawlOutput = new System.Windows.Forms.DataGridView();
             this.ErrorTab = new System.Windows.Forms.TabPage();
             this.ErrorListBox = new System.Windows.Forms.ListBox();
-            this.CrawlOutput = new System.Windows.Forms.DataGridView();
+            this.SearchForLabel = new System.Windows.Forms.Label();
+            this.StringForRegex = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -52,8 +54,8 @@
             this.AddressGroupBox.SuspendLayout();
             this.MainTabControl.SuspendLayout();
             this.OutputTab.SuspendLayout();
-            this.ErrorTab.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.CrawlOutput)).BeginInit();
+            this.ErrorTab.SuspendLayout();
             this.SuspendLayout();
             // 
             // CrawlProgress
@@ -81,11 +83,13 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.MainTabControl);
             this.splitContainer1.Size = new System.Drawing.Size(1718, 834);
-            this.splitContainer1.SplitterDistance = 120;
+            this.splitContainer1.SplitterDistance = 140;
             this.splitContainer1.TabIndex = 9;
             // 
             // AddressGroupBox
             // 
+            this.AddressGroupBox.Controls.Add(this.StringForRegex);
+            this.AddressGroupBox.Controls.Add(this.SearchForLabel);
             this.AddressGroupBox.Controls.Add(this.StoreResultCheckBox);
             this.AddressGroupBox.Controls.Add(this.label2);
             this.AddressGroupBox.Controls.Add(this.label1);
@@ -96,7 +100,7 @@
             this.AddressGroupBox.Controls.Add(this.CrawlAddress);
             this.AddressGroupBox.Location = new System.Drawing.Point(8, 12);
             this.AddressGroupBox.Name = "AddressGroupBox";
-            this.AddressGroupBox.Size = new System.Drawing.Size(844, 211);
+            this.AddressGroupBox.Size = new System.Drawing.Size(844, 260);
             this.AddressGroupBox.TabIndex = 9;
             this.AddressGroupBox.TabStop = false;
             this.AddressGroupBox.Text = "Settings";
@@ -181,7 +185,7 @@
             this.MainTabControl.Location = new System.Drawing.Point(0, 0);
             this.MainTabControl.Name = "MainTabControl";
             this.MainTabControl.SelectedIndex = 0;
-            this.MainTabControl.Size = new System.Drawing.Size(1718, 710);
+            this.MainTabControl.Size = new System.Drawing.Size(1718, 690);
             this.MainTabControl.TabIndex = 1000;
             // 
             // OutputTab
@@ -190,10 +194,25 @@
             this.OutputTab.Location = new System.Drawing.Point(8, 39);
             this.OutputTab.Name = "OutputTab";
             this.OutputTab.Padding = new System.Windows.Forms.Padding(3);
-            this.OutputTab.Size = new System.Drawing.Size(1702, 663);
+            this.OutputTab.Size = new System.Drawing.Size(1702, 643);
             this.OutputTab.TabIndex = 0;
             this.OutputTab.Text = "Output";
             this.OutputTab.UseVisualStyleBackColor = true;
+            // 
+            // CrawlOutput
+            // 
+            this.CrawlOutput.AllowUserToAddRows = false;
+            this.CrawlOutput.AllowUserToDeleteRows = false;
+            this.CrawlOutput.AllowUserToResizeRows = false;
+            this.CrawlOutput.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.CrawlOutput.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.CrawlOutput.Location = new System.Drawing.Point(3, 3);
+            this.CrawlOutput.Name = "CrawlOutput";
+            this.CrawlOutput.ReadOnly = true;
+            this.CrawlOutput.RowTemplate.Height = 33;
+            this.CrawlOutput.Size = new System.Drawing.Size(1696, 637);
+            this.CrawlOutput.TabIndex = 0;
+            this.CrawlOutput.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.ColumnHeaderClick);
             // 
             // ErrorTab
             // 
@@ -216,20 +235,21 @@
             this.ErrorListBox.Size = new System.Drawing.Size(1696, 657);
             this.ErrorListBox.TabIndex = 0;
             // 
-            // CrawlOutput
+            // SearchForLabel
             // 
-            this.CrawlOutput.AllowUserToAddRows = false;
-            this.CrawlOutput.AllowUserToDeleteRows = false;
-            this.CrawlOutput.AllowUserToResizeRows = false;
-            this.CrawlOutput.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.CrawlOutput.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.CrawlOutput.Location = new System.Drawing.Point(3, 3);
-            this.CrawlOutput.Name = "CrawlOutput";
-            this.CrawlOutput.ReadOnly = true;
-            this.CrawlOutput.RowTemplate.Height = 33;
-            this.CrawlOutput.Size = new System.Drawing.Size(1696, 657);
-            this.CrawlOutput.TabIndex = 0;
-            this.CrawlOutput.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.ColumnHeaderClick);
+            this.SearchForLabel.AutoSize = true;
+            this.SearchForLabel.Location = new System.Drawing.Point(14, 189);
+            this.SearchForLabel.Name = "SearchForLabel";
+            this.SearchForLabel.Size = new System.Drawing.Size(123, 25);
+            this.SearchForLabel.TabIndex = 103;
+            this.SearchForLabel.Text = "Search Exp";
+            // 
+            // StringForRegex
+            // 
+            this.StringForRegex.Location = new System.Drawing.Point(138, 186);
+            this.StringForRegex.Name = "StringForRegex";
+            this.StringForRegex.Size = new System.Drawing.Size(372, 31);
+            this.StringForRegex.TabIndex = 4;
             // 
             // MainForm
             // 
@@ -251,8 +271,8 @@
             this.AddressGroupBox.PerformLayout();
             this.MainTabControl.ResumeLayout(false);
             this.OutputTab.ResumeLayout(false);
-            this.ErrorTab.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.CrawlOutput)).EndInit();
+            this.ErrorTab.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -275,6 +295,8 @@
         private System.Windows.Forms.CheckBox StoreResultCheckBox;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.DataGridView CrawlOutput;
+        private System.Windows.Forms.TextBox StringForRegex;
+        private System.Windows.Forms.Label SearchForLabel;
     }
 }
 

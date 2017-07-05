@@ -180,17 +180,6 @@ namespace Katelyn.Core
 
                 _config.Listener.OnDocumentLoaded(request);
 
-                if (_config.CrawlerFlags.HasFlag(CrawlerFlags.IncludeFailureCheck))
-                {
-                    var regex = new Regex(@"KATELYN:ERRORS\([0-9]+\)", RegexOptions.IgnoreCase);
-
-                    foreach (Match match in regex.Matches(htmlDocument.DocumentNode.OuterHtml))
-                    {
-                        _config.Listener.OnError(request, new Exception($"At {match.Index} - {match.Value}"));
-                        return queue;
-                    }
-                }
-
                 if (_config.CrawlerFlags.HasFlag(CrawlerFlags.IncludeLinks))
                 {
                     queue = QueueHyperlinks(queue, htmlDocument);
@@ -209,6 +198,33 @@ namespace Katelyn.Core
                 if (_config.CrawlerFlags.HasFlag(CrawlerFlags.IncludeImages))
                 {
                     queue = QueueImages(queue, htmlDocument);
+                }
+
+                var isError = false;
+
+                if (_config.CrawlerFlags.HasFlag(CrawlerFlags.IncludeFailureCheck))
+                {
+                    var regex = new Regex(@"KATELYN:ERRORS\([0-9]+\)", RegexOptions.IgnoreCase);
+
+                    foreach (Match match in regex.Matches(htmlDocument.DocumentNode.OuterHtml))
+                    {
+                        _config.Listener.OnError(request, new Exception($"At {match.Index} - {match.Value}"));
+                        isError = true;
+                    }
+                }
+
+                if (_config.HtmlContentExpression != null)
+                {
+                    foreach (Match match in _config.HtmlContentExpression.Matches(htmlDocument.DocumentNode.OuterHtml))
+                    {
+                        _config.Listener.OnError(request, new Exception($"At {match.Index} - {match.Value}"));
+                        isError = true;
+                    }
+                }
+
+                if (isError)
+                {
+                    return queue;
                 }
             }
 
