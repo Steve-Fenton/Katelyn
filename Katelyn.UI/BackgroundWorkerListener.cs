@@ -30,7 +30,6 @@ namespace Katelyn.UI
         {
             SuccessCount++;
 
-            //_worker.ReportProgress((int)ProgressType.RequestSuccess, $"OK ({request.Duration}ms) {request.Address} Found on {request.ParentAddress}");
             _worker.ReportProgress((int)ProgressType.RequestSuccess, request);
         }
 
@@ -43,7 +42,7 @@ namespace Katelyn.UI
                 exception = exception.InnerException;
             }
 
-            _worker.ReportProgress((int)ProgressType.RequestError, $"Exception from {request.Address} Found on {request.ParentAddress} {exception.Message}");
+            _worker.ReportProgress((int)ProgressType.RequestError, new CrawlError(request, exception.Message));
         }
 
         public void OnDocumentLoaded(CrawlResult request)

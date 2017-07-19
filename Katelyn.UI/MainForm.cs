@@ -13,6 +13,7 @@ namespace Katelyn.UI
     {
         private BackgroundWorker _worker;
         private IList<CrawlResult> _requests = new List<CrawlResult>();
+        private IList<CrawlError> _errors = new List<CrawlError>();
         private int _errorCount;
         private int _successCount;
 
@@ -70,8 +71,11 @@ namespace Katelyn.UI
                     break;
                 case (int)ProgressType.RequestError:
                     _errorCount++;
-                    var userState = (string)e.UserState;
-                    ErrorListBox.Items.Add(userState);
+                    var crawlError = (CrawlError)e.UserState;
+                    _errors.Add(crawlError);
+
+                    BindErrorGrid();
+                    
                     ErrorTab.Text = $"{_errorCount} Errors";
                     break;
                 case (int)ProgressType.Complete:
@@ -85,7 +89,6 @@ namespace Katelyn.UI
                     }
 
                     break;
-
             }
         }
 
@@ -95,6 +98,14 @@ namespace Katelyn.UI
             bindingSource.DataSource = _requests;
             CrawlOutput.AutoGenerateColumns = true;
             CrawlOutput.DataSource = bindingSource;
+        }
+
+        private void BindErrorGrid()
+        {
+            var bindingSource = new BindingSource();
+            bindingSource.DataSource = _errors;
+            ErrorGridView.AutoGenerateColumns = true;
+            ErrorGridView.DataSource = bindingSource;
         }
 
         private void CrawlStart_Click(object sender, EventArgs e)
@@ -137,7 +148,9 @@ namespace Katelyn.UI
             _errorCount = 0;
             _successCount = 0;
 
-            ErrorListBox.Items.Clear();
+            _errors = new List<CrawlError>();
+            BindErrorGrid();
+
             _requests = new List<CrawlResult>();
             BindCrawlGrid();
 
@@ -154,7 +167,7 @@ namespace Katelyn.UI
 
         private static bool IsLocalPath(string path)
         {
-            if (path.StartsWith("http:\\"))
+            if (path.StartsWith("http:\\", StringComparison.InvariantCultureIgnoreCase) || path.StartsWith("https:\\", StringComparison.InvariantCultureIgnoreCase))
             {
                 return false;
             }
@@ -184,6 +197,30 @@ namespace Katelyn.UI
             }
 
             BindCrawlGrid();
+        }
+
+        private void ErrorColumnHeaderClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            switch (ErrorGridView.Columns[e.ColumnIndex].HeaderText)
+            {
+                case "Address":
+                    _errors = _errors.OrderBy(r => r.Address).ToList();
+                    break;
+                case "ParentAddress":
+                    _errors = _errors.OrderBy(r => r.ParentAddress).ToList();
+                    break;
+                case "ContentType":
+                    _errors = _errors.OrderBy(r => r.ContentType).ToList();
+                    break;
+                case "Duration":
+                    _errors = _errors.OrderByDescending(r => r.Duration).ToList();
+                    break;
+                case "StatusCode":
+                    _errors = _errors.OrderBy(r => r.StatusCode).ToList();
+                    break;
+            }
+
+            BindErrorGrid();
         }
     }
 }
