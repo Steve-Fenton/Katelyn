@@ -1,9 +1,9 @@
 ﻿using HtmlAgilityPack;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Net.Http;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 
@@ -163,17 +163,18 @@ namespace Katelyn.Core
                     return queue;
                 }
 
+                var content = GetContent(response);
+
                 if (response.Content.Headers.ContentType.MediaType != "text/html")
                 {
                     // Not an HTML page - read the content to get an accurate time
-                    var content = response.Content.ReadAsStringAsync().Result;
                     request.Duration = timer.Stop();
                     _config.Listener.OnSuccess(request);
                     return queue;
                 }
 
                 var htmlDocument = new HtmlDocument();
-                htmlDocument.LoadHtml(response.Content.ReadAsStringAsync().Result);
+                htmlDocument.LoadHtml(content);
                 request.Duration = timer.Stop();
 
                 request.Document = htmlDocument.DocumentNode.OuterHtml;
@@ -231,6 +232,23 @@ namespace Katelyn.Core
             _config.Listener.OnSuccess(request);
 
             return queue;
+        }
+
+        private static string GetContent(HttpResponseMessage response)
+        {
+            string content = string.Empty;
+            
+            try
+            {
+                content = response.Content.ReadAsStringAsync().Result;
+            }
+            catch (Exception)
+            {
+                var responseBytes = response.Content.ReadAsByteArrayAsync().Result;
+                content = Encoding.UTF8.GetString(responseBytes, 0, responseBytes.Length - 1);
+            }
+
+            return content;
         }
 
         private IDictionary<string, Uri> QueueHyperlinks(IDictionary<string, Uri> queue, HtmlDocument htmlDocument)
