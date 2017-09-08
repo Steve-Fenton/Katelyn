@@ -153,7 +153,7 @@ namespace Katelyn.Core
 
                 var response = client.GetAsync(request.Address).Result;
 
-                request.ContentType = response.Content.Headers.ContentType.MediaType;
+                request.ContentType = response.Content.Headers.ContentType?.MediaType ?? "Unknown";
                 request.StatusCode = (int)response.StatusCode;
 
                 if (request.StatusCode >= 400)
@@ -165,7 +165,7 @@ namespace Katelyn.Core
 
                 var content = GetContent(response);
 
-                if (response.Content.Headers.ContentType.MediaType != "text/html")
+                if (request.ContentType != "text/html")
                 {
                     // Not an HTML page - read the content to get an accurate time
                     request.Duration = timer.Stop();
