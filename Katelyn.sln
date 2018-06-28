@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2035
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Katelyn.Core", "Katelyn.Core\Katelyn.Core.csproj", "{D6B4563B-3178-4F4F-AD50-7E1575B2CE98}"
 EndProject
@@ -11,6 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Katelyn.Tests", "Katelyn.Te
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B8B2EEA2-E1DC-48C6-8BD0-9FEE18A693D1}"
 	ProjectSection(SolutionItems) = preProject
+		Katelyn.zip = Katelyn.zip
 		LICENSE = LICENSE
 		README.md = README.md
 	EndProjectSection
@@ -48,5 +49,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4F3E993C-6E59-4323-A9E9-3C2EB4B752D6}
 	EndGlobalSection
 EndGlobal
