@@ -10,6 +10,7 @@ namespace Katelyn.Core
         IncludeLinks = 1 << 1,
         IncludeScripts = 1 << 2,
         IncludeStyles = 1 << 3,
-        IncludeFailureCheck = 1 << 4
+        IncludeFailureCheck = 1 << 4,
+        IncludeRobots = 1 << 5
     }
 }

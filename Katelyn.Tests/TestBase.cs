@@ -9,6 +9,7 @@ namespace Katelyn.Tests
     {
         protected int _errorCount;
         protected int _successCount;
+        protected List<string> _crawledAddresses = new List<string>();
         private IList<string> _errors = new List<string>();
 
         public void OnSuccess(CrawlResult request)
@@ -30,6 +31,7 @@ namespace Katelyn.Tests
 
         public void OnDocumentLoaded(CrawlResult request)
         {
+            _crawledAddresses.Add(request.Address);
             return;
         }
 

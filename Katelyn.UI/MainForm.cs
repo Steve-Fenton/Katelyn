@@ -119,7 +119,7 @@ namespace Katelyn.UI
                     StoreResult = StoreResultCheckBox.Checked,
                     MaxDepth = int.Parse(CrawlDepth.Text),
                     HtmlContentExpression = (string.IsNullOrWhiteSpace(StringForRegex.Text)) ? null : new Regex(StringForRegex.Text),
-                    CrawlerFlags = CrawlerFlags.IncludeFailureCheck | CrawlerFlags.IncludeImages | CrawlerFlags.IncludeLinks | CrawlerFlags.IncludeScripts | CrawlerFlags.IncludeStyles,
+                    CrawlerFlags = CrawlerFlags.IncludeFailureCheck | CrawlerFlags.IncludeImages | CrawlerFlags.IncludeLinks | CrawlerFlags.IncludeScripts | CrawlerFlags.IncludeStyles | CrawlerFlags.IncludeRobots,
                 };
 
                 if (IsLocalPath(CrawlAddress.Text))

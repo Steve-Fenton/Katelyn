@@ -6,21 +6,19 @@ using System;
 namespace Katelyn.Tests
 {
     [TestClass]
-    public class RunCrawlerWithScriptsTest
+    public class WhenTheCrawlerRuns
         : TestBase
     {
         [TestMethod]
-        public void RunCrawlerWithScripts()
+        public void TheRootAddressShouldBeCrawled()
         {
             var config = new CrawlerConfig
             {
                 RootAddress = new Uri("http://localhost:51746/"),
                 Listener = this,
-                MaxDepth = 2,
+                MaxDepth = 1,
+                CrawlerFlags = CrawlerFlags.IncludeLinks | CrawlerFlags.IncludeFailureCheck
             };
-
-            config.CrawlerFlags |= CrawlerFlags.IncludeLinks;
-            config.CrawlerFlags |= CrawlerFlags.IncludeScripts;
 
             Crawler.Crawl(config);
         }
@@ -28,7 +26,9 @@ namespace Katelyn.Tests
         public override void OnEnd()
         {
             _errorCount.ShouldBe(0);
-            _successCount.ShouldBe(2);
+
+            _successCount.ShouldBe(1);
+            _crawledAddresses.Contains("http://localhost:51746/").ShouldBeTrue();
         }
     }
 }

@@ -50,11 +50,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PageNotFoundTest.cs" />
+    <Compile Include="WhenAPageDoesNotExist.cs" />
+    <Compile Include="WhenRobotFilesAreIncluded.cs" />
     <Compile Include="TestBase.cs" />
-    <Compile Include="RunCrawlerWithScriptsStylesImagesTest.cs" />
-    <Compile Include="RunCrawlerWithScriptsTest.cs" />
-    <Compile Include="RunCrawlerTest.cs" />
+    <Compile Include="WhenScriptsAndStylesAreIncluded.cs" />
+    <Compile Include="WhenScriptsAreIncluded.cs" />
+    <Compile Include="WhenTheCrawlerRuns.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

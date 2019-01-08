@@ -39,6 +39,7 @@ namespace Katelyn.Core
 
                 if (!string.IsNullOrWhiteSpace(_config.FilePath))
                 {
+                    // Run the crawler for all websites found in the file
                     foreach (var line in File.ReadLines(_config.FilePath))
                     {
                         if (string.IsNullOrWhiteSpace(line))
@@ -47,22 +48,28 @@ namespace Katelyn.Core
                         }
 
                         _config.RootAddress = new Uri(line);
-                        CrawlAddress(_config.RootAddress, 0);
+                        StartRoot();
                     }
                 }
                 else
                 {
-                    CrawlAddress(_config.RootAddress, 0);
+                    // Run the crawler for a single address
+                    StartRoot();
                 }
-
-                _config.Listener.OnEnd();
             }
             catch (Exception ex)
             {
                 _config.Listener.OnError(new CrawlResult { Address = "Crawl Error", ParentAddress = "Start" }, ex);
             }
 
+            _config.Listener.OnEnd();
+
             IsRunning = false;
+        }
+
+        private void StartRoot()
+        {
+            CrawlAddress(_config.RootAddress, 0);
         }
 
         public void Stop()
@@ -101,6 +108,16 @@ namespace Katelyn.Core
                 try
                 {
                     queue = AddLinksToQueueFor(request.Address, parent);
+
+                    if (currentDepth == 0)
+                    {
+                        if (_config.CrawlerFlags.HasFlag(CrawlerFlags.IncludeRobots))
+                        {
+                            var robotAddress = new Uri($"{_config.RootAddress.GetLeftPart(UriPartial.Authority)}/robots.txt");
+                            QueueIfNew(queue, robotAddress);
+                        }
+                    }
+
                     _crawled.Add(request.Address, 1);
                 }
                 catch (Exception ex)
@@ -165,68 +182,88 @@ namespace Katelyn.Core
                 }
 
                 var content = GetContent(response);
-
-                if (request.ContentType != "text/html")
-                {
-                    // Not an HTML page - read the content to get an accurate time
-                    request.Duration = timer.Stop();
-                    _config.Listener.OnSuccess(request);
-                    return queue;
-                }
-
-                var htmlDocument = new HtmlDocument();
-                htmlDocument.LoadHtml(content);
                 request.Duration = timer.Stop();
 
-                request.Document = htmlDocument.DocumentNode.OuterHtml;
+                switch (request.ContentType) {
+                    case "text/html":
+                        var htmlDocument = new HtmlDocument();
+                        htmlDocument.LoadHtml(content);
 
-                _config.Listener.OnDocumentLoaded(request);
+                        request.Document = htmlDocument.DocumentNode.OuterHtml;
 
-                if (_config.CrawlerFlags.HasFlag(CrawlerFlags.IncludeLinks))
-                {
-                    queue = QueueHyperlinks(queue, htmlDocument);
-                }
+                        _config.Listener.OnDocumentLoaded(request);
 
-                if (_config.CrawlerFlags.HasFlag(CrawlerFlags.IncludeScripts))
-                {
-                    queue = QueueScripts(queue, htmlDocument);
-                }
+                        if (_config.CrawlerFlags.HasFlag(CrawlerFlags.IncludeLinks))
+                        {
+                            queue = QueueHyperlinks(queue, htmlDocument);
+                        }
 
-                if (_config.CrawlerFlags.HasFlag(CrawlerFlags.IncludeStyles))
-                {
-                    queue = QueueStyles(queue, htmlDocument);
-                }
+                        if (_config.CrawlerFlags.HasFlag(CrawlerFlags.IncludeScripts))
+                        {
+                            queue = QueueScripts(queue, htmlDocument);
+                        }
 
-                if (_config.CrawlerFlags.HasFlag(CrawlerFlags.IncludeImages))
-                {
-                    queue = QueueImages(queue, htmlDocument);
-                }
+                        if (_config.CrawlerFlags.HasFlag(CrawlerFlags.IncludeStyles))
+                        {
+                            queue = QueueStyles(queue, htmlDocument);
+                        }
 
-                var isError = false;
+                        if (_config.CrawlerFlags.HasFlag(CrawlerFlags.IncludeImages))
+                        {
+                            queue = QueueImages(queue, htmlDocument);
+                        }
 
-                if (_config.CrawlerFlags.HasFlag(CrawlerFlags.IncludeFailureCheck))
-                {
-                    var regex = new Regex(@"KATELYN:ERRORS\([0-9]+\)", RegexOptions.IgnoreCase);
+                        var isError = false;
 
-                    foreach (Match match in regex.Matches(htmlDocument.DocumentNode.OuterHtml))
-                    {
-                        _config.Listener.OnError(request, new Exception($"At {match.Index} - {match.Value}"));
-                        isError = true;
-                    }
-                }
+                        if (_config.CrawlerFlags.HasFlag(CrawlerFlags.IncludeFailureCheck))
+                        {
+                            var regex = new Regex(@"KATELYN:ERRORS\([0-9]+\)", RegexOptions.IgnoreCase);
 
-                if (_config.HtmlContentExpression != null)
-                {
-                    foreach (Match match in _config.HtmlContentExpression.Matches(htmlDocument.DocumentNode.OuterHtml))
-                    {
-                        _config.Listener.OnError(request, new Exception($"At {match.Index} - {match.Value}"));
-                        isError = true;
-                    }
-                }
+                            foreach (Match match in regex.Matches(htmlDocument.DocumentNode.OuterHtml))
+                            {
+                                _config.Listener.OnError(request, new Exception($"At {match.Index} - {match.Value}"));
+                                isError = true;
+                            }
+                        }
 
-                if (isError)
-                {
-                    return queue;
+                        if (_config.HtmlContentExpression != null)
+                        {
+                            foreach (Match match in _config.HtmlContentExpression.Matches(htmlDocument.DocumentNode.OuterHtml))
+                            {
+                                _config.Listener.OnError(request, new Exception($"At {match.Index} - {match.Value}"));
+                                isError = true;
+                            }
+                        }
+
+                        if (isError)
+                        {
+                            return queue;
+                        }
+                        break;
+                    case "text/plain":
+                        // robots.txt
+                        _config.Listener.OnDocumentLoaded(request);
+
+                        foreach (Match item in Regex.Matches(content, @"(http|https):\/\/(.*)\S"))
+                        {
+                            QueueIfNew(queue, new Uri(item.Value));
+                        }
+                        break;
+                    case "text/xml":
+                        // sitemap.xml
+                        var sitemap = new HtmlDocument();
+                        sitemap.LoadHtml(content);
+
+                        request.Document = sitemap.DocumentNode.OuterHtml;
+
+                        queue = QueueSitemaplinks(queue, sitemap);
+
+                        _config.Listener.OnDocumentLoaded(request);
+                        break;
+                    default:
+                        // Unsupported content type - we still load and measure, but don't look for links
+                        _config.Listener.OnDocumentLoaded(request);
+                        break;
                 }
             }
 
@@ -265,6 +302,40 @@ namespace Katelyn.Core
             foreach (HtmlNode link in linkNodes)
             {
                 var linkText = link.Attributes["href"].Value;
+
+                if (linkText.Contains("#"))
+                {
+                    linkText = linkText.Substring(0, linkText.IndexOf('#'));
+                }
+
+                if (IsOffSiteResource(linkText))
+                {
+                    continue;
+                }
+
+                var uri = (IsAbsoluteUri(linkText))
+                    ? new Uri(linkText)
+                    : new Uri(_config.RootAddress, linkText);
+
+                QueueIfNew(queue, uri);
+            }
+
+            return queue;
+        }
+
+        private IDictionary<string, Uri> QueueSitemaplinks(IDictionary<string, Uri> queue, HtmlDocument htmlDocument)
+        {
+            var linkNodes = htmlDocument.DocumentNode.SelectNodes("//loc");
+
+            if (linkNodes == null || linkNodes.Count == 0)
+            {
+                // No links on this page
+                return queue;
+            }
+
+            foreach (HtmlNode link in linkNodes)
+            {
+                var linkText = link.InnerText;
 
                 if (linkText.Contains("#"))
                 {

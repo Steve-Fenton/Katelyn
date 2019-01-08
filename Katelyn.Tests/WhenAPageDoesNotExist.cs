@@ -6,11 +6,11 @@ using System;
 namespace Katelyn.Tests
 {
     [TestClass]
-    public class PageNotFoundTest
+    public class WhenAPageDoesNotExist
         : TestBase
     {
         [TestMethod]
-        public void PageNotFound()
+        public void TheCrawlShouldRecordAnError()
         {
             // TODO: Test Page?
             var config = new CrawlerConfig
@@ -27,6 +27,8 @@ namespace Katelyn.Tests
         public override void OnEnd()
         {
             _errorCount.ShouldBe(1);
+            _crawledAddresses.Contains("http://PageNotFound/").ShouldBeFalse();
+
             _successCount.ShouldBe(0);
         }
     }

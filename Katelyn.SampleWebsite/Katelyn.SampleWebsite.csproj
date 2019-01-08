@@ -25,7 +25,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app.css" />
+    <Content Include="only-in-sitemap.html" />
     <Content Include="index.html" />
+    <Content Include="robots.txt" />
+    <Content Include="sitemap.xml" />
     <Content Include="web.config" />
   </ItemGroup>
   <ItemGroup>

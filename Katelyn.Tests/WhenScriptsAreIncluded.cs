@@ -6,11 +6,11 @@ using System;
 namespace Katelyn.Tests
 {
     [TestClass]
-    public class RunCrawlerWithScriptsStylesImagesTest
+    public class WhenScriptsAreIncluded
         : TestBase
     {
         [TestMethod]
-        public void RunCrawlerWithScriptsStylesImages()
+        public void ScriptTagsShouldBeCrawled()
         {
             var config = new CrawlerConfig
             {
@@ -21,8 +21,6 @@ namespace Katelyn.Tests
 
             config.CrawlerFlags |= CrawlerFlags.IncludeLinks;
             config.CrawlerFlags |= CrawlerFlags.IncludeScripts;
-            config.CrawlerFlags |= CrawlerFlags.IncludeStyles;
-            config.CrawlerFlags |= CrawlerFlags.IncludeImages;
 
             Crawler.Crawl(config);
         }
@@ -30,7 +28,10 @@ namespace Katelyn.Tests
         public override void OnEnd()
         {
             _errorCount.ShouldBe(0);
-            _successCount.ShouldBe(3);
+
+            _successCount.ShouldBe(2);
+            _crawledAddresses.Contains("http://localhost:51746/").ShouldBeTrue();
+            _crawledAddresses.Contains("http://localhost:51746/app.js").ShouldBeTrue();
         }
     }
 }
