@@ -45,6 +45,8 @@ Advanced Options
  
  - `-includeFailureCheck` Whether to check for the Katelyn Error Comment `<!-- KATELYN:ERRORS(1) -->`
 
+ - `-includeRobots` Whether to look for the robots.txt file and follow the sitemap linked within it
+
  - `-maxDepth` The maximum depth to crawl to the site
 
  - `-delay` If specified, the number of milliseconds to pause before each request
@@ -62,6 +64,7 @@ For example, with everything specified:
         -includeStyles=true 
         -includeImages=true
         -includeFailureCheck=true
+		-includeRobots=true
         -delay=500
         -searchExpression="(?i)example[\w\s]expression"
 
@@ -83,7 +86,10 @@ Or use the Katelyn Core library in your own applications.
  - Expose a crawl delay to caller
  - Method of indicating a partial failure (i.e. one module failed, but a page is still being served)
  - Multi-domain service to slow-crawl a list of domains (supply a FilePath to a file with one line per domain)
+ - Find robots.txt
+ - Follow sitemap link from robots.txt
+ - Report on third party resources that have been excluded from the crawl
 
-## TODO
+ ## TODO
 
- - Sample listeners (i.e. dogstatsd, eventlog)
+ - Partner site concept (i.e. where you use a cookieless domain for images and want them treated as internal, rather than third party resources)

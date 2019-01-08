@@ -36,11 +36,12 @@ namespace Katelyn.ConsoleRunner
             [DefaultValue(true)]bool includeScripts,
             [DefaultValue(true)]bool includeStyles,
             [DefaultValue(true)]bool includeFailureCheck,
+            [DefaultValue(true)]bool includeRobots,
             [DefaultValue(100)]int maxDepth,
             [DefaultValue(0)]int delay,
             [DefaultValue("")]string searchExpression)
         {
-            var config = GetComplexConfig(address, verbose, includeImages, includeLinks, includeScripts, includeStyles, includeFailureCheck, maxDepth, delay, searchExpression);
+            var config = GetComplexConfig(address, verbose, includeImages, includeLinks, includeScripts, includeStyles, includeFailureCheck, includeRobots, maxDepth, delay, searchExpression);
 
             Console.WriteLine(JsonConvert.SerializeObject(config));
 
@@ -64,7 +65,7 @@ namespace Katelyn.ConsoleRunner
             };
         }
 
-        private static CrawlerConfig GetComplexConfig(string address, bool verbose, bool includeImages, bool includeLinks, bool includeScripts, bool includeStyles, bool includeFailureCheck, int maxDepth, int delay, string searchExpression)
+        private static CrawlerConfig GetComplexConfig(string address, bool verbose, bool includeImages, bool includeLinks, bool includeScripts, bool includeStyles, bool includeFailureCheck, bool includeRobots, int maxDepth, int delay, string searchExpression)
         {
             var config = new CrawlerConfig
             {
@@ -105,6 +106,11 @@ namespace Katelyn.ConsoleRunner
             if (includeFailureCheck)
             {
                 config.CrawlerFlags |= CrawlerFlags.IncludeFailureCheck;
+            }
+
+            if (includeRobots)
+            {
+                config.CrawlerFlags |= CrawlerFlags.IncludeRobots;
             }
 
             if (delay > 0)
