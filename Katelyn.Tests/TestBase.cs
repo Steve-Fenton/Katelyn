@@ -37,7 +37,7 @@ namespace Katelyn.Tests
 
         public void OnThirdPartyAddress(CrawlResult request)
         {
-            _thirdPartyAddresses.Add(address.Address);
+            _thirdPartyAddresses.Add(request.Address);
         }
 
         public void OnStart()

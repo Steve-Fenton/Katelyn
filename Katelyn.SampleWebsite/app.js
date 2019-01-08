@@ -1,4 +1,4 @@
-var Greeter = (function () {
+var Greeter = /** @class */ (function () {
     function Greeter(element) {
         this.element = element;
         this.element.innerHTML += "The time is: ";
@@ -20,3 +20,4 @@ window.onload = function () {
     var greeter = new Greeter(el);
     greeter.start();
 };
+//# sourceMappingURL=app.js.map

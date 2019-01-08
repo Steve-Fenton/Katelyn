@@ -81,7 +81,12 @@ namespace Katelyn.UI
                     break;
                 case (int)ProgressType.ExternalLink:
                     var externalRequest = (CrawlResult)e.UserState;
-                    _externalLinks.Add(externalRequest);
+
+                    if (!_externalLinks.Any(l => l.Address == externalRequest.Address))
+                    {
+                        _externalLinks.Add(externalRequest);
+                    }
+
                     BindExternalGrid();
                     break;
                 case (int)ProgressType.Complete:
@@ -238,6 +243,30 @@ namespace Katelyn.UI
             }
 
             BindErrorGrid();
+        }
+
+        private void ExternalColumnHeaderClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            switch (CrawlOutput.Columns[e.ColumnIndex].HeaderText)
+            {
+                case "Address":
+                    _externalLinks = _externalLinks.OrderBy(r => r.Address).ToList();
+                    break;
+                case "ParentAddress":
+                    _externalLinks = _externalLinks.OrderBy(r => r.ParentAddress).ToList();
+                    break;
+                case "ContentType":
+                    _externalLinks = _externalLinks.OrderBy(r => r.ContentType).ToList();
+                    break;
+                case "Duration":
+                    _externalLinks = _externalLinks.OrderByDescending(r => r.Duration).ToList();
+                    break;
+                case "StatusCode":
+                    _externalLinks = _externalLinks.OrderBy(r => r.StatusCode).ToList();
+                    break;
+            }
+
+            BindExternalGrid();
         }
     }
 }

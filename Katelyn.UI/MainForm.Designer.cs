@@ -302,6 +302,7 @@
             this.ExternalGridView.RowTemplate.Height = 33;
             this.ExternalGridView.Size = new System.Drawing.Size(1696, 638);
             this.ExternalGridView.TabIndex = 0;
+            this.ExternalGridView.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.ExternalColumnHeaderClick);
             // 
             // MainForm
             // 
