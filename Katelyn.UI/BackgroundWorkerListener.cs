@@ -64,6 +64,11 @@ namespace Katelyn.UI
             File.WriteAllText(Path.Combine(_outputDirectory.FullName, fileName + ".html"), request.Document);
         }
 
+        public void OnThirdPartyAddress(CrawlResult request)
+        {
+            _worker.ReportProgress((int)ProgressType.ExternalLink, request);
+        }
+
         public void OnStart()
         {
             _worker.ReportProgress((int)ProgressType.Information, "Katelyn - Well known for Crawling");

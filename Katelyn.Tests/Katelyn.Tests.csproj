@@ -55,6 +55,7 @@
     <Compile Include="TestBase.cs" />
     <Compile Include="WhenScriptsAndStylesAreIncluded.cs" />
     <Compile Include="WhenScriptsAreIncluded.cs" />
+    <Compile Include="WhenAThirdPartyLinkIsFound.cs" />
     <Compile Include="WhenTheCrawlerRuns.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

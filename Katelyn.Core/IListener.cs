@@ -14,6 +14,8 @@ namespace Katelyn.Core
 
         void OnDocumentLoaded(CrawlResult request);
 
+        void OnThirdPartyAddress(CrawlResult request);
+
         CrawlSummary GetCrawlResult();
     }
 }

@@ -14,6 +14,7 @@ namespace Katelyn.UI
         private BackgroundWorker _worker;
         private IList<CrawlResult> _requests = new List<CrawlResult>();
         private IList<CrawlError> _errors = new List<CrawlError>();
+        private IList<CrawlResult> _externalLinks = new List<CrawlResult>();
         private int _errorCount;
         private int _successCount;
 
@@ -78,6 +79,11 @@ namespace Katelyn.UI
                     
                     ErrorTab.Text = $"{_errorCount} Errors";
                     break;
+                case (int)ProgressType.ExternalLink:
+                    var externalRequest = (CrawlResult)e.UserState;
+                    _externalLinks.Add(externalRequest);
+                    BindExternalGrid();
+                    break;
                 case (int)ProgressType.Complete:
                     // TODO: Tell user it has completed
                     //OutputListBox.Items.Add(userState);
@@ -106,6 +112,14 @@ namespace Katelyn.UI
             bindingSource.DataSource = _errors;
             ErrorGridView.AutoGenerateColumns = true;
             ErrorGridView.DataSource = bindingSource;
+        }
+
+        private void BindExternalGrid()
+        {
+            var bindingSource = new BindingSource();
+            bindingSource.DataSource = _externalLinks;
+            ExternalGridView.AutoGenerateColumns = true;
+            ExternalGridView.DataSource = bindingSource;
         }
 
         private void CrawlStart_Click(object sender, EventArgs e)
@@ -147,6 +161,9 @@ namespace Katelyn.UI
         {
             _errorCount = 0;
             _successCount = 0;
+
+            _externalLinks = new List<CrawlResult>();
+            BindExternalGrid();
 
             _errors = new List<CrawlError>();
             BindErrorGrid();

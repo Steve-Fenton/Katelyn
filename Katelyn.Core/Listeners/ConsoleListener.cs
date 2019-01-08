@@ -45,6 +45,11 @@ namespace Katelyn.Core.Listeners
             return;
         }
 
+        public void OnThirdPartyAddress(CrawlResult request)
+        {
+            return;
+        }
+
         public void OnStart()
         {
             Console.ForegroundColor = ConsoleColor.White;

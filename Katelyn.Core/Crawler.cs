@@ -84,7 +84,7 @@ namespace Katelyn.Core
             var request = new CrawlResult
             {
                 Address = address.AbsoluteUri,
-                ParentAddress = parent?.AbsoluteUri
+                ParentAddress = parent?.AbsoluteUri ?? string.Empty
             };
 
             if (!_continue)
@@ -139,15 +139,22 @@ namespace Katelyn.Core
             }
         }
 
-        private bool IsOffSiteResource(string linkText)
+        private bool IsOffSiteResource(string linkText, Uri parent)
         {
-            return linkText.StartsWith("tel:", StringComparison.InvariantCultureIgnoreCase)
+            bool isOffSiteResource = linkText.StartsWith("tel:", StringComparison.InvariantCultureIgnoreCase)
                 || linkText.StartsWith("fax:", StringComparison.InvariantCultureIgnoreCase)
                 || linkText.StartsWith("mailto:", StringComparison.InvariantCultureIgnoreCase)
                 || linkText.StartsWith("javascript:", StringComparison.InvariantCultureIgnoreCase)
                 || linkText.StartsWith("//", StringComparison.InvariantCultureIgnoreCase)
                 || (linkText.StartsWith("http://", StringComparison.InvariantCultureIgnoreCase) && !linkText.StartsWith("http://" + _config.RootAddress.Host, StringComparison.InvariantCultureIgnoreCase))
                 || (linkText.StartsWith("https://", StringComparison.InvariantCultureIgnoreCase) && !linkText.StartsWith("https://" + _config.RootAddress.Host, StringComparison.InvariantCultureIgnoreCase));
+
+            if (isOffSiteResource)
+            {
+                _config.Listener.OnThirdPartyAddress(new CrawlResult { ParentAddress = parent?.AbsoluteUri ?? string.Empty, Address = linkText });
+            }
+
+            return isOffSiteResource;
         }
 
         private IDictionary<string, Uri> AddLinksToQueueFor(string address, Uri parent)
@@ -155,7 +162,7 @@ namespace Katelyn.Core
             var request = new CrawlResult
             {
                 Address = address,
-                ParentAddress = parent?.AbsoluteUri
+                ParentAddress = parent?.AbsoluteUri ?? string.Empty
             };
 
             IDictionary<string, Uri> queue = new Dictionary<string, Uri>();
@@ -195,22 +202,22 @@ namespace Katelyn.Core
 
                         if (_config.CrawlerFlags.HasFlag(CrawlerFlags.IncludeLinks))
                         {
-                            queue = QueueHyperlinks(queue, htmlDocument);
+                            queue = QueueHyperlinks(queue, htmlDocument, parent);
                         }
 
                         if (_config.CrawlerFlags.HasFlag(CrawlerFlags.IncludeScripts))
                         {
-                            queue = QueueScripts(queue, htmlDocument);
+                            queue = QueueScripts(queue, htmlDocument, parent);
                         }
 
                         if (_config.CrawlerFlags.HasFlag(CrawlerFlags.IncludeStyles))
                         {
-                            queue = QueueStyles(queue, htmlDocument);
+                            queue = QueueStyles(queue, htmlDocument, parent);
                         }
 
                         if (_config.CrawlerFlags.HasFlag(CrawlerFlags.IncludeImages))
                         {
-                            queue = QueueImages(queue, htmlDocument);
+                            queue = QueueImages(queue, htmlDocument, parent);
                         }
 
                         var isError = false;
@@ -256,7 +263,7 @@ namespace Katelyn.Core
 
                         request.Document = sitemap.DocumentNode.OuterHtml;
 
-                        queue = QueueSitemaplinks(queue, sitemap);
+                        queue = QueueSitemaplinks(queue, sitemap, parent);
 
                         _config.Listener.OnDocumentLoaded(request);
                         break;
@@ -289,7 +296,7 @@ namespace Katelyn.Core
             return content;
         }
 
-        private IDictionary<string, Uri> QueueHyperlinks(IDictionary<string, Uri> queue, HtmlDocument htmlDocument)
+        private IDictionary<string, Uri> QueueHyperlinks(IDictionary<string, Uri> queue, HtmlDocument htmlDocument, Uri parent)
         {
             var linkNodes = htmlDocument.DocumentNode.SelectNodes("//a[@href]");
 
@@ -308,7 +315,7 @@ namespace Katelyn.Core
                     linkText = linkText.Substring(0, linkText.IndexOf('#'));
                 }
 
-                if (IsOffSiteResource(linkText))
+                if (IsOffSiteResource(linkText, parent))
                 {
                     continue;
                 }
@@ -323,7 +330,7 @@ namespace Katelyn.Core
             return queue;
         }
 
-        private IDictionary<string, Uri> QueueSitemaplinks(IDictionary<string, Uri> queue, HtmlDocument htmlDocument)
+        private IDictionary<string, Uri> QueueSitemaplinks(IDictionary<string, Uri> queue, HtmlDocument htmlDocument, Uri parent)
         {
             var linkNodes = htmlDocument.DocumentNode.SelectNodes("//loc");
 
@@ -342,7 +349,7 @@ namespace Katelyn.Core
                     linkText = linkText.Substring(0, linkText.IndexOf('#'));
                 }
 
-                if (IsOffSiteResource(linkText))
+                if (IsOffSiteResource(linkText, parent))
                 {
                     continue;
                 }
@@ -357,7 +364,7 @@ namespace Katelyn.Core
             return queue;
         }
 
-        private IDictionary<string, Uri> QueueScripts(IDictionary<string, Uri> queue, HtmlDocument htmlDocument)
+        private IDictionary<string, Uri> QueueScripts(IDictionary<string, Uri> queue, HtmlDocument htmlDocument, Uri parent)
         {
             var scriptNodes = htmlDocument.DocumentNode.SelectNodes("//script[@src]");
 
@@ -371,7 +378,7 @@ namespace Katelyn.Core
             {
                 var linkText = link.Attributes["src"].Value;
 
-                if (IsOffSiteResource(linkText))
+                if (IsOffSiteResource(linkText, parent))
                 {
                     continue;
                 }
@@ -386,7 +393,7 @@ namespace Katelyn.Core
             return queue;
         }
 
-        private IDictionary<string, Uri> QueueStyles(IDictionary<string, Uri> queue, HtmlDocument htmlDocument)
+        private IDictionary<string, Uri> QueueStyles(IDictionary<string, Uri> queue, HtmlDocument htmlDocument, Uri parent)
         {
             var styleNodes = htmlDocument.DocumentNode.SelectNodes("//link[@href]");
 
@@ -400,7 +407,7 @@ namespace Katelyn.Core
             {
                 var linkText = link.Attributes["href"].Value;
 
-                if (IsOffSiteResource(linkText))
+                if (IsOffSiteResource(linkText, parent))
                 {
                     continue;
                 }
@@ -415,7 +422,7 @@ namespace Katelyn.Core
             return queue;
         }
 
-        private IDictionary<string, Uri> QueueImages(IDictionary<string, Uri> queue, HtmlDocument htmlDocument)
+        private IDictionary<string, Uri> QueueImages(IDictionary<string, Uri> queue, HtmlDocument htmlDocument, Uri parent)
         {
             var imageNodes = htmlDocument.DocumentNode.SelectNodes("//img[@src]");
 
@@ -429,7 +436,7 @@ namespace Katelyn.Core
             {
                 var linkText = link.Attributes["src"].Value;
 
-                if (IsOffSiteResource(linkText))
+                if (IsOffSiteResource(linkText, parent))
                 {
                     continue;
                 }
