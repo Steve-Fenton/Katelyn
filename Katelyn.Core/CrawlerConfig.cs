@@ -18,5 +18,13 @@ namespace Katelyn.Core
         public TimeSpan CrawlDelay { get; set; } = TimeSpan.Zero;
 
         public Regex HtmlContentExpression { get; set; } = null;
+
+        public void AddCrawlerFlag(Func<bool> predicate, CrawlerFlags flag)
+        {
+            if (predicate())
+            {
+                CrawlerFlags |= flag;
+            }
+        }
     }
 }

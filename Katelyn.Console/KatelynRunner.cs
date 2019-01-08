@@ -83,40 +83,17 @@ namespace Katelyn.ConsoleRunner
                 config.MaxDepth = maxDepth;
             }
 
-            if (includeLinks)
-            {
-                config.CrawlerFlags |= CrawlerFlags.IncludeLinks;
-            }
-
-            if (includeImages)
-            {
-                config.CrawlerFlags |= CrawlerFlags.IncludeImages;
-            }
-
-            if (includeScripts)
-            {
-                config.CrawlerFlags |= CrawlerFlags.IncludeScripts;
-            }
-
-            if (includeStyles)
-            {
-                config.CrawlerFlags |= CrawlerFlags.IncludeStyles;
-            }
-
-            if (includeFailureCheck)
-            {
-                config.CrawlerFlags |= CrawlerFlags.IncludeFailureCheck;
-            }
-
-            if (includeRobots)
-            {
-                config.CrawlerFlags |= CrawlerFlags.IncludeRobots;
-            }
-
             if (delay > 0)
             {
                 config.CrawlDelay = TimeSpan.FromMilliseconds(delay);
             }
+
+            config.AddCrawlerFlag(() => includeLinks, CrawlerFlags.IncludeLinks);
+            config.AddCrawlerFlag(() => includeImages, CrawlerFlags.IncludeImages);
+            config.AddCrawlerFlag(() => includeScripts, CrawlerFlags.IncludeScripts);
+            config.AddCrawlerFlag(() => includeStyles, CrawlerFlags.IncludeStyles);
+            config.AddCrawlerFlag(() => includeFailureCheck, CrawlerFlags.IncludeFailureCheck);
+            config.AddCrawlerFlag(() => includeRobots, CrawlerFlags.IncludeRobots);
 
             return config;
         }

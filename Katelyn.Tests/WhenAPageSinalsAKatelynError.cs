@@ -6,7 +6,7 @@ using System;
 namespace Katelyn.Tests
 {
     [TestClass]
-    public class WhenAPageDoesNotExist
+    public class WhenAPageSignalsAKatelynError
         : TestBase
     {
         [TestMethod]
@@ -14,10 +14,10 @@ namespace Katelyn.Tests
         {
             var config = new CrawlerConfig
             {
-                RootAddress = new Uri("http://PageNotFound/"),
+                RootAddress = new Uri("http://localhost:51746/katelyn-error.html"),
                 Listener = this,
                 MaxDepth = 2,
-                CrawlerFlags = CrawlerFlags.IncludeLinks
+                CrawlerFlags = CrawlerFlags.IncludeFailureCheck
             };
 
             Crawler.Crawl(config);
@@ -26,7 +26,7 @@ namespace Katelyn.Tests
         public override void OnEnd()
         {
             _errorCount.ShouldBe(1);
-            _errors.ShouldContain("http://pagenotfound/ found on  - The remote name could not be resolved: 'pagenotfound'");
+            _errors.ShouldContain("http://localhost:51746/katelyn-error.html found on  - At 275 - KATELYN:ERRORS(1)");
 
             _successCount.ShouldBe(0);
         }

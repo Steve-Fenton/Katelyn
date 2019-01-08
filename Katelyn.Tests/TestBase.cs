@@ -9,9 +9,9 @@ namespace Katelyn.Tests
     {
         protected int _errorCount;
         protected int _successCount;
-        protected List<string> _crawledAddresses = new List<string>();
-        protected List<string> _thirdPartyAddresses = new List<string>();
-        private IList<string> _errors = new List<string>();
+        protected IList<string> _crawledAddresses = new List<string>();
+        protected IList<string> _thirdPartyAddresses = new List<string>();
+        protected IList<string> _errors = new List<string>();
 
         public void OnSuccess(CrawlResult request)
         {

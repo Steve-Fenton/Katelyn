@@ -28,7 +28,7 @@ namespace Katelyn.Tests
             _errorCount.ShouldBe(0);
 
             _successCount.ShouldBe(1);
-            _crawledAddresses.Contains("http://localhost:51746/").ShouldBeTrue();
+            _crawledAddresses.ShouldContain("http://localhost:51746/");
         }
     }
 }

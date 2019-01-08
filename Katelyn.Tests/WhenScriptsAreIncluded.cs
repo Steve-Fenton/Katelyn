@@ -30,8 +30,8 @@ namespace Katelyn.Tests
             _errorCount.ShouldBe(0);
 
             _successCount.ShouldBe(2);
-            _crawledAddresses.Contains("http://localhost:51746/").ShouldBeTrue();
-            _crawledAddresses.Contains("http://localhost:51746/app.js").ShouldBeTrue();
+            _crawledAddresses.ShouldContain("http://localhost:51746/");
+            _crawledAddresses.ShouldContain("http://localhost:51746/app.js");
         }
     }
 }

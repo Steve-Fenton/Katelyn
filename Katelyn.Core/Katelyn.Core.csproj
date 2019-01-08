@@ -49,6 +49,13 @@
     <Compile Include="Crawler.cs" />
     <Compile Include="CrawlerConfig.cs" />
     <Compile Include="CrawlerFlags.cs" />
+    <Compile Include="AddressProviders\AddressProvider.cs" />
+    <Compile Include="AddressProviders\DefaultAddressProvider.cs" />
+    <Compile Include="AddressProviders\FileAddressProvider.cs" />
+    <Compile Include="LinkParsers\LinkParser.cs" />
+    <Compile Include="LinkParsers\HtmlLinkParser.cs" />
+    <Compile Include="LinkParsers\SitemapLinkParser.cs" />
+    <Compile Include="LinkParsers\RobotLinkParser.cs" />
     <Compile Include="Listeners\CrawlError.cs" />
     <Compile Include="Listeners\CrawlResult.cs" />
     <Compile Include="CrawlTimer.cs" />

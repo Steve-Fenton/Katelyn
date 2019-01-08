@@ -2,22 +2,24 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
 using System;
+using System.Text.RegularExpressions;
 
 namespace Katelyn.Tests
 {
     [TestClass]
-    public class WhenAPageDoesNotExist
+    public class WhenASearchIsUsed
         : TestBase
     {
         [TestMethod]
-        public void TheCrawlShouldRecordAnError()
+        public void ThenMatchesShouldBeFound()
         {
             var config = new CrawlerConfig
             {
-                RootAddress = new Uri("http://PageNotFound/"),
+                RootAddress = new Uri("http://localhost:51746/"),
                 Listener = this,
-                MaxDepth = 2,
-                CrawlerFlags = CrawlerFlags.IncludeLinks
+                MaxDepth = 1,
+                CrawlerFlags = CrawlerFlags.IncludeLinks,
+                HtmlContentExpression = new Regex("#search-link")
             };
 
             Crawler.Crawl(config);
@@ -26,7 +28,7 @@ namespace Katelyn.Tests
         public override void OnEnd()
         {
             _errorCount.ShouldBe(1);
-            _errors.ShouldContain("http://pagenotfound/ found on  - The remote name could not be resolved: 'pagenotfound'");
+            _errors.ShouldContain("http://localhost:51746/ found on  - At 381 - #search-link");
 
             _successCount.ShouldBe(0);
         }
