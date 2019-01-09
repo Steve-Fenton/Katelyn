@@ -5,12 +5,14 @@ using System.Text.RegularExpressions;
 namespace Katelyn.Core.LinkParsers
 {
     public class RobotLinkParser
-        : LinkParser
+        : ContentParser<Uri>
     {
         private readonly Uri _root;
         private readonly Uri _parent;
         private readonly string _content;
         private readonly CrawlerConfig _config;
+
+        public override string Content => _content;
 
         public RobotLinkParser(Uri root, Uri parent, string content, CrawlerConfig config)
         {

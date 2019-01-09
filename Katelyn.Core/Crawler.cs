@@ -1,10 +1,7 @@
-﻿using HtmlAgilityPack;
-using Katelyn.Core.LinkParsers;
+﻿using Katelyn.Core.LinkParsers;
 using System;
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading;
 
 namespace Katelyn.Core
@@ -14,7 +11,7 @@ namespace Katelyn.Core
         private CrawlerConfig _config;
         private IListener _event;
         private bool _continue = true;
-        private readonly IDictionary<string, int> _crawled = new Dictionary<string, int>();
+        private readonly RequestQueue _requestQueue = new RequestQueue();
 
         public bool IsRunning { get; set; }
 
@@ -61,6 +58,7 @@ namespace Katelyn.Core
             foreach (var address in AddressProvider.GetAddressProvider(_config))
             {
                 _config.RootAddress = address;
+                _requestQueue.AddRootAddress(address);
                 CrawlAddress(_config.RootAddress);
             }
         }
@@ -70,13 +68,6 @@ namespace Katelyn.Core
             if (!_continue)
             {
                 // The kill switch has been flipped, stop processing
-                return;
-            }
-
-            if (_crawled.ContainsKey(address.AbsoluteUri))
-            {
-                // Already crawled - don't make another request
-                _crawled[address.AbsoluteUri]++;
                 return;
             }
 
@@ -92,8 +83,6 @@ namespace Katelyn.Core
 
         private void MakeRequest(Uri address, int currentDepth, Uri parent)
         {
-            IDictionary<string, Uri> queue = new Dictionary<string, Uri>();
-
             var crawl = new CrawlResult
             {
                 Address = address.AbsoluteUri,
@@ -102,60 +91,54 @@ namespace Katelyn.Core
 
             try
             {
-                AddLinksToQueueFor(queue, crawl.Address, parent);
-                AddRobotListsToQueue(queue, currentDepth);
-
-                _crawled.Add(crawl.Address, 1);
+                AddRobotListsToQueue(currentDepth);
+                AddLinksToQueueFor(crawl.Address, parent);
             }
             catch (Exception ex)
             {
                 _event.OnError(crawl, ex);
             }
 
-            ProcessChildRequests(queue, address, currentDepth);
+            ProcessChildRequests(address, currentDepth);
         }
 
-        private void ProcessChildRequests(IDictionary<string, Uri> queue, Uri parentAddress, int currentDepth)
+        private void ProcessChildRequests(Uri parentAddress, int currentDepth)
         {
             var nextDepth = currentDepth + 1;
 
             if (nextDepth >= _config.MaxDepth)
             {
-                // We have followed the hierarchy far enough, go no deeper
+                // We have followed the hierarchy deep enough, go no deeper
                 return;
             }
 
-            foreach (var key in queue.Keys)
+            Uri uri = _requestQueue.Pop();
+            while (uri != default(Uri))
             {
-                CrawlAddress(queue[key], nextDepth, parentAddress);
+                try
+                {
+                    CrawlAddress(uri, nextDepth, parentAddress);
+                }
+                finally
+                {
+                    uri = _requestQueue.Pop();
+                }
             }
         }
 
-        private void AddRobotListsToQueue(IDictionary<string, Uri> queue, int currentDepth)
+        private void AddRobotListsToQueue(int currentDepth)
         {
             if (currentDepth == 0)
             {
                 if (_config.CrawlerFlags.HasFlag(CrawlerFlags.IncludeRobots))
                 {
                     var robotAddress = new Uri($"{_config.RootAddress.GetLeftPart(UriPartial.Authority)}/robots.txt");
-                    QueueIfNew(queue, robotAddress);
+                    _requestQueue.Add(robotAddress);
                 }
             }
         }
 
-        private bool IsOffSiteResource(string linkText, Uri parent)
-        {
-            bool isOffSiteResource = LinkParser.IsOffSiteResource(linkText, _config.RootAddress, parent);
-
-            if (isOffSiteResource)
-            {
-                _event.OnThirdPartyAddress(new CrawlResult { ParentAddress = parent?.AbsoluteUri ?? string.Empty, Address = linkText });
-            }
-
-            return isOffSiteResource;
-        }
-
-        private void AddLinksToQueueFor(IDictionary<string, Uri> queue, string address, Uri parent)
+        private void AddLinksToQueueFor(string address, Uri parent)
         {
             var request = new CrawlResult
             {
@@ -168,11 +151,11 @@ namespace Katelyn.Core
                 AllowAutoRedirect = false
             };
 
-            using (var client = new HttpClient(handler))
+            using (var httpClient = new HttpClient(handler))
             {
                 var timer = CrawlTimer.Start();
 
-                var response = client.GetAsync(request.Address).Result;
+                var response = httpClient.GetAsync(request.Address).Result;
 
                 request.ContentType = response.Content.Headers.ContentType?.MediaType ?? "Unknown";
                 request.StatusCode = (int)response.StatusCode;
@@ -187,78 +170,23 @@ namespace Katelyn.Core
                 var content = GetContent(response);
                 request.Duration = timer.Stop();
 
-                switch (request.ContentType)
+                ContentParser<Uri> contentParser = ParserFactory.GetLinkParser(_config, parent, content, request.ContentType);
+                request.Document = contentParser.Content;
+                _event.OnDocumentLoaded(request);
+                _requestQueue.AddRange(contentParser);
+
+                var isError = false;
+                ContentParser<string> searchParser = ParserFactory.GetSearchParser(_config, parent, content, request.ContentType);
+
+                foreach (string message in searchParser)
                 {
-                    case "text/html":
-                        request.Document = content;
-                        _event.OnDocumentLoaded(request);
+                    isError = true;
+                    _event.OnError(request, new Exception(message));
+                }
 
-                        var parser1 = new HtmlLinkParser(_config.RootAddress, parent, content, _config);
-
-                        foreach (Uri resource in parser1)
-                        {
-                            QueueIfNew(queue, resource);
-                        }
-                        //
-
-                        var htmlDocument = new HtmlDocument();
-                        htmlDocument.LoadHtml(content);
-
-                        var isError = false;
-
-                        if (_config.CrawlerFlags.HasFlag(CrawlerFlags.IncludeFailureCheck))
-                        {
-                            var regex = new Regex(@"KATELYN:ERRORS\([0-9]+\)", RegexOptions.IgnoreCase);
-
-                            foreach (Match match in regex.Matches(content))
-                            {
-                                _event.OnError(request, new Exception($"At {match.Index} - {match.Value}"));
-                                isError = true;
-                            }
-                        }
-
-                        if (_config.HtmlContentExpression != null)
-                        {
-                            foreach (Match match in _config.HtmlContentExpression.Matches(htmlDocument.DocumentNode.OuterHtml))
-                            {
-                                _event.OnError(request, new Exception($"At {match.Index} - {match.Value}"));
-                                isError = true;
-                            }
-                        }
-
-                        if (isError)
-                        {
-                            return;
-                        }
-                        break;
-                    case "text/plain":
-                        // robots.txt
-                        request.Document = content;
-                        _event.OnDocumentLoaded(request);
-
-                        var parser = new RobotLinkParser(_config.RootAddress, parent, content, _config);
-
-                        foreach (Uri resource in parser)
-                        {
-                            QueueIfNew(queue, resource);
-                        }
-                        break;
-                    case "text/xml":
-                        // sitemap.xml
-                        request.Document = content;
-                        _event.OnDocumentLoaded(request);
-
-                        var parser2 = new SitemapLinkParser(_config.RootAddress, parent, content, _config);
-
-                        foreach (Uri resource in parser2)
-                        {
-                            QueueIfNew(queue, resource);
-                        }
-                        break;
-                    default:
-                        // Unsupported content type - we still load and measure, but don't look for links
-                        _event.OnDocumentLoaded(request);
-                        break;
+                if (isError)
+                {
+                    return;
                 }
             }
 
@@ -280,21 +208,6 @@ namespace Katelyn.Core
             }
 
             return content;
-        }
-
-        private bool IsAbsoluteUri(string linkText)
-        {
-            return linkText.StartsWith(_config.RootAddress.AbsoluteUri, StringComparison.InvariantCultureIgnoreCase);
-        }
-
-        private void QueueIfNew(IDictionary<string, Uri> queue, Uri uri)
-        {
-            // Only queue it up if it hasn't been queued or crawled
-            if (!_crawled.ContainsKey(uri.AbsoluteUri)
-                && !queue.ContainsKey(uri.AbsoluteUri))
-            {
-                queue.Add(uri.AbsoluteUri, uri);
-            }
         }
     }
 }

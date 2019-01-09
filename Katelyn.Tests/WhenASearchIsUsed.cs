@@ -28,7 +28,7 @@ namespace Katelyn.Tests
         public override void OnEnd()
         {
             _errorCount.ShouldBe(1);
-            _errors.ShouldContain("http://localhost:51746/ found on  - At 381 - #search-link");
+            _errors.ShouldContain("http://localhost:51746/ found on  - At 385 - #search-link");
 
             _successCount.ShouldBe(0);
         }

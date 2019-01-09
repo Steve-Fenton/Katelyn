@@ -2,17 +2,18 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 
 namespace Katelyn.Core.LinkParsers
 {
     public class HtmlLinkParser
-        : LinkParser
+        : ContentParser<Uri>
     {
         private readonly Uri _root;
         private readonly Uri _parent;
         private readonly string _content;
         private readonly CrawlerConfig _config;
+
+        public override string Content => _content;
 
         public HtmlLinkParser(Uri root, Uri parent, string content, CrawlerConfig config)
         {
@@ -31,7 +32,8 @@ namespace Katelyn.Core.LinkParsers
                 return new List<string>();
             }
 
-            return nodes.Select(n => {
+            return nodes.Select(n =>
+            {
                 var linkText = n.Attributes[attributeSelector].Value;
 
                 if (linkText.Contains("#"))

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace Katelyn.Core.LinkParsers
 {
-    public abstract class LinkParser
+    public abstract class ContentParser<T>
     {
         public static bool IsOffSiteResource(string linkText, Uri rootAddress, Uri parent)
         {
@@ -23,6 +23,8 @@ namespace Katelyn.Core.LinkParsers
             return linkText.StartsWith(rootAddress.AbsoluteUri, StringComparison.InvariantCultureIgnoreCase);
         }
 
-        public abstract IEnumerator<Uri> GetEnumerator();
+        public abstract IEnumerator<T> GetEnumerator();
+
+        public abstract string Content { get; }
     }
 }
