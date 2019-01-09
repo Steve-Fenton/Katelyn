@@ -38,12 +38,17 @@ namespace Katelyn.Core.LinkParsers
             {
                 var linkText = link.InnerText;
 
+                if (string.IsNullOrWhiteSpace(linkText))
+                {
+                    continue;
+                }
+
                 if (linkText.Contains("#"))
                 {
                     linkText = linkText.Substring(0, linkText.IndexOf('#'));
                 }
 
-                if (IsOffSiteResource(linkText, _root, _parent))
+                if (IsOffSiteResource(linkText, _root, _parent, _config.PartnerSites))
                 {
                     _config.Listener.OnThirdPartyAddress(new CrawlResult { ParentAddress = _parent?.AbsoluteUri ?? string.Empty, Address = linkText });
                     continue;

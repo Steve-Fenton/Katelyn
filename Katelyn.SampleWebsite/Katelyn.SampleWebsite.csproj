@@ -25,7 +25,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="app.css" />
+    <Content Include="fentonicon.png" />
     <Content Include="katelyn-error.html" />
+    <Content Include="partner.html" />
     <Content Include="only-in-sitemap.html" />
     <Content Include="index.html" />
     <Content Include="robots.txt" />

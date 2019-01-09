@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace Katelyn.Core
@@ -6,6 +7,8 @@ namespace Katelyn.Core
     public class CrawlerConfig
     {
         public Uri RootAddress { get; set; }
+
+        public IList<Uri> PartnerSites { get; set; } = new List<Uri>();
 
         public string FilePath { get; set; }
 

@@ -41,13 +41,15 @@ namespace Katelyn.Core.Listeners
         public void OnDocumentLoaded(CrawlResult request)
         {
             Console.ForegroundColor = InfoForeground;
-            Console.WriteLine($"Document loaded: {request.Address}");
+            Console.WriteLine($"Document loaded: {request.Address} ({request.Duration}ms)");
+            Console.WriteLine($"   Found on {request.ParentAddress}");
         }
 
         public void OnThirdPartyAddress(CrawlResult request)
         {
             Console.ForegroundColor = InfoForeground;
             Console.WriteLine($"Skipped external resource: {request.Address}");
+            Console.WriteLine($"   Found on {request.ParentAddress}");
         }
 
         public void OnStart()

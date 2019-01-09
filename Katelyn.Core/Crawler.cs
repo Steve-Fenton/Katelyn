@@ -59,11 +59,11 @@ namespace Katelyn.Core
             {
                 _config.RootAddress = address;
                 _requestQueue.AddRootAddress(address);
-                CrawlAddress(_config.RootAddress);
+                CrawlAddress(new QueueItem { Address = address, ParentAddress = null });
             }
         }
 
-        private void CrawlAddress(Uri address, int currentDepth = 0, Uri parent = null)
+        private void CrawlAddress(QueueItem queueItem, int currentDepth = 0)
         {
             if (!_continue)
             {
@@ -78,31 +78,31 @@ namespace Katelyn.Core
             }
 
             // If we get this far, we can actually make the request
-            MakeRequest(address, currentDepth, parent);
+            MakeRequest(queueItem, currentDepth);
         }
 
-        private void MakeRequest(Uri address, int currentDepth, Uri parent)
+        private void MakeRequest(QueueItem queueItem, int currentDepth)
         {
             var crawl = new CrawlResult
             {
-                Address = address.AbsoluteUri,
-                ParentAddress = parent?.AbsoluteUri ?? string.Empty
+                Address = queueItem.Address.AbsoluteUri,
+                ParentAddress = queueItem.ParentAddress?.AbsoluteUri ?? string.Empty
             };
 
             try
             {
                 AddRobotListsToQueue(currentDepth);
-                AddLinksToQueueFor(crawl.Address, parent);
+                AddLinksToQueueFor(queueItem);
             }
             catch (Exception ex)
             {
                 _event.OnError(crawl, ex);
             }
 
-            ProcessChildRequests(address, currentDepth);
+            ProcessChildRequests(currentDepth);
         }
 
-        private void ProcessChildRequests(Uri parentAddress, int currentDepth)
+        private void ProcessChildRequests(int currentDepth)
         {
             var nextDepth = currentDepth + 1;
 
@@ -112,16 +112,16 @@ namespace Katelyn.Core
                 return;
             }
 
-            Uri uri = _requestQueue.Pop();
-            while (uri != default(Uri))
+            QueueItem queueItem = _requestQueue.Pop();
+            while (queueItem != default(QueueItem))
             {
                 try
                 {
-                    CrawlAddress(uri, nextDepth, parentAddress);
+                    CrawlAddress(queueItem, nextDepth);
                 }
                 finally
                 {
-                    uri = _requestQueue.Pop();
+                    queueItem = _requestQueue.Pop();
                 }
             }
         }
@@ -133,17 +133,17 @@ namespace Katelyn.Core
                 if (_config.CrawlerFlags.HasFlag(CrawlerFlags.IncludeRobots))
                 {
                     var robotAddress = new Uri($"{_config.RootAddress.GetLeftPart(UriPartial.Authority)}/robots.txt");
-                    _requestQueue.Add(robotAddress);
+                    _requestQueue.Add(robotAddress, _config.RootAddress);
                 }
             }
         }
 
-        private void AddLinksToQueueFor(string address, Uri parent)
+        private void AddLinksToQueueFor(QueueItem queueItem)
         {
             var request = new CrawlResult
             {
-                Address = address,
-                ParentAddress = parent?.AbsoluteUri ?? string.Empty
+                Address = queueItem.Address.AbsoluteUri,
+                ParentAddress = queueItem.ParentAddress?.AbsoluteUri ?? string.Empty
             };
 
             var handler = new HttpClientHandler
@@ -170,13 +170,13 @@ namespace Katelyn.Core
                 var content = GetContent(response);
                 request.Duration = timer.Stop();
 
-                ContentParser<Uri> contentParser = ParserFactory.GetLinkParser(_config, parent, content, request.ContentType);
+                ContentParser<Uri> contentParser = ParserFactory.GetLinkParser(_config, queueItem.ParentAddress, content, request.ContentType);
                 request.Document = contentParser.Content;
                 _event.OnDocumentLoaded(request);
-                _requestQueue.AddRange(contentParser);
+                _requestQueue.AddRange(contentParser, queueItem.Address);
 
                 var isError = false;
-                ContentParser<string> searchParser = ParserFactory.GetSearchParser(_config, parent, content, request.ContentType);
+                ContentParser<string> searchParser = ParserFactory.GetSearchParser(_config, queueItem.ParentAddress, content, request.ContentType);
 
                 foreach (string message in searchParser)
                 {

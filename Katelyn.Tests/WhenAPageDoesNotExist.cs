@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
 using System;
+using System.Linq;
 
 namespace Katelyn.Tests
 {
@@ -26,7 +27,9 @@ namespace Katelyn.Tests
         public override void OnEnd()
         {
             _errorCount.ShouldBe(1);
-            _errors.ShouldContain("http://pagenotfound/ found on  - The remote name could not be resolved: 'pagenotfound'");
+            _errors
+                .Any(err => err.Contains("http://pagenotfound/ found on"))
+                .ShouldBeTrue();
 
             _successCount.ShouldBe(0);
         }

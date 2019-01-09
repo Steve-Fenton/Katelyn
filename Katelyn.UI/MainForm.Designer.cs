@@ -49,6 +49,8 @@
             this.ErrorGridView = new System.Windows.Forms.DataGridView();
             this.ExternalTab = new System.Windows.Forms.TabPage();
             this.ExternalGridView = new System.Windows.Forms.DataGridView();
+            this.PartnerSiteLabel = new System.Windows.Forms.Label();
+            this.StringForPartnerSites = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -90,11 +92,13 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.MainTabControl);
             this.splitContainer1.Size = new System.Drawing.Size(1718, 835);
-            this.splitContainer1.SplitterDistance = 140;
+            this.splitContainer1.SplitterDistance = 166;
             this.splitContainer1.TabIndex = 9;
             // 
             // AddressGroupBox
             // 
+            this.AddressGroupBox.Controls.Add(this.StringForPartnerSites);
+            this.AddressGroupBox.Controls.Add(this.PartnerSiteLabel);
             this.AddressGroupBox.Controls.Add(this.StringForRegex);
             this.AddressGroupBox.Controls.Add(this.SearchForLabel);
             this.AddressGroupBox.Controls.Add(this.StoreResultCheckBox);
@@ -109,17 +113,17 @@
             this.AddressGroupBox.Margin = new System.Windows.Forms.Padding(4);
             this.AddressGroupBox.Name = "AddressGroupBox";
             this.AddressGroupBox.Padding = new System.Windows.Forms.Padding(4);
-            this.AddressGroupBox.Size = new System.Drawing.Size(844, 260);
+            this.AddressGroupBox.Size = new System.Drawing.Size(844, 282);
             this.AddressGroupBox.TabIndex = 9;
             this.AddressGroupBox.TabStop = false;
             this.AddressGroupBox.Text = "Settings";
             // 
             // StringForRegex
             // 
-            this.StringForRegex.Location = new System.Drawing.Point(138, 187);
+            this.StringForRegex.Location = new System.Drawing.Point(159, 185);
             this.StringForRegex.Margin = new System.Windows.Forms.Padding(4);
             this.StringForRegex.Name = "StringForRegex";
-            this.StringForRegex.Size = new System.Drawing.Size(372, 31);
+            this.StringForRegex.Size = new System.Drawing.Size(486, 31);
             this.StringForRegex.TabIndex = 4;
             // 
             // SearchForLabel
@@ -135,7 +139,7 @@
             // StoreResultCheckBox
             // 
             this.StoreResultCheckBox.AutoSize = true;
-            this.StoreResultCheckBox.Location = new System.Drawing.Point(138, 142);
+            this.StoreResultCheckBox.Location = new System.Drawing.Point(159, 142);
             this.StoreResultCheckBox.Margin = new System.Windows.Forms.Padding(4);
             this.StoreResultCheckBox.Name = "StoreResultCheckBox";
             this.StoreResultCheckBox.Size = new System.Drawing.Size(335, 29);
@@ -175,7 +179,7 @@
             // 
             // CrawlDepth
             // 
-            this.CrawlDepth.Location = new System.Drawing.Point(138, 96);
+            this.CrawlDepth.Location = new System.Drawing.Point(159, 93);
             this.CrawlDepth.Margin = new System.Windows.Forms.Padding(4);
             this.CrawlDepth.Name = "CrawlDepth";
             this.CrawlDepth.Size = new System.Drawing.Size(132, 31);
@@ -184,7 +188,7 @@
             // 
             // ClearButton
             // 
-            this.ClearButton.Location = new System.Drawing.Point(684, 48);
+            this.ClearButton.Location = new System.Drawing.Point(692, 119);
             this.ClearButton.Margin = new System.Windows.Forms.Padding(4);
             this.ClearButton.Name = "ClearButton";
             this.ClearButton.Size = new System.Drawing.Size(124, 52);
@@ -195,7 +199,7 @@
             // 
             // CrawlStart
             // 
-            this.CrawlStart.Location = new System.Drawing.Point(552, 48);
+            this.CrawlStart.Location = new System.Drawing.Point(692, 48);
             this.CrawlStart.Margin = new System.Windows.Forms.Padding(4);
             this.CrawlStart.Name = "CrawlStart";
             this.CrawlStart.Size = new System.Drawing.Size(124, 52);
@@ -206,10 +210,10 @@
             // 
             // CrawlAddress
             // 
-            this.CrawlAddress.Location = new System.Drawing.Point(138, 48);
+            this.CrawlAddress.Location = new System.Drawing.Point(159, 48);
             this.CrawlAddress.Margin = new System.Windows.Forms.Padding(4);
             this.CrawlAddress.Name = "CrawlAddress";
-            this.CrawlAddress.Size = new System.Drawing.Size(372, 31);
+            this.CrawlAddress.Size = new System.Drawing.Size(486, 31);
             this.CrawlAddress.TabIndex = 0;
             // 
             // MainTabControl
@@ -222,7 +226,7 @@
             this.MainTabControl.Margin = new System.Windows.Forms.Padding(4);
             this.MainTabControl.Name = "MainTabControl";
             this.MainTabControl.SelectedIndex = 0;
-            this.MainTabControl.Size = new System.Drawing.Size(1718, 691);
+            this.MainTabControl.Size = new System.Drawing.Size(1718, 665);
             this.MainTabControl.TabIndex = 1000;
             // 
             // OutputTab
@@ -232,7 +236,7 @@
             this.OutputTab.Margin = new System.Windows.Forms.Padding(4);
             this.OutputTab.Name = "OutputTab";
             this.OutputTab.Padding = new System.Windows.Forms.Padding(4);
-            this.OutputTab.Size = new System.Drawing.Size(1702, 644);
+            this.OutputTab.Size = new System.Drawing.Size(1702, 618);
             this.OutputTab.TabIndex = 0;
             this.OutputTab.Text = "Output";
             this.OutputTab.UseVisualStyleBackColor = true;
@@ -249,7 +253,7 @@
             this.CrawlOutput.Name = "CrawlOutput";
             this.CrawlOutput.ReadOnly = true;
             this.CrawlOutput.RowTemplate.Height = 33;
-            this.CrawlOutput.Size = new System.Drawing.Size(1694, 636);
+            this.CrawlOutput.Size = new System.Drawing.Size(1694, 610);
             this.CrawlOutput.TabIndex = 0;
             this.CrawlOutput.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.ColumnHeaderClick);
             // 
@@ -304,6 +308,24 @@
             this.ExternalGridView.TabIndex = 0;
             this.ExternalGridView.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.ExternalColumnHeaderClick);
             // 
+            // PartnerSiteLabel
+            // 
+            this.PartnerSiteLabel.AutoSize = true;
+            this.PartnerSiteLabel.Location = new System.Drawing.Point(14, 235);
+            this.PartnerSiteLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.PartnerSiteLabel.Name = "PartnerSiteLabel";
+            this.PartnerSiteLabel.Size = new System.Drawing.Size(136, 25);
+            this.PartnerSiteLabel.TabIndex = 104;
+            this.PartnerSiteLabel.Text = "Partner Sites";
+            // 
+            // StringForPartnerSites
+            // 
+            this.StringForPartnerSites.Location = new System.Drawing.Point(159, 232);
+            this.StringForPartnerSites.Margin = new System.Windows.Forms.Padding(4);
+            this.StringForPartnerSites.Name = "StringForPartnerSites";
+            this.StringForPartnerSites.Size = new System.Drawing.Size(486, 31);
+            this.StringForPartnerSites.TabIndex = 105;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
@@ -356,6 +378,8 @@
         private System.Windows.Forms.DataGridView ErrorGridView;
         private System.Windows.Forms.TabPage ExternalTab;
         private System.Windows.Forms.DataGridView ExternalGridView;
+        private System.Windows.Forms.TextBox StringForPartnerSites;
+        private System.Windows.Forms.Label PartnerSiteLabel;
     }
 }
 

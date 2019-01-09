@@ -31,10 +31,11 @@ namespace Katelyn.Tests
         {
             _errorCount.ShouldBe(0);
 
-            _successCount.ShouldBe(3);
+            _successCount.ShouldBe(4);
             _crawledAddresses.ShouldContain("http://localhost:51746/");
             _crawledAddresses.ShouldContain("http://localhost:51746/app.css");
             _crawledAddresses.ShouldContain("http://localhost:51746/app.js");
+            _crawledAddresses.ShouldContain("http://localhost:51746/fentonicon.png");
         }
     }
 }

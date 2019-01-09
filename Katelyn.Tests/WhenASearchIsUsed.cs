@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
 using System;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace Katelyn.Tests
@@ -28,7 +29,9 @@ namespace Katelyn.Tests
         public override void OnEnd()
         {
             _errorCount.ShouldBe(1);
-            _errors.ShouldContain("http://localhost:51746/ found on  - At 385 - #search-link");
+            _errors
+                .Any(err => err.Contains("http://localhost:51746/ found on") && err.Contains("#search-link"))
+                .ShouldBeTrue();
 
             _successCount.ShouldBe(0);
         }

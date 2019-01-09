@@ -31,7 +31,7 @@ If you wish to specify these options manually, you can use the advanced options 
 
 Advanced Options
 
- - `-address` is mandatory. Specify the full URI to be used as the root for the crawling session
+ - `-address` is mandatory. Specify the full URI to be used as the root for the crawling session _this should only be websites you own_
 
  - `-verbose` optional, if `true` shows information for every URI crawled
 
@@ -53,6 +53,8 @@ Advanced Options
 
  - `-searchExpression` If specified, a regular expression that fails a page if matched
 
+ - `-partnerSites` A comma-separated list of addresses that can be treated as "internal" _this should only be websites you own_
+
 For example, with everything specified:
 
     Katelyn CrawlWith
@@ -67,6 +69,7 @@ For example, with everything specified:
 		-includeRobots=true
         -delay=500
         -searchExpression="(?i)example[\w\s]expression"
+		-partnerSites="http://example.com,http://www.example.com"
 
 This example will crawl the website to 100 levels deep, including all resources, 
 with a 500 millisecond delay between receiving a response and making the next request.
@@ -89,7 +92,5 @@ Or use the Katelyn Core library in your own applications.
  - Find robots.txt
  - Follow sitemap link from robots.txt
  - Report on third party resources that have been excluded from the crawl
-
- ## TODO
-
  - Partner site concept (i.e. where you use a cookieless domain for images and want them treated as internal, rather than third party resources)
+

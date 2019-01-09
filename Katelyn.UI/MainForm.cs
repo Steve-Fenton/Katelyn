@@ -138,6 +138,7 @@ namespace Katelyn.UI
                     StoreResult = StoreResultCheckBox.Checked,
                     MaxDepth = int.Parse(CrawlDepth.Text),
                     HtmlContentExpression = (string.IsNullOrWhiteSpace(StringForRegex.Text)) ? null : new Regex(StringForRegex.Text),
+                    PartnerSites = (string.IsNullOrWhiteSpace(StringForPartnerSites.Text)) ? new List<Uri>() : StringForPartnerSites.Text.Split(',').Select(t => new Uri(t)).ToList(),
                     CrawlerFlags = CrawlerFlags.IncludeFailureCheck | CrawlerFlags.IncludeImages | CrawlerFlags.IncludeLinks | CrawlerFlags.IncludeScripts | CrawlerFlags.IncludeStyles | CrawlerFlags.IncludeRobots,
                 };
 

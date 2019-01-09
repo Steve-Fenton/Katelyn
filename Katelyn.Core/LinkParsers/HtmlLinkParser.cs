@@ -32,17 +32,19 @@ namespace Katelyn.Core.LinkParsers
                 return new List<string>();
             }
 
-            return nodes.Select(n =>
-            {
-                var linkText = n.Attributes[attributeSelector].Value;
-
-                if (linkText.Contains("#"))
+            return nodes
+                .Select(n =>
                 {
-                    linkText = linkText.Substring(0, linkText.IndexOf('#'));
-                }
+                    var linkText = n.Attributes[attributeSelector].Value;
 
-                return linkText;
-            });
+                    if (linkText.Contains("#"))
+                    {
+                        linkText = linkText.Substring(0, linkText.IndexOf('#'));
+                    }
+
+                    return linkText;
+                })
+                .Where(t => !string.IsNullOrWhiteSpace(t));
         }
 
         public override IEnumerator<Uri> GetEnumerator()
@@ -76,7 +78,12 @@ namespace Katelyn.Core.LinkParsers
 
             foreach (var linkText in links)
             {
-                if (IsOffSiteResource(linkText, _root, _parent))
+                if (string.IsNullOrWhiteSpace(linkText))
+                {
+                    continue;
+                }
+
+                if (IsOffSiteResource(linkText, _root, _parent, _config.PartnerSites))
                 {
                     _config.Listener.OnThirdPartyAddress(new CrawlResult { ParentAddress = _parent?.AbsoluteUri ?? string.Empty, Address = linkText });
                     continue;

@@ -5,12 +5,19 @@ using System.Linq;
 
 namespace Katelyn.Core
 {
+    public class QueueItem
+    {
+        public Uri Address { get; set; }
+
+        public Uri ParentAddress { get; set; }
+    }
+
     public class RequestQueue
     {
-        private IDictionary<string, Uri> _queue = new Dictionary<string, Uri>();
+        private IDictionary<string, QueueItem> _queue = new Dictionary<string, QueueItem>();
         private readonly IDictionary<string, int> _completed = new Dictionary<string, int>();
 
-        public void Add(Uri uri)
+        public void Add(Uri uri, Uri parent)
         {
             if (_completed.ContainsKey(uri.AbsoluteUri))
             {
@@ -23,14 +30,14 @@ namespace Katelyn.Core
                 return;
             }
 
-            _queue.Add(uri.AbsoluteUri, uri);
+            _queue.Add(uri.AbsoluteUri, new QueueItem { Address = uri, ParentAddress = parent });
         }
 
-        public void AddRange(ContentParser<Uri> uris)
+        public void AddRange(ContentParser<Uri> uris, Uri parent)
         {
             foreach (Uri resource in uris)
             {
-                Add(resource);
+                Add(resource, parent);
             }
         }
 
@@ -39,13 +46,13 @@ namespace Katelyn.Core
             AddCompletedKey(rootAddress.AbsoluteUri);
         }
 
-        public Uri Pop()
+        public QueueItem Pop()
         {
             string key = _queue.Keys.FirstOrDefault();
 
             if (key == null)
             {
-                return default(Uri);
+                return default(QueueItem);
             }
 
             AddCompletedKey(key);

@@ -2,6 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Shouldly;
 using System;
+using System.Linq;
 
 namespace Katelyn.Tests
 {
@@ -26,7 +27,9 @@ namespace Katelyn.Tests
         public override void OnEnd()
         {
             _errorCount.ShouldBe(1);
-            _errors.ShouldContain("http://localhost:51746/katelyn-error.html found on  - At 275 - KATELYN:ERRORS(1)");
+            _errors
+                .Any(err => err.Contains("http://localhost:51746/katelyn-error.html found on") && err.Contains("KATELYN:ERRORS(1)"))
+                .ShouldBeTrue();
 
             _successCount.ShouldBe(0);
         }

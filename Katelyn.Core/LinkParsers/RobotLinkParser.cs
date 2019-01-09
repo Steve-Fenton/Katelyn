@@ -26,7 +26,12 @@ namespace Katelyn.Core.LinkParsers
         {
             foreach (Match item in Regex.Matches(_content, @"(http|https):\/\/(.*)\S"))
             {
-                if (IsOffSiteResource(item.Value, _root, _parent))
+                if (string.IsNullOrWhiteSpace(item.Value))
+                {
+                    continue;
+                }
+
+                if (IsOffSiteResource(item.Value, _root, _parent, _config.PartnerSites))
                 {
                     _config.Listener.OnThirdPartyAddress(new CrawlResult { ParentAddress = _parent?.AbsoluteUri ?? string.Empty, Address = item.Value });
                     continue;
