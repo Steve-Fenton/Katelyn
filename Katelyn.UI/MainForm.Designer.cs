@@ -32,6 +32,9 @@
             this.CrawlProgress = new System.Windows.Forms.ProgressBar();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.AddressGroupBox = new System.Windows.Forms.GroupBox();
+            this.StopButton = new System.Windows.Forms.Button();
+            this.ErrorsOnlyCheckBox = new System.Windows.Forms.CheckBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.StringForPartnerSites = new System.Windows.Forms.TextBox();
             this.PartnerSiteLabel = new System.Windows.Forms.Label();
             this.StringForRegex = new System.Windows.Forms.TextBox();
@@ -51,9 +54,6 @@
             this.ErrorGridView = new System.Windows.Forms.DataGridView();
             this.ExternalTab = new System.Windows.Forms.TabPage();
             this.ExternalGridView = new System.Windows.Forms.DataGridView();
-            this.label3 = new System.Windows.Forms.Label();
-            this.ErrorsOnlyCheckBox = new System.Windows.Forms.CheckBox();
-            this.StopButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -119,10 +119,46 @@
             this.AddressGroupBox.Margin = new System.Windows.Forms.Padding(4);
             this.AddressGroupBox.Name = "AddressGroupBox";
             this.AddressGroupBox.Padding = new System.Windows.Forms.Padding(4);
-            this.AddressGroupBox.Size = new System.Drawing.Size(1164, 335);
+            this.AddressGroupBox.Size = new System.Drawing.Size(838, 335);
             this.AddressGroupBox.TabIndex = 9;
             this.AddressGroupBox.TabStop = false;
             this.AddressGroupBox.Text = "Settings";
+            // 
+            // StopButton
+            // 
+            this.StopButton.BackColor = System.Drawing.Color.OrangeRed;
+            this.StopButton.FlatAppearance.BorderSize = 0;
+            this.StopButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.StopButton.ForeColor = System.Drawing.Color.White;
+            this.StopButton.Location = new System.Drawing.Point(692, 108);
+            this.StopButton.Margin = new System.Windows.Forms.Padding(4);
+            this.StopButton.Name = "StopButton";
+            this.StopButton.Size = new System.Drawing.Size(124, 52);
+            this.StopButton.TabIndex = 108;
+            this.StopButton.Text = "Stop";
+            this.StopButton.UseVisualStyleBackColor = false;
+            this.StopButton.Click += new System.EventHandler(this.StopButton_Click);
+            // 
+            // ErrorsOnlyCheckBox
+            // 
+            this.ErrorsOnlyCheckBox.AutoSize = true;
+            this.ErrorsOnlyCheckBox.Location = new System.Drawing.Point(159, 188);
+            this.ErrorsOnlyCheckBox.Margin = new System.Windows.Forms.Padding(4);
+            this.ErrorsOnlyCheckBox.Name = "ErrorsOnlyCheckBox";
+            this.ErrorsOnlyCheckBox.Size = new System.Drawing.Size(360, 29);
+            this.ErrorsOnlyCheckBox.TabIndex = 107;
+            this.ErrorsOnlyCheckBox.Text = "(only keeps non-success results)";
+            this.ErrorsOnlyCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(18, 189);
+            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(132, 25);
+            this.label3.TabIndex = 106;
+            this.label3.Text = "Errors Only?";
             // 
             // StringForPartnerSites
             // 
@@ -212,24 +248,31 @@
             // 
             // ClearButton
             // 
-            this.ClearButton.Location = new System.Drawing.Point(824, 48);
+            this.ClearButton.BackColor = System.Drawing.Color.Gainsboro;
+            this.ClearButton.FlatAppearance.BorderSize = 0;
+            this.ClearButton.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.ClearButton.Location = new System.Drawing.Point(692, 169);
             this.ClearButton.Margin = new System.Windows.Forms.Padding(4);
             this.ClearButton.Name = "ClearButton";
             this.ClearButton.Size = new System.Drawing.Size(124, 52);
             this.ClearButton.TabIndex = 102;
             this.ClearButton.Text = "Clear";
-            this.ClearButton.UseVisualStyleBackColor = true;
+            this.ClearButton.UseVisualStyleBackColor = false;
             this.ClearButton.Click += new System.EventHandler(this.ClearButton_Click);
             // 
             // CrawlStart
             // 
+            this.CrawlStart.BackColor = System.Drawing.Color.MediumSeaGreen;
+            this.CrawlStart.FlatAppearance.BorderSize = 0;
+            this.CrawlStart.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.CrawlStart.ForeColor = System.Drawing.Color.White;
             this.CrawlStart.Location = new System.Drawing.Point(692, 48);
             this.CrawlStart.Margin = new System.Windows.Forms.Padding(4);
             this.CrawlStart.Name = "CrawlStart";
             this.CrawlStart.Size = new System.Drawing.Size(124, 52);
             this.CrawlStart.TabIndex = 101;
             this.CrawlStart.Text = "Start";
-            this.CrawlStart.UseVisualStyleBackColor = true;
+            this.CrawlStart.UseVisualStyleBackColor = false;
             this.CrawlStart.Click += new System.EventHandler(this.CrawlStart_Click);
             // 
             // CrawlAddress
@@ -289,7 +332,7 @@
             this.ErrorTab.Margin = new System.Windows.Forms.Padding(4);
             this.ErrorTab.Name = "ErrorTab";
             this.ErrorTab.Padding = new System.Windows.Forms.Padding(4);
-            this.ErrorTab.Size = new System.Drawing.Size(1702, 618);
+            this.ErrorTab.Size = new System.Drawing.Size(1702, 598);
             this.ErrorTab.TabIndex = 1;
             this.ErrorTab.Text = "Errors";
             this.ErrorTab.UseVisualStyleBackColor = true;
@@ -305,7 +348,7 @@
             this.ErrorGridView.Name = "ErrorGridView";
             this.ErrorGridView.ReadOnly = true;
             this.ErrorGridView.RowHeadersWidth = 82;
-            this.ErrorGridView.Size = new System.Drawing.Size(1694, 610);
+            this.ErrorGridView.Size = new System.Drawing.Size(1694, 590);
             this.ErrorGridView.TabIndex = 0;
             this.ErrorGridView.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.ErrorColumnHeaderClick);
             // 
@@ -315,7 +358,7 @@
             this.ExternalTab.Location = new System.Drawing.Point(8, 39);
             this.ExternalTab.Name = "ExternalTab";
             this.ExternalTab.Padding = new System.Windows.Forms.Padding(3);
-            this.ExternalTab.Size = new System.Drawing.Size(1702, 618);
+            this.ExternalTab.Size = new System.Drawing.Size(1702, 598);
             this.ExternalTab.TabIndex = 2;
             this.ExternalTab.Text = "External";
             this.ExternalTab.UseVisualStyleBackColor = true;
@@ -331,41 +374,9 @@
             this.ExternalGridView.Name = "ExternalGridView";
             this.ExternalGridView.RowHeadersWidth = 82;
             this.ExternalGridView.RowTemplate.Height = 33;
-            this.ExternalGridView.Size = new System.Drawing.Size(1696, 612);
+            this.ExternalGridView.Size = new System.Drawing.Size(1696, 592);
             this.ExternalGridView.TabIndex = 0;
             this.ExternalGridView.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.ExternalColumnHeaderClick);
-            // 
-            // label3
-            // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(18, 189);
-            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(132, 25);
-            this.label3.TabIndex = 106;
-            this.label3.Text = "Errors Only?";
-            // 
-            // ErrorsOnlyCheckBox
-            // 
-            this.ErrorsOnlyCheckBox.AutoSize = true;
-            this.ErrorsOnlyCheckBox.Location = new System.Drawing.Point(159, 188);
-            this.ErrorsOnlyCheckBox.Margin = new System.Windows.Forms.Padding(4);
-            this.ErrorsOnlyCheckBox.Name = "ErrorsOnlyCheckBox";
-            this.ErrorsOnlyCheckBox.Size = new System.Drawing.Size(360, 29);
-            this.ErrorsOnlyCheckBox.TabIndex = 107;
-            this.ErrorsOnlyCheckBox.Text = "(only keeps non-success results)";
-            this.ErrorsOnlyCheckBox.UseVisualStyleBackColor = true;
-            // 
-            // StopButton
-            // 
-            this.StopButton.Location = new System.Drawing.Point(956, 48);
-            this.StopButton.Margin = new System.Windows.Forms.Padding(4);
-            this.StopButton.Name = "StopButton";
-            this.StopButton.Size = new System.Drawing.Size(124, 52);
-            this.StopButton.TabIndex = 108;
-            this.StopButton.Text = "Stop";
-            this.StopButton.UseVisualStyleBackColor = true;
-            this.StopButton.Click += new System.EventHandler(this.StopButton_Click);
             // 
             // MainForm
             // 
