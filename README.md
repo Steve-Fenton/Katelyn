@@ -93,4 +93,5 @@ Or use the Katelyn Core library in your own applications.
  - Follow sitemap link from robots.txt
  - Report on third party resources that have been excluded from the crawl
  - Partner site concept (i.e. where you use a cookieless domain for images and want them treated as internal, rather than third party resources)
-
+ - Stop the crawler part-way through a crawl from the UI
+ - Collect only interesting results in the UI (Errors Only)
