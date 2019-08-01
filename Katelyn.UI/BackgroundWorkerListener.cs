@@ -8,16 +8,18 @@ namespace Katelyn.UI
     public class BackgroundWorkerListener
         : IListener
     {
-        private BackgroundWorker _worker;
-        private bool _storeResult;
-        private DirectoryInfo _outputDirectory;
+        private readonly BackgroundWorker _worker;
+        private readonly bool _storeResult;
+        private readonly bool _errorsOnly;
+        private readonly DirectoryInfo _outputDirectory;
         protected int ErrorCount;
         protected int SuccessCount;
 
-        public BackgroundWorkerListener(BackgroundWorker worker, bool storeResult, string outputPath)
+        public BackgroundWorkerListener(BackgroundWorker worker, bool storeResult, bool errorsOnly, string outputPath)
         {
             _worker = worker;
             _storeResult = storeResult;
+            _errorsOnly = errorsOnly;
 
             if (_storeResult)
             {
@@ -29,6 +31,11 @@ namespace Katelyn.UI
         public virtual void OnSuccess(CrawlResult request)
         {
             SuccessCount++;
+
+            if (_errorsOnly && request.StatusCode < 300)
+            {
+                return;
+            }
 
             _worker.ReportProgress((int)ProgressType.RequestSuccess, request);
         }

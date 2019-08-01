@@ -8,12 +8,17 @@ namespace Katelyn.Core
 {
     public class Crawler
     {
-        private CrawlerConfig _config;
-        private IListener _event;
+        private readonly CrawlerConfig _config;
+        private readonly IListener _event;
         private bool _continue = true;
         private readonly RequestQueue _requestQueue = new RequestQueue();
 
         public bool IsRunning { get; set; }
+
+        public static Crawler Create(CrawlerConfig config)
+        {
+            return new Crawler(config);
+        }
 
         public static Crawler Crawl(CrawlerConfig config)
         {

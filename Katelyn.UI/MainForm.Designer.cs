@@ -32,6 +32,8 @@
             this.CrawlProgress = new System.Windows.Forms.ProgressBar();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.AddressGroupBox = new System.Windows.Forms.GroupBox();
+            this.StringForPartnerSites = new System.Windows.Forms.TextBox();
+            this.PartnerSiteLabel = new System.Windows.Forms.Label();
             this.StringForRegex = new System.Windows.Forms.TextBox();
             this.SearchForLabel = new System.Windows.Forms.Label();
             this.StoreResultCheckBox = new System.Windows.Forms.CheckBox();
@@ -49,8 +51,9 @@
             this.ErrorGridView = new System.Windows.Forms.DataGridView();
             this.ExternalTab = new System.Windows.Forms.TabPage();
             this.ExternalGridView = new System.Windows.Forms.DataGridView();
-            this.PartnerSiteLabel = new System.Windows.Forms.Label();
-            this.StringForPartnerSites = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.ErrorsOnlyCheckBox = new System.Windows.Forms.CheckBox();
+            this.StopButton = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -92,11 +95,14 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.MainTabControl);
             this.splitContainer1.Size = new System.Drawing.Size(1718, 835);
-            this.splitContainer1.SplitterDistance = 166;
+            this.splitContainer1.SplitterDistance = 186;
             this.splitContainer1.TabIndex = 9;
             // 
             // AddressGroupBox
             // 
+            this.AddressGroupBox.Controls.Add(this.StopButton);
+            this.AddressGroupBox.Controls.Add(this.ErrorsOnlyCheckBox);
+            this.AddressGroupBox.Controls.Add(this.label3);
             this.AddressGroupBox.Controls.Add(this.StringForPartnerSites);
             this.AddressGroupBox.Controls.Add(this.PartnerSiteLabel);
             this.AddressGroupBox.Controls.Add(this.StringForRegex);
@@ -113,14 +119,32 @@
             this.AddressGroupBox.Margin = new System.Windows.Forms.Padding(4);
             this.AddressGroupBox.Name = "AddressGroupBox";
             this.AddressGroupBox.Padding = new System.Windows.Forms.Padding(4);
-            this.AddressGroupBox.Size = new System.Drawing.Size(844, 282);
+            this.AddressGroupBox.Size = new System.Drawing.Size(1164, 335);
             this.AddressGroupBox.TabIndex = 9;
             this.AddressGroupBox.TabStop = false;
             this.AddressGroupBox.Text = "Settings";
             // 
+            // StringForPartnerSites
+            // 
+            this.StringForPartnerSites.Location = new System.Drawing.Point(159, 284);
+            this.StringForPartnerSites.Margin = new System.Windows.Forms.Padding(4);
+            this.StringForPartnerSites.Name = "StringForPartnerSites";
+            this.StringForPartnerSites.Size = new System.Drawing.Size(486, 31);
+            this.StringForPartnerSites.TabIndex = 105;
+            // 
+            // PartnerSiteLabel
+            // 
+            this.PartnerSiteLabel.AutoSize = true;
+            this.PartnerSiteLabel.Location = new System.Drawing.Point(14, 287);
+            this.PartnerSiteLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.PartnerSiteLabel.Name = "PartnerSiteLabel";
+            this.PartnerSiteLabel.Size = new System.Drawing.Size(136, 25);
+            this.PartnerSiteLabel.TabIndex = 104;
+            this.PartnerSiteLabel.Text = "Partner Sites";
+            // 
             // StringForRegex
             // 
-            this.StringForRegex.Location = new System.Drawing.Point(159, 185);
+            this.StringForRegex.Location = new System.Drawing.Point(159, 232);
             this.StringForRegex.Margin = new System.Windows.Forms.Padding(4);
             this.StringForRegex.Name = "StringForRegex";
             this.StringForRegex.Size = new System.Drawing.Size(486, 31);
@@ -129,7 +153,7 @@
             // SearchForLabel
             // 
             this.SearchForLabel.AutoSize = true;
-            this.SearchForLabel.Location = new System.Drawing.Point(14, 188);
+            this.SearchForLabel.Location = new System.Drawing.Point(14, 235);
             this.SearchForLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.SearchForLabel.Name = "SearchForLabel";
             this.SearchForLabel.Size = new System.Drawing.Size(123, 25);
@@ -153,9 +177,9 @@
             this.label2.Location = new System.Drawing.Point(14, 144);
             this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(63, 25);
+            this.label2.Size = new System.Drawing.Size(75, 25);
             this.label2.TabIndex = 7;
-            this.label2.Text = "Store";
+            this.label2.Text = "Store?";
             // 
             // label1
             // 
@@ -188,7 +212,7 @@
             // 
             // ClearButton
             // 
-            this.ClearButton.Location = new System.Drawing.Point(692, 119);
+            this.ClearButton.Location = new System.Drawing.Point(824, 48);
             this.ClearButton.Margin = new System.Windows.Forms.Padding(4);
             this.ClearButton.Name = "ClearButton";
             this.ClearButton.Size = new System.Drawing.Size(124, 52);
@@ -226,7 +250,7 @@
             this.MainTabControl.Margin = new System.Windows.Forms.Padding(4);
             this.MainTabControl.Name = "MainTabControl";
             this.MainTabControl.SelectedIndex = 0;
-            this.MainTabControl.Size = new System.Drawing.Size(1718, 665);
+            this.MainTabControl.Size = new System.Drawing.Size(1718, 645);
             this.MainTabControl.TabIndex = 1000;
             // 
             // OutputTab
@@ -236,7 +260,7 @@
             this.OutputTab.Margin = new System.Windows.Forms.Padding(4);
             this.OutputTab.Name = "OutputTab";
             this.OutputTab.Padding = new System.Windows.Forms.Padding(4);
-            this.OutputTab.Size = new System.Drawing.Size(1702, 618);
+            this.OutputTab.Size = new System.Drawing.Size(1702, 598);
             this.OutputTab.TabIndex = 0;
             this.OutputTab.Text = "Output";
             this.OutputTab.UseVisualStyleBackColor = true;
@@ -252,8 +276,9 @@
             this.CrawlOutput.Margin = new System.Windows.Forms.Padding(4);
             this.CrawlOutput.Name = "CrawlOutput";
             this.CrawlOutput.ReadOnly = true;
+            this.CrawlOutput.RowHeadersWidth = 82;
             this.CrawlOutput.RowTemplate.Height = 33;
-            this.CrawlOutput.Size = new System.Drawing.Size(1694, 610);
+            this.CrawlOutput.Size = new System.Drawing.Size(1694, 590);
             this.CrawlOutput.TabIndex = 0;
             this.CrawlOutput.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.ColumnHeaderClick);
             // 
@@ -264,7 +289,7 @@
             this.ErrorTab.Margin = new System.Windows.Forms.Padding(4);
             this.ErrorTab.Name = "ErrorTab";
             this.ErrorTab.Padding = new System.Windows.Forms.Padding(4);
-            this.ErrorTab.Size = new System.Drawing.Size(1702, 644);
+            this.ErrorTab.Size = new System.Drawing.Size(1702, 618);
             this.ErrorTab.TabIndex = 1;
             this.ErrorTab.Text = "Errors";
             this.ErrorTab.UseVisualStyleBackColor = true;
@@ -279,7 +304,8 @@
             this.ErrorGridView.Margin = new System.Windows.Forms.Padding(6);
             this.ErrorGridView.Name = "ErrorGridView";
             this.ErrorGridView.ReadOnly = true;
-            this.ErrorGridView.Size = new System.Drawing.Size(1694, 636);
+            this.ErrorGridView.RowHeadersWidth = 82;
+            this.ErrorGridView.Size = new System.Drawing.Size(1694, 610);
             this.ErrorGridView.TabIndex = 0;
             this.ErrorGridView.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.ErrorColumnHeaderClick);
             // 
@@ -289,7 +315,7 @@
             this.ExternalTab.Location = new System.Drawing.Point(8, 39);
             this.ExternalTab.Name = "ExternalTab";
             this.ExternalTab.Padding = new System.Windows.Forms.Padding(3);
-            this.ExternalTab.Size = new System.Drawing.Size(1702, 644);
+            this.ExternalTab.Size = new System.Drawing.Size(1702, 618);
             this.ExternalTab.TabIndex = 2;
             this.ExternalTab.Text = "External";
             this.ExternalTab.UseVisualStyleBackColor = true;
@@ -303,28 +329,43 @@
             this.ExternalGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.ExternalGridView.Location = new System.Drawing.Point(3, 3);
             this.ExternalGridView.Name = "ExternalGridView";
+            this.ExternalGridView.RowHeadersWidth = 82;
             this.ExternalGridView.RowTemplate.Height = 33;
-            this.ExternalGridView.Size = new System.Drawing.Size(1696, 638);
+            this.ExternalGridView.Size = new System.Drawing.Size(1696, 612);
             this.ExternalGridView.TabIndex = 0;
             this.ExternalGridView.ColumnHeaderMouseClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.ExternalColumnHeaderClick);
             // 
-            // PartnerSiteLabel
+            // label3
             // 
-            this.PartnerSiteLabel.AutoSize = true;
-            this.PartnerSiteLabel.Location = new System.Drawing.Point(14, 235);
-            this.PartnerSiteLabel.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.PartnerSiteLabel.Name = "PartnerSiteLabel";
-            this.PartnerSiteLabel.Size = new System.Drawing.Size(136, 25);
-            this.PartnerSiteLabel.TabIndex = 104;
-            this.PartnerSiteLabel.Text = "Partner Sites";
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(18, 189);
+            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(132, 25);
+            this.label3.TabIndex = 106;
+            this.label3.Text = "Errors Only?";
             // 
-            // StringForPartnerSites
+            // ErrorsOnlyCheckBox
             // 
-            this.StringForPartnerSites.Location = new System.Drawing.Point(159, 232);
-            this.StringForPartnerSites.Margin = new System.Windows.Forms.Padding(4);
-            this.StringForPartnerSites.Name = "StringForPartnerSites";
-            this.StringForPartnerSites.Size = new System.Drawing.Size(486, 31);
-            this.StringForPartnerSites.TabIndex = 105;
+            this.ErrorsOnlyCheckBox.AutoSize = true;
+            this.ErrorsOnlyCheckBox.Location = new System.Drawing.Point(159, 188);
+            this.ErrorsOnlyCheckBox.Margin = new System.Windows.Forms.Padding(4);
+            this.ErrorsOnlyCheckBox.Name = "ErrorsOnlyCheckBox";
+            this.ErrorsOnlyCheckBox.Size = new System.Drawing.Size(360, 29);
+            this.ErrorsOnlyCheckBox.TabIndex = 107;
+            this.ErrorsOnlyCheckBox.Text = "(only keeps non-success results)";
+            this.ErrorsOnlyCheckBox.UseVisualStyleBackColor = true;
+            // 
+            // StopButton
+            // 
+            this.StopButton.Location = new System.Drawing.Point(956, 48);
+            this.StopButton.Margin = new System.Windows.Forms.Padding(4);
+            this.StopButton.Name = "StopButton";
+            this.StopButton.Size = new System.Drawing.Size(124, 52);
+            this.StopButton.TabIndex = 108;
+            this.StopButton.Text = "Stop";
+            this.StopButton.UseVisualStyleBackColor = true;
+            this.StopButton.Click += new System.EventHandler(this.StopButton_Click);
             // 
             // MainForm
             // 
@@ -380,6 +421,9 @@
         private System.Windows.Forms.DataGridView ExternalGridView;
         private System.Windows.Forms.TextBox StringForPartnerSites;
         private System.Windows.Forms.Label PartnerSiteLabel;
+        private System.Windows.Forms.CheckBox ErrorsOnlyCheckBox;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Button StopButton;
     }
 }
 

@@ -11,20 +11,26 @@ namespace Katelyn.UI
 {
     public partial class MainForm : Form
     {
-        private BackgroundWorker _worker;
+        private readonly BackgroundWorker _worker;
+        public static Crawler SharedCrawler;
         private IList<CrawlResult> _requests = new List<CrawlResult>();
         private IList<CrawlError> _errors = new List<CrawlError>();
         private IList<CrawlResult> _externalLinks = new List<CrawlResult>();
         private int _errorCount;
         private int _successCount;
 
+        static readonly object _crawlerLock = new Object();
+
         public MainForm()
         {
             InitializeComponent();
 
-            _worker = new BackgroundWorker();
-            _worker.WorkerReportsProgress = true;
-            _worker.WorkerSupportsCancellation = true;
+            _worker = new BackgroundWorker
+            {
+                WorkerReportsProgress = true,
+                WorkerSupportsCancellation = true
+            };
+
             _worker.DoWork += WorkerDoWork;
             _worker.ProgressChanged += WorkerProgressChanged;
             _worker.RunWorkerCompleted += WorkerCompleted;
@@ -40,9 +46,14 @@ namespace Katelyn.UI
             BackgroundWorker worker = sender as BackgroundWorker;
 
             var config = e.Argument as UICrawlerConfig;
-            config.Listener = new BackgroundWorkerListener(worker, config.StoreResult, "c:\\temp\\crawl");
+            config.Listener = new BackgroundWorkerListener(worker, config.StoreResult, config.ErrorsOnly, "c:\\temp\\crawl");
 
-            Crawler.Crawl(config);
+            lock (_crawlerLock)
+            {
+                SharedCrawler = Crawler.Create(config);
+            }
+
+            SharedCrawler.Start();
         }
 
         private void WorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -136,6 +147,7 @@ namespace Katelyn.UI
                 var config = new UICrawlerConfig
                 {
                     StoreResult = StoreResultCheckBox.Checked,
+                    ErrorsOnly = ErrorsOnlyCheckBox.Checked,
                     MaxDepth = int.Parse(CrawlDepth.Text),
                     HtmlContentExpression = (string.IsNullOrWhiteSpace(StringForRegex.Text)) ? null : new Regex(StringForRegex.Text),
                     PartnerSites = (string.IsNullOrWhiteSpace(StringForPartnerSites.Text)) ? new List<Uri>() : StringForPartnerSites.Text.Split(',').Select(t => new Uri(t)).ToList(),
@@ -268,6 +280,14 @@ namespace Katelyn.UI
             }
 
             BindExternalGrid();
+        }
+
+        private void StopButton_Click(object sender, EventArgs e)
+        {
+            lock (_crawlerLock)
+            {
+                SharedCrawler.Stop();
+            }
         }
     }
 }
