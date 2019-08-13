@@ -6,6 +6,22 @@ Katelyn is a simple slow-crawler for checking a single root website for crawl er
 The "slow cralwer" is designed to make light demands on your web server, making no concurrent requests. Additional delay can be added 
 to make the crawl even slower if necessary.
 
+Note: I'm currently porting the entire application to .Net Core. The console is already available as a .Net Core Console application. 
+For the purposes of the migration, the new projects are named Fenton.Katelyn.NameHere. The only project left to move is the Forms UI, 
+which will be done next. The old projects will remain until the UI no longer depends on them; then they will be deleted.
+
+## .Net Core
+
+You can run Katelyn from the command line:
+
+    dotnet Katelyn.dll Crawl -address=http://localhost
+
+Or
+
+    dotnet Katelyn.dll Crawl -address=http://localhost -verbose=false
+
+## .Net Full Framework (Deprecated - Will be removed in a future release)
+
 You can run Katelyn from the command line:
 
     Katelyn Crawl -address=http://localhost/
@@ -13,6 +29,8 @@ You can run Katelyn from the command line:
 Or
 
     Katelyn Crawl -address=http://localhost/ -verbose=false
+
+## Options
 
 Basic Options
 

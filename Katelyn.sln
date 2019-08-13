@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27703.2035
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29102.190
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Katelyn.Core", "Katelyn.Core\Katelyn.Core.csproj", "{D6B4563B-3178-4F4F-AD50-7E1575B2CE98}"
 EndProject
@@ -19,6 +19,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Katelyn.SampleWebsite", "Katelyn.SampleWebsite\Katelyn.SampleWebsite.csproj", "{4283A32D-05A0-4EEF-B63B-3720B67318F0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Katelyn.UI", "Katelyn.UI\Katelyn.UI.csproj", "{027F4DC0-DB75-49BE-A3F7-46E84F7BCADB}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fenton.Katelyn.Engine", "Katelyn.Engine\Fenton.Katelyn.Engine.csproj", "{D0FCE8C6-F2E2-43A4-AF9C-AB5F4F9E150F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fenton.Katelyn.Tests", "Fenton.Katelyn.Tests\Fenton.Katelyn.Tests.csproj", "{7C3F5CA9-3C4F-4E71-873C-95D56DC30DB1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fenton.Katelyn.Console", "Fenton.Katelyn.Console\Fenton.Katelyn.Console.csproj", "{75B2EEBD-978F-4DD3-BA87-6A7780A5DD94}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -46,6 +52,18 @@ Global
 		{027F4DC0-DB75-49BE-A3F7-46E84F7BCADB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{027F4DC0-DB75-49BE-A3F7-46E84F7BCADB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{027F4DC0-DB75-49BE-A3F7-46E84F7BCADB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D0FCE8C6-F2E2-43A4-AF9C-AB5F4F9E150F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D0FCE8C6-F2E2-43A4-AF9C-AB5F4F9E150F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D0FCE8C6-F2E2-43A4-AF9C-AB5F4F9E150F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D0FCE8C6-F2E2-43A4-AF9C-AB5F4F9E150F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7C3F5CA9-3C4F-4E71-873C-95D56DC30DB1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C3F5CA9-3C4F-4E71-873C-95D56DC30DB1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C3F5CA9-3C4F-4E71-873C-95D56DC30DB1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C3F5CA9-3C4F-4E71-873C-95D56DC30DB1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{75B2EEBD-978F-4DD3-BA87-6A7780A5DD94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{75B2EEBD-978F-4DD3-BA87-6A7780A5DD94}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{75B2EEBD-978F-4DD3-BA87-6A7780A5DD94}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{75B2EEBD-978F-4DD3-BA87-6A7780A5DD94}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
