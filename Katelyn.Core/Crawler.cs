@@ -1,5 +1,6 @@
 ﻿using Katelyn.Core.LinkParsers;
 using System;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading;
@@ -164,6 +165,9 @@ namespace Katelyn.Core
 
                 request.ContentType = response.Content.Headers.ContentType?.MediaType ?? "Unknown";
                 request.StatusCode = (int)response.StatusCode;
+
+                var contentLength = response.Content.Headers.ContentLength ?? 0;
+                request.ContentLengthKB = contentLength > 0 ? (long)Math.Round((double)contentLength / 1024, 0, MidpointRounding.AwayFromZero) : 0;
 
                 if (request.StatusCode >= 400)
                 {

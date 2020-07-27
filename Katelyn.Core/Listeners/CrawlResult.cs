@@ -15,6 +15,8 @@ namespace Katelyn.Core
 
         public long Duration { get; internal set; }
 
+        public long ContentLengthKB { get; internal set; }
+
         public int StatusCode { get; internal set; }
     }
 }
