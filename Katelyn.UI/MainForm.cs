@@ -87,7 +87,7 @@ namespace Katelyn.UI
                     _errors.Add(crawlError);
 
                     BindErrorGrid();
-                    
+
                     ErrorTab.Text = $"{_errorCount} Errors";
                     break;
                 case (int)ProgressType.ExternalLink:
@@ -212,74 +212,52 @@ namespace Katelyn.UI
 
         private void ColumnHeaderClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            switch(CrawlOutput.Columns[e.ColumnIndex].HeaderText)
-            {
-                case "Address":
-                    _requests = _requests.OrderBy(r => r.Address).ToList();
-                    break;
-                case "ParentAddress":
-                    _requests = _requests.OrderBy(r => r.ParentAddress).ToList();
-                    break;
-                case "ContentType":
-                    _requests = _requests.OrderBy(r => r.ContentType).ToList();
-                    break;
-                case "Duration":
-                    _requests = _requests.OrderByDescending(r => r.Duration).ToList();
-                    break;
-                case "StatusCode":
-                    _requests = _requests.OrderBy(r => r.StatusCode).ToList();
-                    break;
-            }
+            string headerText = CrawlOutput.Columns[e.ColumnIndex].HeaderText;
+
+            _requests = SortElements(headerText, _requests);
 
             BindCrawlGrid();
         }
 
         private void ErrorColumnHeaderClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            switch (ErrorGridView.Columns[e.ColumnIndex].HeaderText)
-            {
-                case "Address":
-                    _errors = _errors.OrderBy(r => r.Address).ToList();
-                    break;
-                case "ParentAddress":
-                    _errors = _errors.OrderBy(r => r.ParentAddress).ToList();
-                    break;
-                case "ContentType":
-                    _errors = _errors.OrderBy(r => r.ContentType).ToList();
-                    break;
-                case "Duration":
-                    _errors = _errors.OrderByDescending(r => r.Duration).ToList();
-                    break;
-                case "StatusCode":
-                    _errors = _errors.OrderBy(r => r.StatusCode).ToList();
-                    break;
-            }
+            string headerText = ErrorGridView.Columns[e.ColumnIndex].HeaderText;
+
+            _errors = SortElements(headerText, _errors);
 
             BindErrorGrid();
         }
 
         private void ExternalColumnHeaderClick(object sender, DataGridViewCellMouseEventArgs e)
         {
-            switch (CrawlOutput.Columns[e.ColumnIndex].HeaderText)
-            {
-                case "Address":
-                    _externalLinks = _externalLinks.OrderBy(r => r.Address).ToList();
-                    break;
-                case "ParentAddress":
-                    _externalLinks = _externalLinks.OrderBy(r => r.ParentAddress).ToList();
-                    break;
-                case "ContentType":
-                    _externalLinks = _externalLinks.OrderBy(r => r.ContentType).ToList();
-                    break;
-                case "Duration":
-                    _externalLinks = _externalLinks.OrderByDescending(r => r.Duration).ToList();
-                    break;
-                case "StatusCode":
-                    _externalLinks = _externalLinks.OrderBy(r => r.StatusCode).ToList();
-                    break;
-            }
+            string headerText = CrawlOutput.Columns[e.ColumnIndex].HeaderText;
+
+            _externalLinks = SortElements(headerText, _externalLinks);
 
             BindExternalGrid();
+        }
+
+        private IList<T> SortElements<T>(string headerText, IList<T> items) where T : CrawlResult
+        {
+            switch (headerText)
+            {
+                case nameof(CrawlResult.Address):
+                    return items.OrderBy(r => r.Address).ToList();
+                case nameof(CrawlResult.ParentAddress):
+                    return items.OrderBy(r => r.ParentAddress).ToList();
+                case nameof(CrawlResult.ContentType):
+                    return items.OrderBy(r => r.ContentType).ToList();
+                case nameof(CrawlResult.Duration):
+                    return items.OrderByDescending(r => r.Duration).ToList();
+                case nameof(CrawlResult.ContentLengthKB):
+                    return items.OrderByDescending(r => r.ContentLengthKB).ToList();
+                case nameof(CrawlResult.StatusCode):
+                    return items.OrderBy(r => r.StatusCode).ToList();
+                case nameof(CrawlResult.Error):
+                    return items.OrderBy(r => r.Error).ToList();
+                default:
+                    throw new ApplicationException($"Unknown sortable column {headerText}");
+            }
         }
 
         private void StopButton_Click(object sender, EventArgs e)

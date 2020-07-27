@@ -1,6 +1,7 @@
 ﻿namespace Katelyn.Core
 {
-    public class CrawlError : CrawlResult
+    public class CrawlError 
+        : CrawlResult
     {
         public CrawlError(CrawlResult request, string error)
         {
@@ -12,7 +13,5 @@
             StatusCode = request.StatusCode;
             Error = error;
         }
-
-        public string Error { get; internal set; }
     }
 }

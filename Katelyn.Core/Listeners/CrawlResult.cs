@@ -2,7 +2,7 @@
 
 namespace Katelyn.Core
 {
-    public class CrawlResult
+    public class CrawlResult 
     {
         public string Address { get; internal set; }
 
@@ -18,5 +18,7 @@ namespace Katelyn.Core
         public long ContentLengthKB { get; internal set; }
 
         public int StatusCode { get; internal set; }
+
+        public string Error { get; internal set; }
     }
 }
