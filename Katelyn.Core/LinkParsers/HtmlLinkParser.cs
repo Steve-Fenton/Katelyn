@@ -74,6 +74,11 @@ namespace Katelyn.Core.LinkParsers
             if (_config.CrawlerFlags.HasFlag(CrawlerFlags.IncludeImages))
             {
                 links.AddRange(GetNodeAttributes(htmlDocument, "//img[@src]", "src"));
+
+                var sourceSets = GetNodeAttributes(htmlDocument, "//img[@srcset]", "srcset")
+                    .SelectMany(s => s.Split(',').Select(i => i.Split(' ')[0]));
+
+                links.AddRange(sourceSets);
             }
 
             foreach (var linkText in links)

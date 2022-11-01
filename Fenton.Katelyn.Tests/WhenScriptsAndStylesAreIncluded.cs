@@ -30,11 +30,14 @@ namespace Katelyn.Tests
         {
             _errorCount.ShouldBe(0);
 
-            _successCount.ShouldBe(4);
+            _successCount.ShouldBe(7);
             _crawledAddresses.ShouldContain("http://localhost:51746/");
             _crawledAddresses.ShouldContain("http://localhost:51746/app.css");
             _crawledAddresses.ShouldContain("http://localhost:51746/app.js");
             _crawledAddresses.ShouldContain("http://localhost:51746/fentonicon.png");
+            _crawledAddresses.ShouldContain("http://localhost:51746/fentonicon.webp");
+            _crawledAddresses.ShouldContain("http://localhost:51746/sitemap.xml");
+            _crawledAddresses.ShouldContain("http://localhost:51746/only-in-sitemap.html");
         }
     }
 }
