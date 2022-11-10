@@ -1,48 +1,43 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text.RegularExpressions;
+﻿namespace Katelyn.Core.LinkParsers;
 
-namespace Katelyn.Core.LinkParsers
+public class SearchParser
+    : ContentParser<string>
 {
-    public class SearchParser
-        : ContentParser<string>
+    private readonly Uri _root;
+    private readonly Uri _parent;
+    private readonly string _content;
+    private readonly CrawlerConfig _config;
+
+    public override string Content => _content;
+
+    public SearchParser(Uri root, Uri parent, string content, CrawlerConfig config)
     {
-        private readonly Uri _root;
-        private readonly Uri _parent;
-        private readonly string _content;
-        private readonly CrawlerConfig _config;
+        _root = root;
+        _parent = parent;
+        _content = content;
+        _config = config;
+    }
 
-        public override string Content => _content;
-
-        public SearchParser(Uri root, Uri parent, string content, CrawlerConfig config)
+    public override IEnumerator<string> GetEnumerator()
+    {
+        if (_config.CrawlerFlags.HasFlag(CrawlerFlags.IncludeFailureCheck))
         {
-            _root = root;
-            _parent = parent;
-            _content = content;
-            _config = config;
+            var regex = new Regex(@"KATELYN:ERRORS\([0-9]+\)", RegexOptions.IgnoreCase);
+
+            foreach (Match match in regex.Matches(_content))
+            {
+                yield return $"At {match.Index} - {match.Value}";
+            }
         }
 
-        public override IEnumerator<string> GetEnumerator()
+        if (_config.HtmlContentExpression != null)
         {
-            if (_config.CrawlerFlags.HasFlag(CrawlerFlags.IncludeFailureCheck))
+            foreach (Match match in _config.HtmlContentExpression.Matches(_content))
             {
-                var regex = new Regex(@"KATELYN:ERRORS\([0-9]+\)", RegexOptions.IgnoreCase);
-
-                foreach (Match match in regex.Matches(_content))
-                {
-                    yield return $"At {match.Index} - {match.Value}";
-                }
+                yield return $"At {match.Index} - {match.Value}";
             }
-
-            if (_config.HtmlContentExpression != null)
-            {
-                foreach (Match match in _config.HtmlContentExpression.Matches(_content))
-                {
-                    yield return $"At {match.Index} - {match.Value}";
-                }
-            }
-
-
         }
+
+
     }
 }

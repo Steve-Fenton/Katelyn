@@ -1,78 +1,74 @@
 ﻿using Katelyn.Core.LinkParsers;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
-namespace Katelyn.Core
+namespace Katelyn.Core;
+
+public class QueueItem
 {
-    public class QueueItem
-    {
-        public Uri Address { get; set; }
+    public Uri Address { get; set; }
 
-        public Uri ParentAddress { get; set; }
+    public Uri ParentAddress { get; set; }
+}
+
+public class RequestQueue
+{
+    private IDictionary<string, QueueItem> _queue = new Dictionary<string, QueueItem>();
+    private readonly IDictionary<string, int> _completed = new Dictionary<string, int>();
+
+    public void Add(Uri uri, Uri parent)
+    {
+        if (_completed.ContainsKey(uri.AbsoluteUri))
+        {
+            _completed[uri.AbsoluteUri]++;
+            return;
+        }
+
+        if (_queue.ContainsKey(uri.AbsoluteUri))
+        {
+            return;
+        }
+
+        _queue.Add(uri.AbsoluteUri, new QueueItem { Address = uri, ParentAddress = parent });
     }
 
-    public class RequestQueue
+    public void AddRange(ContentParser<Uri> uris, Uri parent)
     {
-        private IDictionary<string, QueueItem> _queue = new Dictionary<string, QueueItem>();
-        private readonly IDictionary<string, int> _completed = new Dictionary<string, int>();
-
-        public void Add(Uri uri, Uri parent)
+        foreach (Uri resource in uris)
         {
-            if (_completed.ContainsKey(uri.AbsoluteUri))
-            {
-                _completed[uri.AbsoluteUri]++;
-                return;
-            }
+            Add(resource, parent);
+        }
+    }
 
-            if (_queue.ContainsKey(uri.AbsoluteUri))
-            {
-                return;
-            }
+    public void AddRootAddress(Uri rootAddress)
+    {
+        AddCompletedKey(rootAddress.AbsoluteUri);
+    }
 
-            _queue.Add(uri.AbsoluteUri, new QueueItem { Address = uri, ParentAddress = parent });
+    public QueueItem Pop()
+    {
+        string key = _queue.Keys.FirstOrDefault();
+
+        if (key == null)
+        {
+            return default(QueueItem);
         }
 
-        public void AddRange(ContentParser<Uri> uris, Uri parent)
+        AddCompletedKey(key);
+
+        var uri = _queue[key];
+        _queue.Remove(key);
+
+        return uri;
+    }
+
+    private void AddCompletedKey(string key)
+    {
+        if (_completed.ContainsKey(key))
         {
-            foreach (Uri resource in uris)
-            {
-                Add(resource, parent);
-            }
+            _completed[key]++;
         }
-
-        public void AddRootAddress(Uri rootAddress)
+        else
         {
-            AddCompletedKey(rootAddress.AbsoluteUri);
-        }
-
-        public QueueItem Pop()
-        {
-            string key = _queue.Keys.FirstOrDefault();
-
-            if (key == null)
-            {
-                return default(QueueItem);
-            }
-
-            AddCompletedKey(key);
-
-            var uri = _queue[key];
-            _queue.Remove(key);
-
-            return uri;
-        }
-
-        private void AddCompletedKey(string key)
-        {
-            if (_completed.ContainsKey(key))
-            {
-                _completed[key]++;
-            }
-            else
-            {
-                _completed.Add(key, 1);
-            }
+            _completed.Add(key, 1);
         }
     }
 }

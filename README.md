@@ -14,21 +14,11 @@ which will be done next. The old projects will remain until the UI no longer dep
 
 You can run Katelyn from the command line:
 
-    dotnet Katelyn.dll Crawl -address=http://localhost
+    dotnet Katelyn.dll Crawl -address=http://localhost:51746
 
 Or
 
-    dotnet Katelyn.dll Crawl -address=http://localhost -verbose=false
-
-## .Net Full Framework (Deprecated - Will be removed in a future release)
-
-You can run Katelyn from the command line:
-
-    Katelyn Crawl -address=http://localhost/
-
-Or
-
-    Katelyn Crawl -address=http://localhost/ -verbose=false
+    dotnet Katelyn.dll Crawl -address=http://localhost:51746 -verbose=false
 
 ## Options
 
@@ -45,7 +35,7 @@ no additional delay.
 
 If you wish to specify these options manually, you can use the advanced options along with the `CrawlWith` method:
 
-    Katelyn CrawlWith ...
+    dotnet Katelyn.dll CrawlWith ...
 
 Advanced Options
 
@@ -75,8 +65,8 @@ Advanced Options
 
 For example, with everything specified:
 
-    Katelyn CrawlWith
-        -address=http://localhost/ 
+    dotnet Katelyn.dll CrawlWith
+        -address=http://localhost:51746/ 
         -verbose=true
         -maxDepth=100
         -includeLinks=true

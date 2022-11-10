@@ -1,8 +1,7 @@
-﻿namespace Katelyn.ConsoleRunner
+﻿namespace Katelyn.ConsoleRunner;
+
+public enum ExitCode
 {
-    public enum ExitCode
-    {
-        Success = 0,
-        CrawlError = 1
-    }
+    Success = 0,
+    CrawlError = 1
 }

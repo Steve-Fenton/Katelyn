@@ -1,21 +1,20 @@
 ﻿using System;
 
-namespace Katelyn.Core
+namespace Katelyn.Core;
+
+public interface IListener
 {
-    public interface IListener
-    {
-        void OnStart();
+    void OnStart();
 
-        void OnEnd();
+    void OnEnd();
 
-        void OnError(CrawlResult request, Exception exception);
+    void OnError(CrawlResult request, Exception exception);
 
-        void OnSuccess(CrawlResult request);
+    void OnSuccess(CrawlResult request);
 
-        void OnDocumentLoaded(CrawlResult request);
+    void OnDocumentLoaded(CrawlResult request);
 
-        void OnThirdPartyAddress(CrawlResult request);
+    void OnThirdPartyAddress(CrawlResult request);
 
-        CrawlSummary GetCrawlResult();
-    }
+    CrawlSummary GetCrawlResult();
 }

@@ -1,17 +1,16 @@
-﻿namespace Katelyn.Core
+﻿namespace Katelyn.Core;
+
+public class CrawlSummary
 {
-    public class CrawlSummary
+    public int Total
     {
-        public int Total
+        get
         {
-            get
-            {
-                return ErrorCount + SuccessCount;
-            }
+            return ErrorCount + SuccessCount;
         }
-
-        public int ErrorCount { get; set; }
-
-        public int SuccessCount { get; set; }
     }
+
+    public int ErrorCount { get; set; }
+
+    public int SuccessCount { get; set; }
 }

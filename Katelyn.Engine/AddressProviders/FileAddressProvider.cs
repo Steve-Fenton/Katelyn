@@ -1,30 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 
-namespace Katelyn.Core
+namespace Katelyn.Core;
+
+public class FileAddressProvider
+    : AddressProvider
 {
-    public class FileAddressProvider
-        : AddressProvider
+    private readonly string _filePath;
+
+    public FileAddressProvider(string filePath)
     {
-        private readonly string _filePath;
+        _filePath = filePath;
+    }
 
-        public FileAddressProvider(string filePath)
+    public override IEnumerator<Uri> GetEnumerator()
+    {
+        foreach (var line in File.ReadLines(_filePath))
         {
-            _filePath = filePath;
-        }
-
-        public override IEnumerator<Uri> GetEnumerator()
-        {
-            foreach (var line in File.ReadLines(_filePath))
+            if (string.IsNullOrWhiteSpace(line))
             {
-                if (string.IsNullOrWhiteSpace(line))
-                {
-                    continue;
-                }
-
-                yield return new Uri(line);
+                continue;
             }
+
+            yield return new Uri(line);
         }
     }
 }

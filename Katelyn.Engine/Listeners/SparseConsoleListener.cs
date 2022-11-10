@@ -1,11 +1,10 @@
-﻿namespace Katelyn.Core.Listeners
+﻿namespace Katelyn.Core.Listeners;
+
+public class SparseConsoleListener
+    : ConsoleListener
 {
-    public class SparseConsoleListener
-        : ConsoleListener
+    public override void OnSuccess(CrawlResult request)
     {
-        public override void OnSuccess(CrawlResult request)
-        {
-            SuccessCount++;
-        }
+        SuccessCount++;
     }
 }

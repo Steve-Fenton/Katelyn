@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29102.190
+# Visual Studio Version 17
+VisualStudioVersion = 17.4.33103.184
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Katelyn.Core", "Katelyn.Core\Katelyn.Core.csproj", "{D6B4563B-3178-4F4F-AD50-7E1575B2CE98}"
 EndProject
@@ -24,7 +24,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fenton.Katelyn.Engine", "Ka
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fenton.Katelyn.Tests", "Fenton.Katelyn.Tests\Fenton.Katelyn.Tests.csproj", "{7C3F5CA9-3C4F-4E71-873C-95D56DC30DB1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fenton.Katelyn.Console", "Fenton.Katelyn.Console\Fenton.Katelyn.Console.csproj", "{75B2EEBD-978F-4DD3-BA87-6A7780A5DD94}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Fenton.Katelyn.Console", "Fenton.Katelyn.Console\Fenton.Katelyn.Console.csproj", "{75B2EEBD-978F-4DD3-BA87-6A7780A5DD94}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Legacy", "Legacy", "{81ADD4C2-6F0E-4FEB-B72C-E83B841630AB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -67,6 +69,12 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{D6B4563B-3178-4F4F-AD50-7E1575B2CE98} = {81ADD4C2-6F0E-4FEB-B72C-E83B841630AB}
+		{2DCEA476-C09C-4DF4-BCF8-0AA9E1C4ED75} = {81ADD4C2-6F0E-4FEB-B72C-E83B841630AB}
+		{5041AB95-347D-46CF-B763-CA41B3FFC38B} = {81ADD4C2-6F0E-4FEB-B72C-E83B841630AB}
+		{027F4DC0-DB75-49BE-A3F7-46E84F7BCADB} = {81ADD4C2-6F0E-4FEB-B72C-E83B841630AB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {4F3E993C-6E59-4323-A9E9-3C2EB4B752D6}

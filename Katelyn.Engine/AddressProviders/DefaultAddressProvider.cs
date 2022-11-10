@@ -1,21 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace Katelyn.Core;
 
-namespace Katelyn.Core
+public class DefaultAddressProvider
+    :AddressProvider
 {
-    public class DefaultAddressProvider
-        :AddressProvider
+    private readonly Uri _address;
+
+    public DefaultAddressProvider(Uri address)
     {
-        private readonly Uri _address;
+        _address = address;
+    }
 
-        public DefaultAddressProvider(Uri address)
-        {
-            _address = address;
-        }
-
-        public override IEnumerator<Uri> GetEnumerator()
-        {
-            yield return _address;
-        }
+    public override IEnumerator<Uri> GetEnumerator()
+    {
+        yield return _address;
     }
 }

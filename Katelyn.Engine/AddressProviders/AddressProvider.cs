@@ -1,20 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿namespace Katelyn.Core;
 
-namespace Katelyn.Core
+public abstract class AddressProvider
 {
-    public abstract class AddressProvider
+    public static AddressProvider GetAddressProvider(CrawlerConfig config)
     {
-        public static AddressProvider GetAddressProvider(CrawlerConfig config)
+        if (!string.IsNullOrWhiteSpace(config.FilePath))
         {
-            if (!string.IsNullOrWhiteSpace(config.FilePath))
-            {
-                return new FileAddressProvider(config.FilePath);
-            }
-
-            return new DefaultAddressProvider(config.RootAddress);
+            return new FileAddressProvider(config.FilePath);
         }
 
-        public abstract IEnumerator<Uri> GetEnumerator();
+        return new DefaultAddressProvider(config.RootAddress);
     }
+
+    public abstract IEnumerator<Uri> GetEnumerator();
 }
