@@ -17,7 +17,10 @@ public abstract class ContentParser<T>
 
     public static bool IsAbsoluteUri(Uri rootAddress, string linkText)
     {
-        return linkText.StartsWith(rootAddress.AbsoluteUri, NC);
+        return linkText.StartsWith(rootAddress.AbsoluteUri, NC)
+            || linkText.StartsWith("//", NC)
+            || linkText.StartsWith("http://", NC)
+            || linkText.StartsWith("https://", NC);
     }
 
     private static bool IsCrawlableDomain(Uri rootAddress, IEnumerable<Uri> partnerSites, string linkText)

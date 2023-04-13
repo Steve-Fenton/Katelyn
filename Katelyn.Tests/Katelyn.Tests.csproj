@@ -53,6 +53,7 @@
     <Compile Include="WhenAPageSinalsAKatelynError.cs" />
     <Compile Include="WhenAPageDoesNotExist.cs" />
     <Compile Include="WhenAPartnerLinkIsFound.cs" />
+    <Compile Include="WhenRelativeImagesAreFound.cs" />
     <Compile Include="WhenRobotFilesAreIncluded.cs" />
     <Compile Include="TestBase.cs" />
     <Compile Include="WhenScriptsAndStylesAreIncluded.cs" />

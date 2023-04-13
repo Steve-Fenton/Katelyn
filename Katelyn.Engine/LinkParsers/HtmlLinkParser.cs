@@ -6,15 +6,17 @@ public class HtmlLinkParser
     : ContentParser<Uri>
 {
     private readonly Uri _root;
+    private readonly Uri _currentAddress;
     private readonly Uri _parent;
     private readonly string _content;
     private readonly CrawlerConfig _config;
 
     public override string Content => _content;
 
-    public HtmlLinkParser(Uri root, Uri parent, string content, CrawlerConfig config)
+    public HtmlLinkParser(Uri root, Uri parent, Uri currentAddress, string content, CrawlerConfig config)
     {
         _root = root;
+        _currentAddress = currentAddress;
         _parent = parent;
         _content = content;
         _config = config;
@@ -91,11 +93,29 @@ public class HtmlLinkParser
                 continue;
             }
 
-            var uri = (IsAbsoluteUri(_root, linkText))
-                ? new Uri(linkText)
-                : new Uri(_root, linkText);
+            Uri foundResource = null;
 
-            yield return uri;
+            if (IsAbsoluteUri(_root, linkText))
+            {
+                // i.e. https://...
+                foundResource = new Uri(linkText);
+            }
+            else
+            {
+                if (linkText.StartsWith("/"))
+                {
+                    // i.e. /resource.png (relative to root)
+                    foundResource = new Uri(_root, linkText);
+                }
+                else
+                {
+                    // i.e. resource.png (relative to current)
+                    int pos = _currentAddress.AbsoluteUri.LastIndexOf('/') + 1;
+                    foundResource = new Uri(_currentAddress.AbsoluteUri.Substring(0, pos) + linkText);
+                }
+            }
+
+            yield return foundResource;
         }
     }
 }

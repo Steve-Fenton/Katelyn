@@ -4,12 +4,12 @@ namespace Katelyn.Core.LinkParsers
 {
     public static class ParserFactory
     {
-        public static ContentParser<Uri> GetLinkParser(CrawlerConfig config, Uri parent, string content, string contentType)
+        public static ContentParser<Uri> GetLinkParser(CrawlerConfig config, Uri parent, Uri currentUrl, string content, string contentType)
         {
             switch (contentType)
             {
                 case "text/html":
-                    return new HtmlLinkParser(config.RootAddress, parent, content, config);
+                    return new HtmlLinkParser(config.RootAddress, parent, currentUrl, content, config);
                 case "text/plain":
                     // robots.txt
                     return new RobotLinkParser(config.RootAddress, parent, content, config);

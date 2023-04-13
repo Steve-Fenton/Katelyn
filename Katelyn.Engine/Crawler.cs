@@ -172,7 +172,7 @@ public class Crawler
             var content = GetContent(response);
             request.Duration = timer.Stop();
 
-            ContentParser<Uri> contentParser = ParserFactory.GetLinkParser(_config, queueItem.ParentAddress, content, request.ContentType);
+            ContentParser<Uri> contentParser = ParserFactory.GetLinkParser(_config, queueItem.ParentAddress, queueItem.Address, content, request.ContentType);
             request.Document = contentParser.Content;
             _event.OnDocumentLoaded(request);
             _requestQueue.AddRange(contentParser, queueItem.Address);
